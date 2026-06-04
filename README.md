@@ -8,6 +8,10 @@
   omi --- imo           ← the palindrome that encodes everything
 ```
 
+OMI is a **universal hyphenated palindromic mnemonic notation** — a bit-level addressing scheme where `omi` (Greek small omicron, `U+03BF`) and `imo` (Greek capital omicron, `U+039F`) bookend a 128-character frame of 4-character hex blocks, each separated by hyphens that act as bus dividers.
+
+It started as a question about Node.js font parsing. It became a self-hosting meta-circular compiler, an eBPF/XDP kernel packet filter, a sexagesimal spatial geometry system, and a lock-free 5040-slot memory ring — all governed by a single quadratic law: `60x² + 16xy + 4y²`.
+
 ```mermaid
 graph LR
     subgraph Ideas["The OMI Narrative"]
@@ -18,10 +22,6 @@ graph LR
         MEM --> I["6. Implementation<br/>Node.js + C99 + eBPF<br/>572 tests"]
     end
 ```
-
-OMI is a **universal hyphenated palindromic mnemonic notation** — a bit-level addressing scheme where `omi` (Greek small omicron, `U+03BF`) and `imo` (Greek capital omicron, `U+039F`) bookend a 128-character frame of 4-character hex blocks, each separated by hyphens that act as bus dividers.
-
-It started as a question about Node.js font parsing. It became a self-hosting meta-circular compiler, an eBPF/XDP kernel packet filter, a sexagesimal spatial geometry system, and a lock-free 5040-slot memory ring — all governed by a single quadratic law: `60x² + 16xy + 4y²`.
 
 ## The Ideas, as a Narrative
 
