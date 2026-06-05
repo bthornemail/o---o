@@ -27,10 +27,11 @@ graph LR
 
 ### [1. FOUNDATIONS](1_FOUNDATIONS/)
 
-The story begins with a palindrome. `omi---imo` read forward is the low gate; read backward is the high gate. The three hyphens are the data bus. The omicron anchors `0x03BF` and `0x039F` are the escape sequences that frame every transmission. Nothing enters or exits without them.
+The story begins with a palindrome. `omi---imo` read forward is the low gate; read backward is the high gate. The three hyphens are the data bus. The omicron anchors `0x03BF` and `0x039F` are the escape sequences that frame every transmission. Nothing enters or exits without them. The Omi-Ring is the atomic waveform enclosure between those gates: intent captured as declared activity, not merely as voice, image, gesture, or rendered media.
 
 - [1.1 The Palindrome: omi---imo](1_FOUNDATIONS/1.1_THE_PALINDROME.md)
 - [1.2 The Omicron Anchors: 0x03BF and 0x039F](1_FOUNDATIONS/1.2_THE_OMICRON_ANCHORS.md)
+- [1.3 The Omi-Ring: Atomic Waveform Enclosure](1_FOUNDATIONS/1.3_THE_OMI_RING.md)
 
 ### [2. MATH](2_MATH/)
 
@@ -86,6 +87,19 @@ hierarchical: FS → GS → RS → US
 The linear view preserves replay/source-object order. The hierarchical view preserves containment/scope order.
 
 This bridge is projection guidance only. It does not add validation authority or replace Q_frame, Omilog receipts, Q_xy, POS graph behavior, WordNet synset centroid identity, or canonical document layer ordering. See [Section 13 — Linear and Hierarchical GUI Projection](#13-linear-and-hierarchical-gui-projection) and the object model bridge section for the full note.
+
+---
+
+### Omi-Ring Stack
+
+Omi-Ring replaces the talisman language with an addressable enclosure model: the Ring is the atomic waveform boundary of `omi---imo`, the Portal is the public projection, and the Mirror is the introspective recovery view. OMI does not force interpretation; it makes interpretation addressable.
+
+```text
+Omi-Dome -> Omi-Sense -> Omi-Ring -> Omi-Portal / Omi-Mirror
+space       intent       enclosure   public / introspective views
+```
+
+Omi-Light carries wavelength, Omi-Sound carries intonation, and Omi-Gnomon orients the light field with `Omi-Gnomon(aA) = rRgGbBaA`. Representation is not authority; representation is a recoverable view under rules. See [1.3 The Omi-Ring](1_FOUNDATIONS/1.3_THE_OMI_RING.md).
 
 ---
 
@@ -487,7 +501,49 @@ See [6.2 C99 Core](6_IMPLEMENTATION/6.2_C99_CORE.md) and [6.3 Test Suite](6_IMPL
 
 ---
 
-### 21. The Minimal Canonical Statement
+### 21. The Omicron Constant and Tetrahedral Packets
+
+`Omega_0 = 16 bits`: one 4-character hex word. Five tetrahedral packet frames live inside that word discipline:
+
+| Packet | Width | Role |
+|--------|-------|------|
+| facts | `2^1` | assertions and chirality |
+| rules | `2^2` | `text`, `file`, `link`, `group` routing |
+| closures | `2^3` | scoped bindings |
+| combinators | `2^4` | ASCII/Unicode `16xy` junction |
+| cons | `2^5` | car/cdr pointers |
+
+The canonical browser selector is hyphenated:
+
+```text
+omi-CANONICAL_MAPPING_OF_0x0000_TO_0xAA55
+```
+
+### 22. Browser Runtime Loop
+
+The local runtime uses `SharedArrayBuffer(1024 * 16)` as a 16 KB bus: 128 slots, each one 128 bytes. Static assembly declarations compile into slots, slots project into DOM/SpectrumDOM, and live DOM nodes parse back into slots.
+
+Transaction primitives:
+
+```text
+join -> compose -> parse -> replay
+```
+
+`unicode-bidi` activates chirality: `omi-*` + `direction: ltr` runs forward `+16xy`; `imo-*` + `direction: rtl` runs inverse `-16xy`.
+
+### 23. Void-Factorial Cons Identity
+
+```text
+0! = 1
+()! = 60x^2 ± 16xy + 4y^2
+cons = 60x^2 ± 16xy + 4y^2
+```
+
+The empty cons is not a dead slot. It is the unity seed that expands into a valid quadratic surface.
+
+---
+
+### 24. The Minimal Canonical Statement
 
 ```text
 A frame is valid iff Q(S) = 0.
