@@ -27,11 +27,12 @@ graph LR
 
 ### [1. FOUNDATIONS](1_FOUNDATIONS/)
 
-The story begins with a palindrome. `omi---imo` read forward is the low gate; read backward is the high gate. The three hyphens are the data bus. The omicron anchors `0x03BF` and `0x039F` are the escape sequences that frame every transmission. Nothing enters or exits without them. The Omi-Ring is the atomic waveform enclosure between those gates: intent captured as declared activity, not merely as voice, image, gesture, or rendered media.
+The story begins with a palindrome. `omi---imo` read forward is the low gate; read backward is the high gate. The three hyphens are the data bus. The omicron anchors `0x03BF` and `0x039F` are the escape sequences that frame every transmission. Nothing enters or exits without them. The OMI Universal Constant `Ω₀ = 0! = omi---imo` is the zero-point of bounded agreement; the Omi-Ring is the atomic waveform enclosure between those gates: intent captured as declared activity, not merely as voice, image, gesture, or rendered media.
 
 - [1.1 The Palindrome: omi---imo](1_FOUNDATIONS/1.1_THE_PALINDROME.md)
 - [1.2 The Omicron Anchors: 0x03BF and 0x039F](1_FOUNDATIONS/1.2_THE_OMICRON_ANCHORS.md)
 - [1.3 The Omi-Ring: Atomic Waveform Enclosure](1_FOUNDATIONS/1.3_THE_OMI_RING.md)
+- [1.4 The OMI Universal Constant: Ω₀ = 0! = omi---imo](1_FOUNDATIONS/1.4_THE_OMI_UNIVERSAL_CONSTANT.md)
 
 ### [2. MATH](2_MATH/)
 
@@ -92,6 +93,14 @@ This bridge is projection guidance only. It does not add validation authority or
 
 ### Omi-Ring Stack
 
+The Universal Constant gives the zero-point frame:
+
+```text
+Ω₀ = 0! = omi---imo
+Ω₀ bounds.
+Q(x,y) projects.
+```
+
 Omi-Ring replaces the talisman language with an addressable enclosure model: the Ring is the atomic waveform boundary of `omi---imo`, the Portal is the public projection, and the Mirror is the introspective recovery view. OMI does not force interpretation; it makes interpretation addressable.
 
 ```text
@@ -99,7 +108,7 @@ Omi-Dome -> Omi-Sense -> Omi-Ring -> Omi-Portal / Omi-Mirror
 space       intent       enclosure   public / introspective views
 ```
 
-Omi-Light carries wavelength, Omi-Sound carries intonation, and Omi-Gnomon orients the light field with `Omi-Gnomon(aA) = rRgGbBaA`. Representation is not authority; representation is a recoverable view under rules. See [1.3 The Omi-Ring](1_FOUNDATIONS/1.3_THE_OMI_RING.md).
+Omi-Light carries wavelength, Omi-Sound carries intonation, and Omi-Gnomon orients the light field with `Omi-Gnomon(aA) = rRgGbBaA`. Representation is not authority; representation is a recoverable view under rules. See [1.3 The Omi-Ring](1_FOUNDATIONS/1.3_THE_OMI_RING.md) and [1.4 The OMI Universal Constant](1_FOUNDATIONS/1.4_THE_OMI_UNIVERSAL_CONSTANT.md).
 
 ---
 
