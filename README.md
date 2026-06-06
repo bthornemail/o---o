@@ -59,7 +59,7 @@ The repo is organized as a progressive reader path:
 5_MEMORY           how replay and receipts persist
 6_IMPLEMENTATION   how runtimes prove conformance
 7_CANON            how the final doctrine reconciles the versions
-8_COSMOLOGY        how the quadratic law becomes a ring cosmology
+8_COSMOLOGY        how OMI's proportions become a ring/world model
 public             static public pages and browser-facing models
 _archive           source notes, extracted sessions, and older drafts
 ```
@@ -810,7 +810,18 @@ Thinking has both a timeline and a structure. OMI preserves both.
 │   ├── 7.3_LOWER_OMICRON_UPPER_BIDI.md
 │   └── 7.4_CONFORMANCE_CANON.md
 ├── 8_COSMOLOGY
-│   └── 8.1_THE_COSMOLOGY_OF_OMI.md
+│   ├── 8.1_THE_OMI_RING_DOMAIN.md
+│   ├── 8.2_ATOMIC_DELTA_AND_COSMIC_ORBIT.md
+│   ├── 8.3_LIGHT_SOUND_AND_FRAME_REFERENCE.md
+│   ├── 8.4_OMI_GRAVITY_AND_CENTROID.md
+│   ├── 8.5_PRINCIPAL_ADDRESS_DOMAIN.md
+│   ├── 8.6_SNUB_TRUNCATION_AS_MODEL_OPERATION.md
+│   ├── 8.7_GEOMETRIC_BRIDGE_PLATONIC_SNUB_4D.md
+│   ├── 8.8_SNUB_CUBE_AND_SNUB_DODECAHEDRON.md
+│   ├── 8.9_CHIRALITY_SELECTION_AND_SNUB_CARDINALITY.md
+│   ├── 8.10_P2P_TRAVERSAL_AND_MIRROR_SPACE.md
+│   ├── 8.11_SNUB_TRAVERSAL_MATH_FOR_EVERYONE.md
+│   └── 8.12_STANDARD_TRUNCATION_VS_SNUB_OPERATION.md
 ├── public
 │   ├── agreement-is-all-we-need.html
 │   ├── index.html
@@ -958,21 +969,34 @@ Read this section if you want the shortest authoritative version of the OMI doct
 
 ### [8. Cosmology](8_COSMOLOGY/)
 
-The cosmology section explains how OMI reads the quadratic law as a ring domain instead of a flat coordinate sheet.
+The cosmology section interprets OMI as a ringed domain of bounded return.
 
-In this layer:
+Here, `x` and `y` are not treated as flat coordinate lines. They are Omi-Rings: recurring address paths inside the `omi---imo` enclosure. The quadratic form becomes a cosmological grammar:
 
 ```text
-4y² = Atomic Delta
-16xy = Omi-Ring Bridge
-60x² = Cosmic Orbit
+4y²  = Atomic Delta / declaration ring
+16xy = Omi-Ring bridge / address relation
+60x² = Cosmic Orbit / orientation ring
 ```
 
-The key shift is that `x` and `y` are Omi-Rings: arcs of recurrence whose bridge makes low declaration and high orientation mutually addressable.
+This section also introduces Omi-Light and Omi-Sound as the two most ubiquitous reference spectrums: light for projection, sound for intention. A frame step compares what is projected with what is declared, then resolves declarations toward a definitional centroid.
 
-Read this section if you want the video-notebook view of OMI as bounded return, centroid resolution, and address cosmology.
+Snub truncation is the interpretive model operation: cut the excess, twist the relation, re-face the boundary, record the receipt, and project only after acceptance.
 
-- [8.1 The Cosmology of OMI](8_COSMOLOGY/8.1_THE_COSMOLOGY_OF_OMI.md)
+The three-geometry mapping reads `4y²` as the Platonic vertex seed, `16xy` as the Archimedean-Catalan snub bridge, and `60x²` as the 4D regular polytope orbit.
+
+- [8.1 The Omi-Ring Domain](8_COSMOLOGY/8.1_THE_OMI_RING_DOMAIN.md)
+- [8.2 Atomic Delta and Cosmic Orbit](8_COSMOLOGY/8.2_ATOMIC_DELTA_AND_COSMIC_ORBIT.md)
+- [8.3 Light, Sound, and Frame Reference](8_COSMOLOGY/8.3_LIGHT_SOUND_AND_FRAME_REFERENCE.md)
+- [8.4 Omi-Gravity and the Centroid](8_COSMOLOGY/8.4_OMI_GRAVITY_AND_CENTROID.md)
+- [8.5 Principal Address Domain](8_COSMOLOGY/8.5_PRINCIPAL_ADDRESS_DOMAIN.md)
+- [8.6 Snub Truncation as Model Operation](8_COSMOLOGY/8.6_SNUB_TRUNCATION_AS_MODEL_OPERATION.md)
+- [8.7 Geometric Bridge: Platonic Seed, Archimedean/Catalan Snub, and 4D Closure](8_COSMOLOGY/8.7_GEOMETRIC_BRIDGE_PLATONIC_SNUB_4D.md)
+- [8.8 Snub Cube and Snub Dodecahedron: Cardinality of Chirality](8_COSMOLOGY/8.8_SNUB_CUBE_AND_SNUB_DODECAHEDRON.md)
+- [8.9 Chirality Selection and Snub Cardinality](8_COSMOLOGY/8.9_CHIRALITY_SELECTION_AND_SNUB_CARDINALITY.md)
+- [8.10 P2P Traversal and Mirror Space](8_COSMOLOGY/8.10_P2P_TRAVERSAL_AND_MIRROR_SPACE.md)
+- [8.11 Snub Traversal: OMI Geometry for Everyone](8_COSMOLOGY/8.11_SNUB_TRAVERSAL_MATH_FOR_EVERYONE.md)
+- [8.12 Standard Truncation vs. Snub Operation](8_COSMOLOGY/8.12_STANDARD_TRUNCATION_VS_SNUB_OPERATION.md)
 
 ## Public Pages
 
