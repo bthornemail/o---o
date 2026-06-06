@@ -1,1261 +1,135 @@
 # OMI: Omicron Object Model (o---o)
 
-```
-   ___    __  __    _   
-  / _ \  |  \/  |  | |  
- | (_) | | |\/| |  | |  
-  \___/  |_|  |_|  |_|  
-  omi --- imo           ← the palindrome that encodes everything
-```
-
-OMI is a **universal hyphenated palindromic mnemonic notation** — a bit-level addressing scheme where `omi` (Greek small omicron, `U+03BF`) and `imo` (Greek capital omicron, `U+039F`) bookend a 128-character frame of 4-character hex blocks, each separated by hyphens that act as bus dividers.
-
-It started as a question about Node.js font parsing. It became a self-hosting meta-circular compiler, an eBPF/XDP kernel packet filter, a sexagesimal spatial geometry system, and a lock-free 5040-slot memory ring — all governed by a single quadratic law: `60x² + 16xy + 4y²`.
-
-```mermaid
-graph LR
-    subgraph Ideas["The OMI Narrative"]
-        F["1. The Palindrome<br/>omi---imo"] --> M["2. The Laws<br/>60x²+16xy+4y²<br/>period-8 delta"]
-        M --> A["3. Architecture<br/>DOM hierarchy<br/>wormhole portals"]
-        A --> N["4. Network<br/>IPv6 mapping<br/>eBPF kernel gate"]
-        N --> MEM["5. Memory<br/>5040-ring<br/>overwrite policy"]
-        MEM --> I["6. Implementation<br/>Node.js + C99 + eBPF<br/>572 tests"]
-    end
+```text
+   ___    __  __    _
+  / _ \  |  \/  |  | |
+ | (_) | | |\/| |  | |
+  \___/  |_|  |_|  |_|
+  omi --- imo
 ```
 
-## The Ideas, as a Narrative
+**OMI** is the **Omicron Object Model**: a docs-first specification for turning open-world actions, claims, identities, links, events, and objects into bounded, inspectable, replayable structure.
 
-### [1. FOUNDATIONS](1_FOUNDATIONS/)
+It begins with a palindrome:
 
-The story begins with a palindrome. `omi---imo` read forward is the low gate; read backward is the high gate. The three hyphens are the data bus. The omicron anchors `0x03BF` and `0x039F` are the escape sequences that frame every transmission. Nothing enters or exits without them. The OMI Universal Constant `Ω₀ = 0! = omi---imo` is the zero-point of bounded agreement; the Omi-Ring is the atomic waveform enclosure between those gates: intent captured as declared activity, not merely as voice, image, gesture, or rendered media.
-
-- [1.1 The Palindrome: omi---imo](1_FOUNDATIONS/1.1_THE_PALINDROME.md)
-- [1.2 The Omicron Anchors: 0x03BF and 0x039F](1_FOUNDATIONS/1.2_THE_OMICRON_ANCHORS.md)
-- [1.3 The Omi-Ring: Atomic Waveform Enclosure](1_FOUNDATIONS/1.3_THE_OMI_RING.md)
-- [1.4 The OMI Universal Constant: Ω₀ = 0! = omi---imo](1_FOUNDATIONS/1.4_THE_OMI_UNIVERSAL_CONSTANT.md)
-
-### [2. MATH](2_MATH/)
-
-From the palindrome emerged two laws. The **Quadratic Law** `60x² + 16xy + 4y²` maps high-plane `id` (x) to low-plane `data-*` (y) through a sexagesimal bridge. The **Delta Law** `rotl(x,1) XOR rotl(x,3) XOR rotr(x,2) XOR C` generates period-8 orbits — each orbit is a cycle through the 8 segments of an OMI frame. The base-60 system ensures every coordinate subdivision resolves exactly.
-
-- [2.1 The Quadratic Law: 60x² + 16xy + 4y²](2_MATH/2.1_THE_QUADRATIC_LAW.md)
-- [2.2 The Delta Law: The Period-8 Engine](2_MATH/2.2_THE_DELTA_LAW.md)
-- [2.3 The Sexagesimal System: Base-60](2_MATH/2.3_SEXAGESIMAL_SYSTEM.md)
-- [2.4 Polycubes and Symmetry Groups](2_MATH/2.4_POLYCUBES_AND_GROUPS.md)
-
-### [3. ARCHITECTURE](3_ARCHITECTURE/)
-
-The laws needed a physical form. The OMI DOM hierarchy encodes register gates as HTML elements — `<omi />`, `<imo />`, `<omi-fs>`, `<imo-fs>`, `<imo-gs>`, `<imo-rs>`, `<imo-us>`. Floating nodes act as wormhole portals, teleporting state across disconnected contexts via ShadowDOM capsules and SVG references. The whole thing is a meta-circular chronograph compiler — a self-hosting engine where every instruction is also data and every data frame is also code.
-
-- [3.1 The DOM Hierarchy: Elements as Register Gates](3_ARCHITECTURE/3.1_DOM_HIERARCHY.md)
-- [3.2 Wormhole Portals: State Teleportation](3_ARCHITECTURE/3.2_WORMHOLE_PORTALS.md)
-- [3.3 The Meta-Circular Chronograph Compiler](3_ARCHITECTURE/3.3_META_CIRCULAR_COMPILER.md)
-
-### [4. NETWORK](4_NETWORK/)
-
-An IPv6 address is 128 bits. An OMI frame is 128 bits. They are the same width, so an OMI frame lives directly in an IPv6 source address. Every 16-bit colon-delimited group is one OMI segment. `RULES.omi` encodes the axiomatic constraint system — over 60 rules mapping segments to service buses, factorial strides, barcode carriers, and boot signatures. The eBPF/XDP kernel gate validates every incoming frame at NIC driver speed: Gate 1 checks the quadratic surface, Gate 2 runs the Fano delta resolver. Invalid frames are dropped before they touch userspace.
-
-- [4.1 IPv6 Frame Mapping](4_NETWORK/4.1_IPv6_FRAME_MAPPING.md)
-- [4.2 RULES.omi: The Axiomatic Rule Directory](4_NETWORK/4.2_RULES_OMI.md)
-- [4.3 The eBPF/XDP Kernel Gate](4_NETWORK/4.3_eBPF_KERNEL_GATE.md)
-
-### [5. MEMORY](5_MEMORY/)
-
-The 5040-slot ring buffer (`7!` slots, 64 bits each) is the winding ledger. Memory advancement is a function of orbital distance — the Delta Law resolver determines how far the cursor moves. The overwrite policy enforces epoch-based safety: cold slots are overwritten freely, warm slots require re-verification, corrupt slots are reclaimed.
-
-- [5.1 The Ring Indexer](5_MEMORY/5.1_RING_INDEXER.md)
-- [5.2 Ring Overwrite Policy](5_MEMORY/5.2_OVERWRITE_POLICY.md)
-
-### [6. IMPLEMENTATION](6_IMPLEMENTATION/)
-
-Three runtimes implement the same ABI surface. The Node.js `PalindromicOmiEngine` is the reference compiler. The C99 core compiles to a 2.7 KB WASM module with byte-level equivalence. The eBPF variant compiles to a 14.7 KB ELF object that JITs to 1.5 KB of native kernel code. All 572 tests pass across all implementations. The genesis frame `0100-03bf-7c00-2b01-2f01-1434-039f-01ff` is mathematically locked — frozen at slot 1504 on the replay ring.
-
-- [6.1 The Node.js Compiler](6_IMPLEMENTATION/6.1_NODEJS_COMPILER.md)
-- [6.2 The C99 Core: Minimal WASM Substrate](6_IMPLEMENTATION/6.2_C99_CORE.md)
-- [6.3 The Test Suite: 572 Passing](6_IMPLEMENTATION/6.3_TEST_SUITE.md)
-
----
-
-### Projection Bridge
-
-The `omi---imo` palindrome defines an addressed traversal from low-side source to high-side object and back through inversion. GUI renderers may expose that same validated state in two views:
-
-```
-linear:       omi → payload → imo
-hierarchical: FS → GS → RS → US
+```text
+omi---imo
 ```
 
-The linear view preserves replay/source-object order. The hierarchical view preserves containment/scope order.
+Read forward, `omi` is the opening side of the relation. Read backward, `imo` is the closing side of the relation. The hyphen bridge is the bus between them.
 
-This bridge is projection guidance only. It does not add validation authority or replace Q_frame, Omilog receipts, Q_xy, POS graph behavior, WordNet synset centroid identity, or canonical document layer ordering. See [Section 13 — Linear and Hierarchical GUI Projection](#13-linear-and-hierarchical-gui-projection) and the object model bridge section for the full note.
-
----
-
-### Omi-Ring Stack
-
-The Universal Constant gives the zero-point frame:
+The zero-point is:
 
 ```text
 Ω₀ = 0! = omi---imo
-Ω₀ bounds.
-Q(x,y) projects.
 ```
 
-Omi-Ring replaces the talisman language with an addressable enclosure model: the Ring is the atomic waveform boundary of `omi---imo`, the Portal is the public projection, and the Mirror is the introspective recovery view. OMI does not force interpretation; it makes interpretation addressable.
+From that zero-point, OMI builds a complete object doctrine:
 
 ```text
-Omi-Dome -> Omi-Sense -> Omi-Ring -> Omi-Portal / Omi-Mirror
-space       intent       enclosure   public / introspective views
+validate -> resolve -> record -> project -> inspect
 ```
 
-Omi-Light carries wavelength, Omi-Sound carries intonation, and Omi-Gnomon orients the light field with `Omi-Gnomon(aA) = rRgGbBaA`. Representation is not authority; representation is a recoverable view under rules. See [1.3 The Omi-Ring](1_FOUNDATIONS/1.3_THE_OMI_RING.md) and [1.4 The OMI Universal Constant](1_FOUNDATIONS/1.4_THE_OMI_UNIVERSAL_CONSTANT.md).
+A portal may show an OMI object as a card, map pin, QR code, JSON Canvas node, SVG widget, local file, receipt row, event page, or timeline entry. Those are projections. They help humans inspect the object, but they do not authorize it.
 
----
+The authority belongs to the accepted frame, its truth-row resolution, its receipt, its replay path, and its address relation.
 
-## The Specification
-
-### 1. The Enclosure Ring — `0x03BF` · `0x039F`
-
-Every instruction is a 128-byte (2¹⁰-bit) long-word bounded by invertible Unicode anchors:
-
-| Anchor | Value | Name | Role |
-|--------|-------|------|------|
-| `omi-` | `0x03BF` | Greek small omicron (ο) | Forward spin, little-endian BOM, LTR layout |
-| `-imo` | `0x039F` | Greek capital omicron (Ο) | Reverse spin, big-endian BOM, RTL state recovery |
-
-The payload splits by hyphens into 4-character hex words (16-bit registers):
-
-```
-03BF-AAAA-BBBB-CCCC-039F
-```
-
-Reversing the frame reverses its interpretation without destroying structure. See [1.1 The Palindrome](1_FOUNDATIONS/1.1_THE_PALINDROME.md) and [1.2 The Omicron Anchors](1_FOUNDATIONS/1.2_THE_OMICRON_ANCHORS.md).
-
----
-
-### 2. The Delta Law — Period-8 State Engine
-
-```text
-Δ(x) = rotl(x, 1) ⊕ rotl(x, 3) ⊕ rotr(x, 2) ⊕ C
-```
-
-**Properties:** rotations (not shifts) preserve the full 16-bit register; XOR gives reversibility; the constant `C = 0x5A3C` breaks the zero fixed-point; `& 0xFFFF` masks to word width.
-
-Period 8: Δ⁸(x) = x for all 16-bit values. This partitions the 2¹⁶ state space into cycles of length dividing 8 — matching the decimal repeating sequence of 1/73:
-
-```text
-1/73 = 0.01369863...
-B = [0, 1, 3, 6, 9, 8, 6, 3],  W = ΣB = 36
-(epoch, phase) = divmod(position, 36)
-```
-
-See [2.2 The Delta Law](2_MATH/2.2_THE_DELTA_LAW.md) and [2.3 Sexagesimal System](2_MATH/2.3_SEXAGESIMAL_SYSTEM.md).
-
----
-
-### 3. The Binary Quadratic Perceptron — `60x² ± 16xy + 4y²`
-
-Each coefficient has a structural role in the DOM model:
-
-| Term | Domain | DOM Mapping | Coefficient Rationale |
-|------|--------|-------------|----------------------|
-| `4y²` | Low-side `omi-` | `data-*` attributes, atomic data | 4 = 2², half-precision width |
-| `60x²` | High-side `-imo` | `id` selector, stable identity | 60 = 2²·3·5, highly composite |
-| `16xy` | Cross-term meeting plane | CSSOM + JSDOM shared address | 16 = 2⁴, full word boundary |
-
-The sign `+`/`–` is determined by `unicode-bidi`: `direction: ltr` → `+16xy` (forward spatial evolution), `direction: rtl` → `-16xy` (inverse state recovery).
-
-See [2.1 The Quadratic Law](2_MATH/2.1_THE_QUADRATIC_LAW.md).
-
----
-
-### 4. The Part-of-Speech and Feature Matrix
-
-The lower 2⁴ half-precision space handles linguistic grammar features via exact bitmasks:
-
-| Class | Bitmask | Category |
-|-------|---------|----------|
-| `NOUN` | `0x1000` | Open class element frame |
-| `VERB` | `0x2000` | Open class action frame |
-| `ADJECTIVE` | `0x3000` | Closed class property frame |
-| `ADVERB` | `0x4000` | Closed class vector frame |
-| `OPEN` / `CLOSED` | `0x0100` / `0x0200` | Open/closed class marker |
-| `LEXICAL` / `INFLECTIONAL` | `0x0010` / `0x0001` | Lexical / inflectional flag |
-
-See [2.3 Sexagesimal System](2_MATH/2.3_SEXAGESIMAL_SYSTEM.md) and [3.1 DOM Hierarchy](3_ARCHITECTURE/3.1_DOM_HIERARCHY.md).
-
----
-
-### 5. SpectrumDOM — The G(AA) Color Graph
-
-Every interface node is a continuous wavelength-field matrix:
-
-```text
-G(AA) = (V:RR, E:GG, I:BB, A:AA)
-```
-
-| Component | Source | Width | DOM Mapping |
-|-----------|--------|-------|-------------|
-| **V:RR** (Vertex Red) | `4y²` Atomic Delta field | 2⁴ | PoS features, lexical rules |
-| **E:GG** (Edge Green) | `16xy` Dialectic Combinator | 2⁸ | ASCII character codes |
-| **I:BB** (Intensity Blue) | `60x²` Cosmic Synset pointer | 2⁸ | WordNet graph offsets |
-| **A:AA** (Alpha) | `unicode-bidi` spatial shift | 2⁸ | Transparency → shift multiplier |
-
-When `direction: rtl` fires, the alpha channel becomes an active mathematical shift multiplier, inverting the color spectrum to trace provenance backward without a log cache.
-
-**High Definition** (forward spin, `+16xy`):
-```css
-div[id^="omi-"][style*="direction: ltr"] { unicode-bidi: bidi-override; mix-blend-mode: screen; }
-```
-
-**Low Definition** (inverse spin, `-16xy`):
-```css
-div[id^="imo-"][style*="direction: rtl"] { unicode-bidi: embed; mix-blend-mode: difference; filter: hue-rotate(180deg); }
-```
-
-See [3.1 DOM Hierarchy](3_ARCHITECTURE/3.1_DOM_HIERARCHY.md) and [3.2 Wormhole Portals](3_ARCHITECTURE/3.2_WORMHOLE_PORTALS.md).
-
----
-
-### 6. The 2¹⁰ Omicron Encapsulation Ring — 1024-Bit Frame
-
-Inside each 1024-bit (128-byte) instruction, powers of two act as interpretation layers:
-
-```text
-2¹ through 2⁵  = low atomic memory / flags / data (4y² domain)
-2⁶ through 2⁸  = high vector memory / orientation (60x² domain)
-2⁹             = cross-bus pointer (16xy domain)
-2¹⁰            = omicron ring boundary
-```
-
-The runtime memory pool is a `SharedArrayBuffer(1024)` — 8 discrete instruction slots of 128 bytes each, aligned to L1/L2 cache lines.
-
-See [3.3 Meta-Circular Compiler](3_ARCHITECTURE/3.3_META_CIRCULAR_COMPILER.md) and [5.1 Ring Indexer](5_MEMORY/5.1_RING_INDEXER.md).
-
----
-
-### 7. JSON Canvas 1.0 Integration
-
-OMI compiles directly to the JSON Canvas spec. The 2² Tangential Type classification splits the network into four application domains:
-
-| Index | Type | Role |
-|-------|------|------|
-| `0x00` | `text` | String structures, character code arrays |
-| `0x01` | `file` | Continuous file blocks, NLP text records |
-| `0x02` | `link` | Remote address targets, decentralized routes |
-| `0x03` | `group` | System matrix configurations, parent/child layouts |
-
-**Color mapping:** Low space → 6 integer canvasColor presets (`"1"` red through `"6"` purple). High space → 6-character hex colors (`#RRGGBB`).
-
-**Directional axis mapping:**
-
-```text
-0x1C (FS) → TOP   0x1D (GS) → RIGHT
-0x1E (RS) → BOTTOM  0x1F (US) → LEFT
-```
-
-See [3.3 Meta-Circular Compiler](3_ARCHITECTURE/3.3_META_CIRCULAR_COMPILER.md) and [4.2 RULES.omi](4_NETWORK/4.2_RULES_OMI.md).
-
----
-
-### 8. The Four Temporal Operators
-
-| Operator | Layer | Function |
-|----------|-------|----------|
-| **join** | Facts (2¹) + Rules (2²) | Merge feature/rule block from slot A with cdr pointer from slot B |
-| **compose** | Closures (2³) | Ingest text tokens, map PoS, assign instruction slots |
-| **parse** | Combinators (2⁴) | Scan webpage structure, trap edge attributes, decode to 128-byte slice |
-| **replay** | Cons cells (2⁵) | Lock-free rollback via streaming binary frames onto the canvas bus |
-
-See [3.3 Meta-Circular Compiler](3_ARCHITECTURE/3.3_META_CIRCULAR_COMPILER.md).
-
----
-
-### 9. The Prime 73 Activation Function — Zero-Drift Feedback
-
-Instead of ReLU/Sigmoid (which introduce floating-point drift), OMI uses a modular period-8 step operation derived from the digits of 1/73:
-
-```text
-Output State = Δ(Z(x, y)) mod 2¹⁶
-```
-
-**Properties:** (1) integer-only — no floating-point accumulation; (2) deterministic orbits — period-8 across all 2¹⁶ states; (3) bounded HNSW discovery — layer indices recoverable from position via `divmod(position, 36)`.
-
-The **Void-Factorial Identity** bridges discrete combinatorics and continuous mechanics:
-
-```text
-0! = 1  ≡  ()! = (60x² ± 16xy + 4y²)
-```
-
-The empty cons is the fixed point of factorial closure: `cons() ≠ ()! ⟹ 0 ≠ 1`. A valid instruction can never be a terminal fence; a terminal fence can never pass the quadratic gate.
-
-See [2.2 The Delta Law](2_MATH/2.2_THE_DELTA_LAW.md) and [2.4 Polycubes and Groups](2_MATH/2.4_POLYCUBES_AND_GROUPS.md).
-
----
-
-### 10. The Fano Resolution — 15-Step Deterministic Bound
-
-Two execution frames governed by Δ_C trace trajectories across the 5040-slot ring. The Fano plane PG(2,2) — 7 points, 7 lines, 3 points per line — guarantees intersection within 15 steps:
-
-```text
-max_path = (2 × period) − 1 = 15
-```
-
-This is not probabilistic consensus — it is a **deterministic geometric guarantee**. The **Snub-Roll Transformation** acts as a spatial filter: when a stream reaches 2⁴ (16-bit) half-precision limit, the engine cuts cleanly at the `0x7C00` boundary. The `unicode-bidi` function maps full RRGGBBAA (32-bit alpha-blended) inputs to flat RGB (24-bit non-interpreted) fields.
-
-See [4.3 eBPF Kernel Gate](4_NETWORK/4.3_eBPF_KERNEL_GATE.md) and [5.1 Ring Indexer](5_MEMORY/5.1_RING_INDEXER.md).
-
----
-
-### 11. The 5040 Replay Ring — Factorial Stride
-
-```text
-7! = 5040 slots  →  SharedArrayBuffer(5040 × 8) = 40,320 bytes
-```
-
-Cursor advancement via atomic compare-exchange: `CAS(old, new)` where `new = (old + steps) mod 5040`. At `ring_pos ≡ 0 mod 5040`, the hard reset fires — `cons() → ()!` loop begins again.
-
-**The 64-bit receipt format:**
-
-| Bits | Field |
-|------|-------|
-| 0–15 | Provenance (LL) |
-| 16–31 | Step count |
-| 32–47 | NN (low instruction) |
-| 48–63 | MM (high instruction) |
-
-See [5.1 Ring Indexer](5_MEMORY/5.1_RING_INDEXER.md) and [5.2 Overwrite Policy](5_MEMORY/5.2_OVERWRITE_POLICY.md).
-
----
-
-### 12. Floating Wormhole Nodes & Hierarchical FS Nodes
-
-**Floating nodes** (portal elements for wormhole state movement across layout boundaries):
-
-```html
-<OMI-* /> <IMO-* /> <svg></svg>
-<template shadowrootmode="open"></template> <iframe></iframe>
-```
-
-**Hierarchical FS nodes** (sexagesimal orientation):
-
-```html
-<OMI-FS><omi-fs /><IMO-FS><imo-fs><imo-gs><imo-rs><imo-us /></imo-rs></imo-gs></imo-fs></IMO-FS></OMI-FS>
-```
-
-| Element | Role |
-|---------|------|
-| `OMI-FS` / `omi-fs` | Outer field system / low atomic field |
-| `IMO-FS` / `imo-fs` | High orientation field / frame system |
-| `imo-gs` | Glyph / geometry / graph structure |
-| `imo-rs` | Resolution segment |
-| `imo-us` | Unit state |
-
-See [3.2 Wormhole Portals](3_ARCHITECTURE/3.2_WORMHOLE_PORTALS.md) and [3.1 DOM Hierarchy](3_ARCHITECTURE/3.1_DOM_HIERARCHY.md).
-
----
-
-### 13. Linear and Hierarchical GUI Projection
-
-OMI GUI projections expose the same validated addressed state in two inspectable forms: a linear traversal stream and a hierarchical containment tree.
-
-This is projection guidance only. It does not add validation authority, replace Q_frame, bypass Omilog receipts, redefine Q_xy, alter POS graph behavior, change WordNet synset centroid identity, or reorder canonical document layers.
-
-| Projection | Preserves | GUI Surface | Canonical Meaning |
-|------------|-----------|-------------|-------------------|
-| Linear traversal stream | Replay/source-object order | `omi → payload → imo`, ids, `data-omi-*`, JSON Canvas node order | Shows how addressed state is walked, replayed, and inspected |
-| Hierarchical containment tree | Scope/document order | `FS → GS → RS → US`, nested GUI structure, document/context/control/unit layers | Shows where addressed state belongs and how it is contained |
-
-The linear projection preserves traversal order:
-
-```
-omi → payload → imo
-```
-
-It is appropriate for replay streams, source/object flow, frame inspection, JSON Canvas node order, DOM ids, `data-omi-*` attributes, and Omilog-visible sequence review.
-
-The hierarchical projection preserves containment order:
-
-```
-FS → GS → RS → US
-```
-
-It is appropriate for document layers, context boundaries, control surfaces, unit projections, nested GUI structure, and scoped object containment.
-
-Both projections remain downstream of validation:
-
-```
-validate → resolve → project → inspect
-```
-
-A GUI may render the two forms side by side, but neither form becomes the source of truth. The source of truth remains the accepted frame, its receipts, its graph identity, and its address resolution.
-
-Fonts, glyphs, Unicode codepoints, and visual typography may serve as precision carriers for GUI readability. They can help align mnemonic inspection, codepoint display, and visual debugging. They are not semantic authority. A rendered glyph is only a carrier. The validated state is determined by canonical frame validation, Omilog receipt evidence, graph identity, and x/y address resolution.
-
-```
-linear view       = how the state is traversed
-hierarchical view = where the state is contained
-validation        = why the state is accepted
-```
-
-See [3.1 DOM Hierarchy](3_ARCHITECTURE/3.1_DOM_HIERARCHY.md), [3.2 Wormhole Portals](3_ARCHITECTURE/3.2_WORMHOLE_PORTALS.md), and [3.3 Meta-Circular Compiler](3_ARCHITECTURE/3.3_META_CIRCULAR_COMPILER.md).
-
----
-
-### 14. WebMedia Multiplexing — Chiral Stream Routing
-
-| MIME Type | Role |
-|-----------|------|
-| `text/x-omi-mnemonic` | Text strings, lexicon definitions, Prolog fact-graphs |
-| `application/x-omi-cbos` | Raw Chiral Binary Object Streams (CBOS) over hardware caches |
-
-See [4.1 IPv6 Frame Mapping](4_NETWORK/4.1_IPv6_FRAME_MAPPING.md).
-
----
-
-### 15. The Prolog Tokenizer — Clause-to-Frame Pipeline
-
-```text
-Prolog clause → POS tag → 4y² feature pack → 16xy combinator inject → 60x² synset address → 128-byte frame
-```
-
-1. Accepts Prolog fact strings (e.g. `"FACT_SYNSET_NODE"`)
-2. Maps grammar types to POS bitmasks (NOUN → 0x1100, VERB → 0x2100)
-3. First character code → 16xy combinator byte
-4. Synset address → 24-bit 60x² pointer field
-5. ASCII control codes for directional axis positioning
-6. Writes 128-byte frame bounded by 0x03BF · 0x039F
-
-See [6.1 Node.js Compiler](6_IMPLEMENTATION/6.1_NODEJS_COMPILER.md) and [6.2 C99 Core](6_IMPLEMENTATION/6.2_C99_CORE.md).
-
----
-
-### 16. The Omni-Router — Deployment Blueprint
-
-The primary deployment blueprint reads declarative markdown and compiles directly to SpectrumDOM color fields:
-
-1. `SharedArrayBuffer(1024)` — 8 slots × 128 bytes, lock-free shared memory
-2. Multi-threaded WASM HNSW convolutions
-3. `routeMnemonic()` — instruction ingestion
-4. `compileToSpectrumDOM()` — layout tree generation
-5. `window.OmiRouter` — DevTools console access
-
-See [6.1 Node.js Compiler](6_IMPLEMENTATION/6.1_NODEJS_COMPILER.md).
-
----
-
-### 17. Cross-Language Implementation Targets
-
-All four targets produce identical Q(S) outcomes:
-
-| Target | Language | Size | Role |
-|--------|----------|------|------|
-| Reference | JavaScript | — | Canonical high-level implementation, test oracle |
-| Portable | C99 | — | Low-level cross-platform substrate |
-| Executable | WebAssembly | 2.7 KB | Compiled runtime artifact |
-| Kernel | eBPF/XDP | 14.7 KB ELF → ~1.5 KB JIT | Zero-copy NIC driver packet filter |
-
-See [6.2 C99 Core](6_IMPLEMENTATION/6.2_C99_CORE.md) and [4.3 eBPF Kernel Gate](4_NETWORK/4.3_eBPF_KERNEL_GATE.md).
-
----
-
-### 18. The Six-Layer Carrier Taxonomy
-
-All carriers satisfy `decode(encode(S)) = S` for structurally valid S:
-
-| Layer | Carriers | Role |
-|-------|----------|------|
-| **Physical** | ITF (clock), Code39 (guard) | Signal integrity — valid pulse? framed? |
-| **Transport** | Codabar → Code128 → Code16K → Code93 | 1D precision ladder (binary16 → binary256) |
-| **Geometric** | Aztec (FS), Maxi (GS), JABCode (RS), BeeTag (US) | 2D C0 control plane mapping |
-| **Algebraic** | Q(S) = 0 | Branchless quadratic zero-sum structural proof |
-| **Projective** | δ_C_LL resolver | Truth-row closure in ≤ 14 steps |
-| **Atomic** | CAS cursor | Lock-free 64-bit receipt write |
-
-See [4.2 RULES.omi](4_NETWORK/4.2_RULES_OMI.md).
-
----
-
-### 19. The Canonical Genesis Frame
-
-```text
-BOOT_ADDRESS = 0x7C00
-BOOT_SLOT = 0x7C00 mod 5040 = 1504
-GENESIS_LL = 0x01
-GENESIS_NN = 0x7C00
-C = (0x01 × 0x1337) & 0xFFFF = 0x1337
-GENESIS_MM = Δ_{0x1337}(0x7C00) = 0x1434
-GENESIS_STEPS = 1
-```
-
-Canonical frame: `0100-03bf-7c00-2b01-2f01-1434-039f-01ff`
-
-Q(S) = 0, steps = 1. This is the golden accept fixture for all conforming implementations. See [6.3 Test Suite](6_IMPLEMENTATION/6.3_TEST_SUITE.md).
-
----
-
-### 20. Conformance Requirements
-
-A conforming implementation MUST:
-
-1. Recognize `0x03BF` (omi-) and `0x039F` (-imo) as canonical frame anchors
-2. Validate frames via Q(S) = E_var + E_const = 0 as the sole structural predicate
-3. Implement Δ(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C with C = 0x5A3C
-4. Implement the Fano truth resolver with LL-modulated C = (LL × 0x1337) & 0xFFFF, bound ≤ 14 steps
-5. Accept the canonical genesis frame with Q(S) = 0 and steps = 1
-6. Reject byte-swapped frames (Q(S) ≥ 2×10⁹)
-7. Produce identical Q(S) outcomes to the JavaScript reference implementation
-
-See [6.2 C99 Core](6_IMPLEMENTATION/6.2_C99_CORE.md) and [6.3 Test Suite](6_IMPLEMENTATION/6.3_TEST_SUITE.md).
-
----
-
-### 21. The Omicron Constant and Tetrahedral Packets
-
-`Omega_0 = 16 bits`: one 4-character hex word. Five tetrahedral packet frames live inside that word discipline:
-
-| Packet | Width | Role |
-|--------|-------|------|
-| facts | `2^1` | assertions and chirality |
-| rules | `2^2` | `text`, `file`, `link`, `group` routing |
-| closures | `2^3` | scoped bindings |
-| combinators | `2^4` | ASCII/Unicode `16xy` junction |
-| cons | `2^5` | car/cdr pointers |
-
-The canonical browser selector is hyphenated:
-
-```text
-omi-CANONICAL_MAPPING_OF_0x0000_TO_0xAA55
-```
-
-### 22. Browser Runtime Loop
-
-The local runtime uses `SharedArrayBuffer(1024 * 16)` as a 16 KB bus: 128 slots, each one 128 bytes. Static assembly declarations compile into slots, slots project into DOM/SpectrumDOM, and live DOM nodes parse back into slots.
-
-Transaction primitives:
-
-```text
-join -> compose -> parse -> replay
-```
-
-`unicode-bidi` activates chirality: `omi-*` + `direction: ltr` runs forward `+16xy`; `imo-*` + `direction: rtl` runs inverse `-16xy`.
-
-### 23. Void-Factorial Cons Identity
-
-```text
-0! = 1
-()! = 60x^2 ± 16xy + 4y^2
-cons = 60x^2 ± 16xy + 4y^2
-```
-
-The empty cons is not a dead slot. It is the unity seed that expands into a valid quadratic surface.
-
----
-
-### 24. The Minimal Canonical Statement
-
-```text
-A frame is valid iff Q(S) = 0.
-A valid frame yields one truth row (LL, NN, MM).
-A truth row is accepted iff it resolves under δ_C_LL within the bounded step window.
-An accepted row advances the 5040-slot replay cursor by its step count using atomic compare-exchange.
-The resulting slot stores a 64-bit receipt.
-
-Ο bounds. ο executes. -- compresses zero. CIDR scopes.
-/// frames projection (FS 0x1C). \\ constrains boundary (RS 0x1E).
-Omicron inverts (0x5A3C). δ evaluates (period 8).
-() empties. ()! closes. 0! seeds. 60 counts. 720 sweeps. 5040 replays.
-```
-
----
-
-## Consumer Use Case: Open-World Decentralized Web Portal
-
-An **open-world decentralized web portal** is a consumer-facing OMI application where a user enters a shared digital space through an ordinary browser, but the objects inside that space are not locked to one server, one app, one account system, or one feed.
-
-The portal behaves like a normal website on the surface:
-
-```text
-open page → browse objects → inspect details → post/update → share/link → replay history
-```
-
-But underneath, every visible object is an addressed OMI state:
-
-```text
-omi → payload → imo
-```
-
-The consumer does not need to understand the full protocol. They experience OMI as a portable portal where pages, cards, files, notes, events, identities, maps, products, posts, and conversations can be inspected in two ways:
-
-```text
-linear view       = what happened, in what order
-hierarchical view = where it belongs, in what context
-```
-
-The open-world portal is therefore not just a webpage. It is a **decentralized object window**.
-
-### 1. Consumer Story
-
-A user opens the portal on their phone or laptop.
-
-They see a world of objects:
-
-- people
-- events
-- posts
-- notes
-- maps
-- files
-- products
-- services
-- local groups
-- routes
-- tasks
-- receipts
-- claims
-- knowledge cards
-
-Each object can be clicked, expanded, followed, copied, shared, verified, or replayed.
-
-To the consumer, the portal feels like a mix of:
-
-```text
-browser + map + wiki + wallet + canvas + feed + local bulletin board
-```
-
-But the key difference is this:
-
-> The portal does not merely show content. It shows addressed state.
-
-Every card has an identity. Every edit can produce a receipt. Every object can be viewed as part of a timeline, a graph, a document tree, or a local portal.
-
-### 2. Open-World Meaning
-
-"Open-world" means the portal assumes the world is not complete.
-
-A normal app usually behaves like a closed database:
-
-```text
-only this app's users
-only this app's posts
-only this app's IDs
-only this app's permissions
-only this app's feed
-```
-
-An OMI open-world portal behaves differently:
-
-```text
-new objects may appear
-unknown peers may publish
-external files may attach
-local devices may join
-offline state may later sync
-multiple naming systems may coexist
-different portals may project the same object
-```
-
-So the portal does not assume it owns the truth. It only asks:
-
-```text
-Can this object be addressed?
-Can this frame be validated?
-Can this receipt be replayed?
-Can this object be projected safely?
-Can the consumer inspect where it came from?
-```
-
-That is the consumer value: the user is not trapped inside one platform's database.
-
-### 3. The Main Consumer Experience
-
-The portal has four major consumer modes.
-
-#### 3.1 Discover
-
-The user enters through a homepage, map, QR code, shared link, local mesh node, event page, or personal dashboard.
-
-They discover objects as cards:
-
-```text
-event card
-person card
-place card
-file card
-post card
-route card
-service card
-product card
-discussion card
-```
-
-Each card has normal UI fields:
-
-```text
-title
-summary
-author/source
-time
-location/context
-status
-actions
-```
-
-But each card also has OMI fields:
-
-```text
-omi address
-frame receipt
-source path
-object path
-linear replay
-hierarchical containment
-```
-
-The consumer can ignore those fields until needed.
-
-#### 3.2 Inspect
-
-When the user opens an object, the portal shows two projections.
-
-The **linear projection** answers:
-
-```text
-What happened?
-What came before this?
-What does this replay from?
-What is the source/object flow?
-```
-
-Example:
-
-```text
-omi → event payload → update payload → comment payload → imo
-```
-
-The **hierarchical projection** answers:
-
-```text
-Where does this belong?
-What contains it?
-What context controls it?
-What unit is being inspected?
-```
-
-Example:
-
-```text
-Community
-  Bike Ride
-    Route
-      Stop
-        Comment
-```
-
-In OMI notation:
-
-```text
-FS → GS → RS → US
-```
-
-The consumer can switch between these views:
-
-| View         | Consumer Question          | Portal Projection          |
-|--------------|----------------------------|----------------------------|
-| Linear       | "What happened?"           | replay stream              |
-| Hierarchical | "Where is it?"             | containment tree           |
-| Graph        | "What is it connected to?" | object links               |
-| Receipt      | "Can I trust this?"        | validation/replay evidence |
-| Portal       | "Can I open it elsewhere?" | portable object projection |
-
-#### 3.3 Act
-
-The user can interact with the object:
-
-```text
-save
-share
-reply
-annotate
-verify
-join
-buy
-reserve
-donate
-route
-fork
-mirror
-publish
-```
-
-Each action becomes a new addressed state instead of a hidden platform-side mutation.
-
-For example, joining an event does not merely update a server database. It can produce a small receipt:
-
-```text
-user X joined event Y at time Z under context C
-```
-
-That receipt can be displayed in the user's portal, the event organizer's portal, and any trusted mirror that accepts the same validated object.
-
-#### 3.4 Port
-
-The "portal" part means the object can move across surfaces.
-
-The same object can appear as:
-
-```text
-web card
-map pin
-JSON Canvas node
-QR code
-SVG badge
-ShadowDOM widget
-local file
-mesh message
-receipt row
-timeline event
-```
-
-The object is not identical to its visual rendering. The rendering is only a carrier.
-
-This preserves the OMI rule:
-
-```text
-carrier ≠ authority
-projection ≠ validation
-glyph ≠ meaning
-```
-
-The object's authority comes from its addressed state, receipts, and validation path.
-
-### 4. Example Scenario: Local Event Portal
-
-A community bike ride organizer creates an event.
-
-The consumer sees:
-
-```text
-Sunday Night Lights Ride
-Meetup: Popeyes parking lot
-Route: Vermont Ave Florence → Imperial and back
-Distance: 3.2 miles one way
-Food: hot dogs, hot links, sodas
-Status: active
-```
-
-Underneath, the portal treats the event as an OMI object:
-
-```text
-omi-event
-  payload: ride details
-  context: local community
-  route: map object
-  author: organizer identity
-  receipts: updates, RSVPs, comments
-imo-event
-```
-
-A rider opens the event and sees:
-
-#### Linear view
-
-```text
-event created
-route added
-food info added
-safety note added
-rider joined
-speaker note added
-time updated
-```
-
-#### Hierarchical view
-
-```text
-Community
-  Sunday Night Lights
-    Ride
-      Meetup
-      Route
-      Safety
-      Food
-      Riders
-      Updates
-```
-
-#### Map view
-
-```text
-start point
-turnaround point
-route trace
-nearby posts
-local vendors
-live updates
-```
-
-#### Receipt view
-
-```text
-who posted what
-when it changed
-which frame accepted it
-which portal mirrored it
-```
-
-The consumer does not need to know the protocol to benefit. They just get a portable event page that can be opened, mirrored, verified, and replayed.
-
-### 5. Example Scenario: Personal Knowledge Portal
-
-A user saves a document, a note, and a conversation into their personal OMI portal.
-
-The portal shows the objects as a canvas:
-
-```text
-Note A → Topic B → File C → Source D
-```
-
-The user can inspect the same knowledge in two modes:
-
-#### Linear replay
-
-```text
-I found this source
-I wrote this note
-I linked this idea
-I revised this claim
-I shared this object
-```
-
-#### Hierarchical containment
-
-```text
-Project
-  Topic
-    Claim
-      Evidence
-        Source
-```
-
-This is useful because a consumer often needs both:
-
-```text
-timeline = how I got here
-tree     = where this belongs
-```
-
-A normal notes app may preserve one or the other. The OMI portal preserves both as projections of the same addressed state.
-
-### 6. Example Scenario: Local Marketplace Portal
-
-A vendor publishes a mobile cart menu.
-
-The consumer sees:
-
-```text
-Item: Hot dog
-Price: $2
-Location: event route
-Availability: tonight
-Payment: cash/donation
-```
-
-The OMI object contains:
-
-```text
-seller identity
-item identity
-price state
-location state
-availability state
-receipt history
-```
-
-If the vendor changes the price or runs out of stock, the update is a new state, not a silent overwrite.
-
-The consumer can inspect:
-
-```text
-current menu
-previous menu
-vendor identity
-event relationship
-location context
-receipt trail
-```
-
-That creates a decentralized local commerce portal where small vendors do not need a full platform account structure to publish inspectable objects.
-
-### 7. Trust Model for Consumers
-
-The consumer should not be forced to trust the portal operator blindly.
-
-The portal should show simple trust labels:
-
-```text
-Accepted
-Unverified
-Conflicting
-Expired
-Mirrored
-Local-only
-Replayed
-Rejected
-```
-
-A consumer-facing trust panel could say:
-
-```text
-This object passed frame validation.
-This object has 3 receipts.
-This object was mirrored by 2 peers.
-This object has 1 conflicting update.
-This object is local-only and not yet synced.
-```
-
-The consumer sees plain language, while the protocol maintains the deeper validation path.
-
-The rule is:
-
-```text
-simple labels for humans
-receipts for machines
-replay for verification
-```
-
-### 8. Identity Without Platform Lock-In
-
-In a normal app, identity often means:
-
-```text
-login with platform account
-profile stored on central server
-content owned by platform database
-```
-
-In an OMI portal, identity should be object-based:
-
-```text
-person object
-device object
-author key
-local handle
-portal handle
-receipt history
-relationship graph
-```
-
-A consumer can have multiple identities:
-
-```text
-public identity
-local event identity
-vendor identity
-private notebook identity
-device identity
-```
-
-The portal does not need to collapse all of them into one global account.
-
-That is important for an open-world system because the same person may participate differently in different contexts.
-
-### 9. Consumer Safety and Control
-
-A decentralized portal must not mean "anything can run."
-
-Consumer safety requires strict projection boundaries:
-
-```text
-render safely
-sandbox portals
-sanitize innerHTML
-isolate ShadowDOM widgets
-show unknown sources
-block unsafe scripts
-separate carrier from authority
-```
-
-Floating wormhole nodes are useful because they let objects appear inside portal surfaces, but they must be treated as projection capsules, not trusted execution by default.
-
-A safe consumer portal should default to:
-
-```text
-read-only projection first
-interaction second
-execution last
-```
-
-### 10. Why OMI Matters Here
-
-OMI gives the portal a stable object spine.
-
-The consumer sees:
-
-```text
-card
-page
-map
-timeline
-canvas
-widget
-receipt
-```
-
-The system sees:
-
-```text
-validated frame
-x/y address relation
-linear projection
-hierarchical projection
-receipt slot
-carrier surface
-```
-
-That means the same state can be shown many ways without changing what it is.
-
-This is the main consumer promise:
-
-> One object, many portals, inspectable history, portable context.
-
-### 11. Minimal Consumer Promise
-
-The open-world decentralized web portal should promise five things:
-
-1. **Portability** — objects are not trapped in one app view.
-2. **Inspectability** — users can see history, containment, and source.
-3. **Replayability** — important actions can be replayed from receipts.
-4. **Context** — every object can show where it belongs.
-5. **Safety** — projection does not automatically become authority.
-
-In one sentence:
-
-```text
-The portal lets consumers browse, trust, and move through decentralized objects as ordinary web pages, while OMI preserves the addressed state, replay order, containment structure, and validation receipts underneath.
-```
-
-### 12. Consumer-Facing Interface Sketch
-
-```text
-┌─────────────────────────────────────────────────────────────┐
-│ Open World Portal                                           │
-├─────────────────────────────────────────────────────────────┤
-│ Search / Scan / Open / Nearby / My Objects                  │
-├─────────────────────────────────────────────────────────────┤
-│ Object Card                                                 │
-│   Title: Sunday Night Lights Ride                           │
-│   Status: Accepted                                          │
-│   Source: Local organizer                                   │
-│   Context: Community / Bike Ride / Route                    │
-├─────────────────────────────────────────────────────────────┤
-│ Views                                                       │
-│   [Linear Replay] [Hierarchy] [Map] [Graph] [Receipts]      │
-├─────────────────────────────────────────────────────────────┤
-│ Linear Replay                                               │
-│   created → route added → safety note → riders joined       │
-├─────────────────────────────────────────────────────────────┤
-│ Hierarchy                                                   │
-│   Community → Event → Route → Stop → Comment                │
-├─────────────────────────────────────────────────────────────┤
-│ Actions                                                     │
-│   Save | Join | Share | Mirror | Verify | Export            │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### 13. Portal Architecture in One Flow
-
 ```text
-consumer action
-  ↓
-portal UI
-  ↓
-object projection
-  ↓
-OMI frame / object address
-  ↓
-validation + receipt
-  ↓
-linear replay stream
-  ↓
-hierarchical containment tree
-  ↓
-portable carrier output
+carrier != authority
+projection != validation
+glyph != meaning
+portal != proof
 ```
 
-The consumer-facing app should hide the complexity until the user asks to inspect it. The protocol should remain visible enough that power users can verify, export, mirror, and replay objects without depending on a single platform.
+OMI is a way to make open-world structure portable without handing truth to one platform.
 
-The shortest version: **the consumer portal is a normal-looking web portal for open-world objects, but every object can be inspected as timeline, tree, graph, receipt, and portable carrier.**
+## What This Repository Is
 
----
+This is a **documentation-only OMI canon repository**.
 
-## Agreement Is All You Need: The OMI Open-World Portal Model
+It is not trying to be a package manager artifact, production runtime, or single app. It is the written specification, narrative map, and conceptual architecture for the Omicron Object Model.
 
-### Abstract
+The repo is organized as a progressive reader path:
 
-The open-world decentralized web does not need a single platform to decide what is true. It needs a shared way to turn user actions, objects, claims, links, events, and identities into validated, replayable, inspectable state.
-
-That is the role of the **Omi Object Model**.
-
-In OMI, **agreement** is not passive approval, social consensus, or majority vote. Agreement is the moment an object becomes structurally valid, addressable, replayable, and projectable across portals.
-
-A consumer does not experience this as math. A consumer experiences it as a normal web portal:
-
 ```text
-open → browse → inspect → act → verify → share → replay
+1_FOUNDATIONS      what OMI is
+2_MATH             why the laws work
+3_ARCHITECTURE     how accepted state projects into DOM/portal space
+4_NETWORK          how frames map to IPv6, eBPF, and RULES.omi
+5_MEMORY           how replay and receipts persist
+6_IMPLEMENTATION   how runtimes prove conformance
+7_CANON            how the final doctrine reconciles the versions
+8_COSMOLOGY        how the quadratic law becomes a ring cosmology
+public             static public pages and browser-facing models
+_archive           source notes, extracted sessions, and older drafts
 ```
-
-But underneath, every visible object is an OMI object:
 
-```text
-omi → payload → imo
-```
+The goal is that a reader can enter from any layer:
 
-The portal may show the object as a card, map pin, canvas node, QR code, SVG widget, local file, timeline event, or receipt row. Those are only projections. The authority is the accepted frame, its receipts, its address resolution, and its graph identity.
+- from the palindrome,
+- from the math,
+- from the browser architecture,
+- from the IPv6/eBPF mapping,
+- from the replay ring,
+- from the open-world portal model,
+- or from the final canon.
+- or from the cosmology of bounded return.
 
-The claim of this article is simple:
+Each path should lead back to the same core doctrine:
 
 ```text
-Agreement is all you need because agreement is the bridge from open-world uncertainty to validated shared structure.
+Agreement is the moment shared intelligence becomes validated, replayable structure.
 ```
 
-### 1. The Consumer Problem
+## Why OMI Exists
 
-Today's web is full of portals, but most portals are closed worlds.
+Most software portals are closed worlds.
 
 A closed-world platform assumes:
 
 ```text
 this app owns the account
 this app owns the feed
-this app owns the database
 this app owns the object ID
+this app owns the database
 this app decides the truth state
 ```
 
-That is convenient, but it creates lock-in. A post cannot naturally become a map object. A note cannot naturally become an event object. A receipt cannot naturally become a portable proof. A local community page cannot easily move between a browser, phone, QR code, mesh node, and personal archive without losing structure.
+That makes the interface convenient, but it traps context. A post cannot naturally become a map object. A note cannot naturally become an event object. A receipt cannot naturally become portable proof. A local community page cannot easily move between a browser, phone, QR code, mesh node, personal archive, and public portal without losing structure.
 
-Consumers do not only need content. They need portable context.
-
-They need to know:
+OMI starts from a different assumption:
 
 ```text
-What is this object?
-Where did it come from?
-Who changed it?
-Can I trust it?
-Can I open it somewhere else?
-Can I replay what happened?
-Can I see where it belongs?
+the world is not complete
+objects may appear from outside the app
+multiple naming systems may coexist
+offline state may later sync
+different portals may project the same object
+the user should be able to inspect what happened
 ```
 
-An open-world portal must answer those questions without requiring one central platform to own everything.
+So OMI does not ask one platform to own truth.
 
-### 2. Agreement as Consumer Trust
+It asks:
 
-In OMI, agreement means a piece of shared intelligence has been lowered into validated structure.
+```text
+Can this object be addressed?
+Can this frame be validated?
+Can this truth row resolve?
+Can this receipt be replayed?
+Can this object be projected safely?
+Can the reader inspect where it came from?
+```
 
-For the consumer, this becomes a trust path:
+That is the open-world promise.
+
+## Agreement Is All You Need
+
+In OMI, **agreement** is not passive approval, voting, social consensus, or platform acceptance.
+
+Agreement is a structural event.
+
+An informal action becomes agreement only when it can be lowered into a bounded object path:
 
 ```text
 someone says something
@@ -1273,72 +147,387 @@ the object becomes inspectable
 the object can be projected
 ```
 
-So agreement is not merely:
+So agreement does not mean:
 
 ```text
 I like this
-I approve this
 I voted for this
 the platform accepted this
+the majority approved this
 ```
 
-Agreement is:
+Agreement means:
 
 ```text
 this object has a valid frame
-this object has a replay path
 this object has an address relation
+this object has a replay path
+this object has a receipt
 this object can be inspected
 this object can be projected without becoming corrupted
 ```
 
-For consumers, the portal can translate that into plain labels:
+Disagreement is not failure. Disagreement is an unresolved path.
 
 ```text
-Accepted
-Unverified
-Conflicting
-Expired
-Mirrored
-Local-only
-Rejected
-Replayed
+disagreement -> missing structure -> new object/path/test/receipt
 ```
 
-A normal user sees simple status. A power user can inspect the receipt, frame, replay path, and graph relation.
+For example:
 
-### 3. Disagreement as an Unresolved Path
+| Disagreement | Missing Structure | OMI Output |
+|--------------|-------------------|------------|
+| "What is this?" | boundary | create or reveal object address |
+| "Who said this?" | source | show identity/provenance object |
+| "Where does this belong?" | containment | show hierarchy path |
+| "What changed?" | replay | show linear event stream |
+| "Why trust it?" | receipt | show validation evidence |
+| "What does this word mean?" | semantic identity | resolve POS / synset / graph node |
+| "Which version is current?" | conflict rule | show competing receipts |
+| "Can I open it elsewhere?" | carrier projection | export as card, canvas, QR, SVG, or file |
 
-In a closed platform, disagreement often becomes moderation, argument, deletion, or ranking.
+OMI does not erase disagreement. It routes disagreement into construction.
 
-In OMI, disagreement is treated as an unresolved path.
+## The Core Pipeline
 
-A disagreement means something structural is missing:
-
-| Disagreement                | Missing Structure          | Portal Output                            |
-|-----------------------------|----------------------------|------------------------------------------|
-| "What is this?"             | Missing boundary           | Create or reveal object address          |
-| "Who said this?"            | Missing source             | Show identity or provenance object       |
-| "Where does this belong?"   | Missing containment        | Show hierarchy path                      |
-| "What changed?"             | Missing replay             | Show linear event stream                 |
-| "Why trust it?"             | Missing receipt            | Show validation evidence                 |
-| "What does this word mean?" | Missing semantic identity  | Resolve POS / synset / graph node        |
-| "Which version is current?" | Missing conflict rule      | Show competing receipts                  |
-| "Can I open it elsewhere?"  | Missing carrier projection | Export as card, canvas, QR, SVG, or file |
-
-This is the constructive doctrine:
+The minimal OMI pipeline is:
 
 ```text
-disagreement → missing structure → new object/path/test/receipt
+Q_frame(S) = 0
+  ↓
+truth row = (LL, NN, MM)
+  ↓
+MM resolves from NN under the LL-modulated Delta Law
+  ↓
+receipt writes into the 5040-slot replay ring
+  ↓
+Q_xy projects accepted state into readable geometry
+  ↓
+portal surfaces inspect the accepted object
 ```
 
-The portal does not need to erase disagreement. It needs to route disagreement into inspectable structure.
+Expanded:
 
-### 4. The Open-World Portal
+```text
+A frame is valid iff Q_frame(S) = 0.
 
-An OMI open-world portal is a normal-looking web app that displays decentralized objects.
+A valid frame yields one truth row:
+  (LL, NN, MM)
 
-The consumer sees:
+A truth row is accepted iff MM resolves from NN under the LL-modulated Delta Law within the bounded Fano window.
+
+An accepted row writes a replayable receipt into the 5040-slot ring.
+
+Only after validation, resolution, and receipt may the object be projected into DOM, SVG, JSON Canvas, IPv6, QR, portal UI, or reader lenses.
+
+Projection is never authority.
+```
+
+This is the order that must not collapse:
+
+```text
+validate -> resolve -> record -> project -> inspect
+```
+
+Not:
+
+```text
+render -> believe
+```
+
+## The Palindrome
+
+The story begins with:
+
+```text
+omi---imo
+```
+
+The readable mnemonic form is `omi` and `imo`.
+
+The compiled symbolic boundary uses the Omicron pair:
+
+```text
+ο = U+03BF = Greek small omicron
+Ο = U+039F = Greek capital Omicron
+```
+
+OMI treats those symbols as structural anchors, not decorative glyphs.
+
+```text
+omi-  ->  ο  ->  entry into the object
+-imo  ->  Ο  ->  closure of the object
+```
+
+The lower Omicron pair acts as the zero-frame marker. It tells the system where interpretation begins and where closure occurs.
+
+The short rule:
+
+```text
+Omicron is not display.
+Omicron is structure.
+```
+
+This distinction matters because OMI may render many visual forms, but the rendered form is not what validates the object.
+
+## The Two Major Laws
+
+OMI is governed by two major mathematical laws.
+
+### 1. The Delta Law
+
+The Delta Law is the atomic 16-bit transition engine:
+
+```text
+Δ(x) = rotl(x, 1) ⊕ rotl(x, 3) ⊕ rotr(x, 2) ⊕ C
+```
+
+The canonical base constant is:
+
+```text
+C = 0x5A3C
+```
+
+The Delta Law uses:
+
+```text
+rotations  -> preserve bits
+XOR        -> reversible mixing
+constant   -> breaks the zero fixed point
+mask       -> keeps state bounded to 16 bits
+```
+
+The bounded form is:
+
+```text
+Δ₁₆(x) = (rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C) & 0xFFFF
+```
+
+In OMI, Delta gives local motion, orbit tracking, replay cadence, deterministic step behavior, and truth-row resolution.
+
+It produces the period-8 cadence that connects to the repeating decimal block of `1/73`:
+
+```text
+1/73 = 0.01369863...
+B = [0, 1, 3, 6, 9, 8, 6, 3]
+W = 36
+(epoch, phase) = divmod(position, 36)
+```
+
+The short rule:
+
+```text
+Atomic Delta clocks.
+Cosmic 36 orbits.
+```
+
+### 2. The Quadratic Law
+
+OMI's projection and address geometry is:
+
+```text
+Q_xy(x, y) = 60x² + 16xy + 4y²
+```
+
+Each term has a role:
+
+| Term | Role | OMI Meaning |
+|------|------|-------------|
+| `4y²` | low side | `omi-`, atomic data, `data-*`, local payload |
+| `16xy` | meeting plane | CSSOM/JSDOM bridge, shared address relation |
+| `60x²` | high side | `-imo`, DOM `id`, stable identity, orientation |
+
+The number `60` anchors sexagesimal orientation. The number `16` anchors the nibble/word-boundary bridge. The number `4` anchors the visible selector/control face.
+
+The Quadratic Law is projection geometry. It is not the structural validator itself.
+
+Structural validation belongs to:
+
+```text
+Q_frame(S) = 0
+```
+
+This distinction is central:
+
+```text
+Q_frame validates.
+Q_xy projects.
+```
+
+## The 128-Bit Frame
+
+An OMI frame is an 8-segment structure of 16-bit words:
+
+```text
+S0-S1-S2-S3-S4-S5-S6-S7
+```
+
+A canonical frame has this shape:
+
+| Segment | Value | Role |
+|---------|-------|------|
+| `S0` | `0xLL00` | opening boundary |
+| `S1` | `0x03BF` | small omicron delimiter |
+| `S2` | `0xNNNN` | antecedent input |
+| `S3` | `0x2BLL` | interior lens binding |
+| `S4` | `0x2FLL` | interior lens binding |
+| `S5` | `0xMMMM` | consequent output |
+| `S6` | `0x039F` | capital Omicron delimiter |
+| `S7` | `0xLLFF` | closing boundary |
+
+Frame validation checks two things:
+
+```text
+E_var    -> repeated LL agreement across S0, S3, S4, S7
+E_const  -> fixed delimiter and constant alignment
+```
+
+A valid frame satisfies:
+
+```text
+Q_frame(S) = E_var + E_const = 0
+```
+
+This is the lower structural gate. A glyph, CSS rule, DOM node, Base36 symbol, emoji, color field, or portal card cannot make an invalid frame valid.
+
+## Truth-Row Resolution
+
+Once the frame validates, OMI extracts the truth row:
+
+```text
+(LL, NN, MM)
+```
+
+The resolver tries to reach `MM` from `NN` under the LL-modulated Delta Law.
+
+One canonical modulation is:
+
+```text
+C_LL = (LL × 0x1337) & 0xFFFF
+```
+
+The resolver iterates:
+
+```text
+NN -> Δ_C_LL(NN) -> ... -> MM
+```
+
+If `MM` is reached within the bounded Fano window, the row is accepted and the step count becomes a receipt field.
+
+If `MM` is not reached, the row is rejected.
+
+This gives OMI a deterministic acceptance path:
+
+```text
+valid frame
+  ↓
+truth row extracted
+  ↓
+bounded resolution attempted
+  ↓
+accepted or rejected
+```
+
+This is not majority vote. It is not probabilistic social consensus. It is a structural resolver.
+
+## The 5040 Replay Ring
+
+Accepted truth rows are recorded into the replay ring:
+
+```text
+7! = 5040 slots
+```
+
+Each receipt stores enough information to replay the accepted relation.
+
+A receipt contains:
+
+```text
+provenance
+step count
+LL
+NN
+MM
+```
+
+The ring makes agreement durable:
+
+```text
+agreement -> receipt -> replay path
+```
+
+The replay ring is why OMI can say an object has history without depending on a hidden platform database. The object's visible state can be inspected through its accepted receipts.
+
+The short rule:
+
+```text
+5040 replays.
+```
+
+## Lower Omicron and Upper Bidi
+
+OMI separates lower structural law from upper reader law.
+
+The lower stack is governed by:
+
+```text
+Omicron symbols
+Delta Law
+binary quadratic form
+Q_frame
+Fano replay
+hidden 5! orbit recovery
+5040 receipts
+```
+
+The upper stack is governed by:
+
+```text
+reader sequencing
+CSS unicode-bidi
+LTR/RTL display orientation
+visual lenses
+observer order
+template phase
+```
+
+The correction is important:
+
+```text
+unicode-bidi does not belong to the lower stack as authority.
+unicode-bidi belongs to the upper stack as a cosmetic reader lens.
+```
+
+Below `8!`, OMI is governed by actual Omicron zero-frame symbols, Delta, the binary quadratic form, and replay.
+
+Above `9!`, OMI may use `unicode-bidi` to display alternate reader orientation without changing the underlying character representation, validating the frame, or authorizing lower-state mutation.
+
+Short doctrine:
+
+```text
+Lower Omicron encodes.
+Atomic Delta clocks.
+Hidden 5! roots.
+Cosmic 36 orbits.
+Upper Bidi displays.
+Characters stay fixed.
+```
+
+A lower error means the object body drifted. An upper error means the reader lens tilted.
+
+That separation protects the protocol from confusing display with truth.
+
+## The Open-World Portal
+
+A consumer does not experience OMI as equations.
+
+A consumer experiences OMI as a normal web portal:
+
+```text
+open -> browse -> inspect -> act -> verify -> share -> replay
+```
+
+They see:
 
 ```text
 cards
@@ -1356,7 +545,7 @@ comments
 local groups
 ```
 
-The OMI layer sees:
+Underneath, the portal sees:
 
 ```text
 validated frames
@@ -1383,28 +572,13 @@ timeline entry
 receipt row
 ```
 
-The consumer does not have to learn the protocol. The portal gives them ordinary actions:
+The object is the addressed state. The portal surface is only a carrier.
 
-```text
-save
-share
-join
-reply
-mirror
-verify
-export
-follow
-fork
-annotate
-```
+## The Two Reader Views
 
-But each action can produce a new addressed state instead of a hidden server-side mutation.
+Every accepted OMI object should be inspectable in two basic views.
 
-### 5. The Two Consumer Views: Linear and Hierarchical
-
-Every portal object should be inspectable in two basic forms.
-
-#### 5.1 Linear View
+### Linear View
 
 The linear view answers:
 
@@ -1415,13 +589,13 @@ What was replayed?
 What led to this state?
 ```
 
-In OMI terms:
+In OMI notation:
 
 ```text
-omi → payload → imo
+omi -> payload -> imo
 ```
 
-For an event, the consumer might see:
+For an event, the linear view might show:
 
 ```text
 event created
@@ -1433,9 +607,9 @@ time updated
 comment posted
 ```
 
-The linear view is a replay stream. It is how the object moved.
+The linear view shows how the object moved.
 
-#### 5.2 Hierarchical View
+### Hierarchical View
 
 The hierarchical view answers:
 
@@ -1446,13 +620,13 @@ What context controls it?
 What unit am I inspecting?
 ```
 
-In OMI terms:
+In OMI notation:
 
 ```text
-FS → GS → RS → US
+FS -> GS -> RS -> US
 ```
 
-For the same event, the consumer might see:
+For the same event, the hierarchy might show:
 
 ```text
 Community
@@ -1462,79 +636,17 @@ Community
         Comment
 ```
 
-The hierarchical view is a containment tree. It is where the object belongs.
+The hierarchical view shows where the object belongs.
 
-#### 5.3 Projection Is Not Authority
-
-Both views are projections. They help users inspect the object, but they do not validate the object.
-
-The rule is:
+Together:
 
 ```text
-validate → resolve → record → project → inspect
+linear view       = how the state moved
+hierarchical view = where the state belongs
+receipts          = why the state was accepted
 ```
 
-Not:
-
-```text
-render → believe
-```
-
-The portal may use fonts, glyphs, codepoints, color graphs, SVG, ShadowDOM, JSON Canvas, or QR codes. Those are carriers. They do not become semantic authority.
-
-### 6. The Object Agreement Pipeline
-
-A consumer action becomes agreement only after passing through the OMI pipeline.
-
-```text
-consumer action
-  ↓
-portal object
-  ↓
-OMI frame
-  ↓
-Q_frame validation
-  ↓
-truth-row resolution
-  ↓
-receipt write
-  ↓
-Q_xy projection
-  ↓
-linear and hierarchical GUI views
-```
-
-The user sees a clean interface. The protocol preserves the proof path.
-
-This means a user can click "join event," "save note," "mirror post," or "verify object," and the portal can convert that into a structured state change.
-
-Example:
-
-```text
-User joins a bike ride.
-```
-
-Closed platform interpretation:
-
-```text
-server updates RSVP table
-```
-
-OMI portal interpretation:
-
-```text
-person object
-  agrees to
-event object
-  under context
-local community ride
-  with receipt
-timestamp / source / replay slot
-```
-
-The action becomes portable state.
-
-### 7. Local Event Use Case
+## Example: Local Event Portal
 
 A community organizer creates a bike ride portal.
 
@@ -1543,7 +655,7 @@ The consumer sees:
 ```text
 Sunday Night Lights Ride
 Meetup: Popeyes parking lot
-Route: Vermont Ave Florence → Imperial and back
+Route: Vermont Ave Florence -> Imperial and back
 Distance: 3.2 miles one way
 Food: hot dogs, hot links, sodas
 Status: active
@@ -1561,17 +673,17 @@ omi-event
 imo-event
 ```
 
-A rider opens the portal and gets five views:
+A rider opens the portal and gets multiple views:
 
-| View          | Consumer Value            |
-|---------------|---------------------------|
-| Card          | Fast summary              |
-| Linear replay | What changed and when     |
-| Hierarchy     | Where the object belongs  |
-| Map           | Where to go               |
-| Receipts      | Why the object is trusted |
+| View | Consumer Value |
+|------|----------------|
+| Card | fast summary |
+| Linear replay | what changed and when |
+| Hierarchy | where the object belongs |
+| Map | where to go |
+| Receipts | why the object is trusted |
 
-If the route changes, the old version is not silently erased. The new update becomes a new addressed state. Consumers can inspect the update path.
+If the route changes, the old version is not silently erased. The update becomes a new addressed state.
 
 The portal can say:
 
@@ -1584,7 +696,7 @@ Previous route still replayable.
 
 That is consumer-facing agreement.
 
-### 8. Local Marketplace Use Case
+## Example: Local Marketplace Portal
 
 A vendor publishes a cart menu through the same portal.
 
@@ -1625,24 +737,22 @@ receipt status
 
 This makes local commerce portable. The vendor does not need to be trapped inside one delivery app, marketplace app, or social platform.
 
-### 9. Personal Knowledge Use Case
+## Example: Personal Knowledge Portal
 
-A user saves a note, a source, and a claim.
+A user saves a source, note, and claim.
 
 In a normal notes app, this becomes private content inside one database.
 
-In an OMI portal, the note can become an addressed object:
+In an OMI portal, the note can become an addressed object chain:
 
 ```text
 source object
-  → note object
-    → claim object
-      → evidence object
+  -> note object
+    -> claim object
+      -> evidence object
 ```
 
-The consumer can inspect the same knowledge in two ways.
-
-Linear replay:
+The same knowledge can be inspected as replay:
 
 ```text
 source found
@@ -1653,7 +763,7 @@ summary revised
 shared with group
 ```
 
-Hierarchical containment:
+And as containment:
 
 ```text
 Project
@@ -1663,144 +773,299 @@ Project
         Source
 ```
 
-This matters because thinking has both a timeline and a structure.
+Thinking has both a timeline and a structure. OMI preserves both.
 
-The OMI portal preserves both.
-
-### 10. Identity Use Case
-
-A consumer should not need one universal platform account for every context.
-
-In an open-world portal, identity can be object-based:
+## Repository Map
 
 ```text
-person object
-device object
-local handle
-public handle
-vendor handle
-event handle
-author key
-receipt history
-relationship graph
+.
+├── 1_FOUNDATIONS
+│   ├── 1.1_THE_PALINDROME.md
+│   ├── 1.2_THE_OMICRON_ANCHORS.md
+│   ├── 1.3_THE_OMI_RING.md
+│   └── 1.4_THE_OMI_UNIVERSAL_CONSTANT.md
+├── 2_MATH
+│   ├── 2.1_THE_QUADRATIC_LAW.md
+│   ├── 2.2_THE_DELTA_LAW.md
+│   ├── 2.3_SEXAGESIMAL_SYSTEM.md
+│   └── 2.4_POLYCUBES_AND_GROUPS.md
+├── 3_ARCHITECTURE
+│   ├── 3.1_DOM_HIERARCHY.md
+│   ├── 3.2_WORMHOLE_PORTALS.md
+│   └── 3.3_META_CIRCULAR_COMPILER.md
+├── 4_NETWORK
+│   ├── 4.1_IPv6_FRAME_MAPPING.md
+│   ├── 4.2_RULES_OMI.md
+│   └── 4.3_eBPF_KERNEL_GATE.md
+├── 5_MEMORY
+│   ├── 5.1_RING_INDEXER.md
+│   └── 5.2_OVERWRITE_POLICY.md
+├── 6_IMPLEMENTATION
+│   ├── 6.1_NODEJS_COMPILER.md
+│   ├── 6.2_C99_CORE.md
+│   └── 6.3_TEST_SUITE.md
+├── 7_CANON
+│   ├── 7.1_AGREEMENT_DOCTRINE.md
+│   ├── 7.2_OPEN_WORLD_PORTAL_MODEL.md
+│   ├── 7.3_LOWER_OMICRON_UPPER_BIDI.md
+│   └── 7.4_CONFORMANCE_CANON.md
+├── 8_COSMOLOGY
+│   └── 8.1_THE_COSMOLOGY_OF_OMI.md
+├── public
+│   ├── agreement-is-all-we-need.html
+│   ├── index.html
+│   └── omi-block-model.html
+├── _archive
+└── README.md
 ```
 
-The same person may appear differently in different contexts:
+## Narrative Index
+
+### [1. Foundations](1_FOUNDATIONS/)
+
+The foundations introduce the palindrome, the Omicron anchors, the Omi-Ring, and the universal zero-point.
+
+The story begins with `omi---imo`: a bounded relation between source-side intelligence and object-side projection. The omicron anchors `0x03BF` and `0x039F` frame every transmission. The OMI Universal Constant is the zero-point of bounded agreement, and the Omi-Ring is the waveform enclosure built on it.
+
+Read this section first if you want to understand why OMI begins with a mnemonic relation instead of a conventional object ID.
+
+- [1.1 The Palindrome: omi---imo](1_FOUNDATIONS/1.1_THE_PALINDROME.md)
+- [1.2 The Omicron Anchors: 0x03BF and 0x039F](1_FOUNDATIONS/1.2_THE_OMICRON_ANCHORS.md)
+- [1.3 The Omi-Ring: Atomic Waveform Enclosure](1_FOUNDATIONS/1.3_THE_OMI_RING.md)
+- [1.4 The OMI Universal Constant: Ω₀ = 0! = omi---imo](1_FOUNDATIONS/1.4_THE_OMI_UNIVERSAL_CONSTANT.md)
+
+### [2. Math](2_MATH/)
+
+The math section defines the transition, validation, projection, and symmetry laws.
+
+`Q_frame(S)` is the lower validation gate. `Q_xy(x,y) = 60x² + 16xy + 4y²` is the projection geometry. The Delta Law generates bounded period-8 orbits used by the Fano resolver and replay ring. The sexagesimal system supplies the orientation grammar.
+
+Read this section if you want to understand why OMI treats agreement as a bounded computation instead of a social label.
+
+- [2.1 The Quadratic Law](2_MATH/2.1_THE_QUADRATIC_LAW.md)
+- [2.2 The Delta Law](2_MATH/2.2_THE_DELTA_LAW.md)
+- [2.3 The Sexagesimal System](2_MATH/2.3_SEXAGESIMAL_SYSTEM.md)
+- [2.4 Polycubes and Symmetry Groups](2_MATH/2.4_POLYCUBES_AND_GROUPS.md)
+
+### [3. Architecture](3_ARCHITECTURE/)
+
+The architecture section explains how accepted state becomes inspectable without confusing display with authority.
+
+Accepted OMI state can project into:
 
 ```text
-public profile
-local event participant
-vendor
-private notebook author
-device operator
-community moderator
+DOM hierarchy
+ShadowDOM capsules
+SVG surfaces
+JSON Canvas nodes
+portal cards
+wormhole nodes
+reader lenses
 ```
 
-Agreement does not require collapsing all identities into one platform account. It only requires that each action has an inspectable source path appropriate to its context.
+The important rule is that all of these surfaces are downstream of validation. They may carry state, inspect state, or render state, but they do not create authority.
 
-### 11. Safety: Open World Does Not Mean Unsafe World
+Read this section if you want to understand how OMI becomes visible in the browser.
 
-A decentralized portal must be strict about safety.
+- [3.1 The DOM Hierarchy](3_ARCHITECTURE/3.1_DOM_HIERARCHY.md)
+- [3.2 Wormhole Portals](3_ARCHITECTURE/3.2_WORMHOLE_PORTALS.md)
+- [3.3 The Meta-Circular Chronograph Compiler](3_ARCHITECTURE/3.3_META_CIRCULAR_COMPILER.md)
 
-The portal should default to:
+### [4. Network](4_NETWORK/)
+
+The network section explains the 128-bit frame mapping.
+
+An IPv6 source address is 128 bits. An OMI canonical frame is also 128 bits. This width alignment allows OMI frame structure to be carried directly through IPv6-style segment layout.
+
+The eBPF/XDP gate model places validation at the network edge:
 
 ```text
-read-only projection first
-interaction second
-execution last
+packet arrives
+  ↓
+XDP/eBPF reads IPv6 source frame
+  ↓
+Gate 1: Q_frame validation
+  ↓
+Gate 2: Delta/Fano truth-row resolution
+  ↓
+valid   -> XDP_PASS
+invalid -> XDP_DROP
 ```
 
-Floating portal nodes such as ShadowDOM, SVG, iframe-like capsules, and innerHTML islands are useful for projection, but they must not automatically become trusted execution surfaces.
+Read this section if you want to understand how OMI treats packet structure as an object boundary.
 
-Consumer safety requires:
+- [4.1 IPv6 Frame Mapping](4_NETWORK/4.1_IPv6_FRAME_MAPPING.md)
+- [4.2 RULES.omi](4_NETWORK/4.2_RULES_OMI.md)
+- [4.3 The eBPF/XDP Kernel Gate](4_NETWORK/4.3_eBPF_KERNEL_GATE.md)
+
+### [5. Memory](5_MEMORY/)
+
+The memory section explains how accepted truth rows persist.
+
+OMI uses:
 
 ```text
-sanitize innerHTML
-sandbox iframe-like portals
-separate display from validation
-mark unknown sources
-show unverified objects
-block unsafe scripts
-preserve receipt inspection
+7! = 5040
 ```
 
-The rule is:
+as the replay ring size. Accepted truth rows write receipts into the ring. Cursor movement follows Delta/Fano step distance, and overwrite policy preserves epoch safety.
+
+Read this section if you want to understand how OMI turns agreement into replayable memory.
+
+- [5.1 The Ring Indexer](5_MEMORY/5.1_RING_INDEXER.md)
+- [5.2 Ring Overwrite Policy](5_MEMORY/5.2_OVERWRITE_POLICY.md)
+
+### [6. Implementation](6_IMPLEMENTATION/)
+
+The implementation section describes how the same conformance surface can be expressed across runtimes.
+
+Targets include:
 
 ```text
-carrier is not authority
-projection is not validation
-visual trust is not protocol trust
+JavaScript reference
+C99 portable core
+WASM executable substrate
+eBPF/XDP kernel gate
 ```
 
-### 12. Why Agreement Is Enough
+The goal is byte-level agreement on validation outcomes, truth-row behavior, and canonical fixtures.
 
-Agreement is enough because it gives every object a path from uncertainty to structure.
+Read this section if you want to understand how the written doctrine becomes testable.
 
-A user may begin with an informal action:
+- [6.1 The Node.js Compiler](6_IMPLEMENTATION/6.1_NODEJS_COMPILER.md)
+- [6.2 The C99 Core](6_IMPLEMENTATION/6.2_C99_CORE.md)
+- [6.3 The Test Suite](6_IMPLEMENTATION/6.3_TEST_SUITE.md)
+
+### [7. Canon](7_CANON/)
+
+The canon section reconciles the major doctrine versions.
+
+It contains the final statements on:
 
 ```text
-I want to join this ride.
-I want to post this menu.
-I want to save this note.
-I want to mirror this event.
-I disagree with this claim.
+agreement as construction
+open-world portal behavior
+lower Omicron versus upper Bidi
+conformance and non-collapse rules
 ```
 
-OMI lowers the action into structure:
+Read this section if you want the shortest authoritative version of the OMI doctrine after the different drafts were reconciled.
+
+- [7.1 Agreement Doctrine](7_CANON/7.1_AGREEMENT_DOCTRINE.md)
+- [7.2 Open-World Portal Model](7_CANON/7.2_OPEN_WORLD_PORTAL_MODEL.md)
+- [7.3 Lower Omicron / Upper Bidi](7_CANON/7.3_LOWER_OMICRON_UPPER_BIDI.md)
+- [7.4 Conformance Canon](7_CANON/7.4_CONFORMANCE_CANON.md)
+
+### [8. Cosmology](8_COSMOLOGY/)
+
+The cosmology section explains how OMI reads the quadratic law as a ring domain instead of a flat coordinate sheet.
+
+In this layer:
 
 ```text
-boundary
-frame
-truth row
-receipt
-projection
-replay
+4y² = Atomic Delta
+16xy = Omi-Ring Bridge
+60x² = Cosmic Orbit
 ```
 
-Once that happens, the object can move across portals.
+The key shift is that `x` and `y` are Omi-Rings: arcs of recurrence whose bridge makes low declaration and high orientation mutually addressable.
 
-It can be shown as a card, map, canvas node, QR code, receipt, or graph relation without losing its identity.
+Read this section if you want the video-notebook view of OMI as bounded return, centroid resolution, and address cosmology.
 
-Agreement is not the end of disagreement. Agreement is the construction of enough shared structure that disagreement can continue without destroying the object.
+- [8.1 The Cosmology of OMI](8_COSMOLOGY/8.1_THE_COSMOLOGY_OF_OMI.md)
 
-### 13. Minimal Consumer Canon
+## Public Pages
+
+The `public/` folder contains static browser-facing pages:
+
+- [public/index.html](public/index.html)
+- [public/omi-block-model.html](public/omi-block-model.html)
+- [public/agreement-is-all-we-need.html](public/agreement-is-all-we-need.html)
+
+These pages are public projections of the docs.
+
+No build step is required.
+
+## Genesis Frame
+
+The canonical genesis frame is the golden accept fixture.
 
 ```text
-An open-world portal does not own truth.
-It projects accepted objects.
-
-An object is accepted when its frame validates,
-its truth row resolves,
-and its receipt can be replayed.
-
-A user trusts the portal not because the portal says so,
-but because the object can be inspected.
-
-Linear projection shows how the object moved.
-Hierarchical projection shows where the object belongs.
-Receipts show why the object was accepted.
-
-Agreement is all you need because agreement is the moment
-shared intelligence becomes portable, replayable structure.
+BOOT_ADDRESS = 0x7C00
+BOOT_SLOT = 0x7C00 mod 5040 = 1504
+GENESIS_LL = 0x01
+GENESIS_NN = 0x7C00
+C = (0x01 × 0x1337) & 0xFFFF = 0x1337
+GENESIS_MM = Δ_{0x1337}(0x7C00) = 0x1434
+GENESIS_STEPS = 1
 ```
 
-### 14. Final Statement
-
-The OMI open-world portal is a consumer interface for decentralized agreement.
-
-It lets people browse ordinary web objects while preserving extraordinary structure underneath:
+Canonical frame:
 
 ```text
-address
-validation
-receipt
-replay
-containment
-projection
-portability
+0100-03bf-7c00-2b01-2f01-1434-039f-01ff
 ```
 
-This is the consumer promise:
+This frame is the first conformance anchor:
+
+```text
+Q_frame(S) = 0
+truth row resolves
+steps = 1
+slot = 1504
+```
+
+## Conformance
+
+A conforming OMI implementation must:
+
+1. Recognize `0x03BF` and `0x039F` as canonical lower frame anchors.
+2. Validate frames via `Q_frame(S) = E_var + E_const = 0`.
+3. Extract exactly one truth row `(LL, NN, MM)` from a valid frame.
+4. Resolve `MM` from `NN` under the LL-modulated Delta Law within the bounded Fano window.
+5. Write accepted rows as replayable receipts in the `5040 = 7!` slot ring.
+6. Treat DOM, SVG, JSON Canvas, QR, portal UI, typography, color, and `unicode-bidi` as projection or reader lenses only.
+7. Accept the canonical genesis frame.
+8. Reject malformed, byte-swapped, delimiter-drifted, LL-incoherent, or projection-authorized frames.
+9. Preserve the non-collapse rule:
+
+```text
+projection must never authorize validation
+```
+
+See [7.4 Conformance Canon](7_CANON/7.4_CONFORMANCE_CANON.md).
+
+## Minimal Canonical Statement
+
+```text
+A frame is valid iff Q_frame(S) = 0.
+A valid frame yields one truth row: (LL, NN, MM).
+A truth row is accepted iff MM resolves from NN under the LL-modulated Delta Law within the bounded Fano window.
+An accepted row advances the 5040-slot replay cursor and writes a receipt.
+Only after validation, resolution, and receipt may the object be projected.
+Projection is never authority.
+```
+
+## Short Doctrine
+
+```text
+Ο bounds.
+ο executes.
+-- carries the bridge.
+0! seeds.
+Q_frame validates.
+Delta clocks.
+Fano resolves.
+5040 replays.
+Q_xy projects.
+Portals inspect.
+Lower Omicron encodes.
+Upper Bidi displays.
+Characters stay fixed.
+Agreement becomes structure.
+```
+
+## Consumer Promise
 
 ```text
 One object.
@@ -1811,20 +1076,6 @@ Validation before projection.
 Agreement without platform lock-in.
 ```
 
-The main shift from a protocol-spec article is that this version speaks to portal users, builders, and community operators. It keeps the same doctrine, but turns it into a consumer-facing open-world web argument.
+OMI is for a web where objects can move without losing their structure, where disagreement creates new paths instead of destroying shared context, and where ordinary users can inspect why something is trusted.
 
----
-
-## References
-
-1. Wallis, J. (1657). *Mathesis Universalis*. Oxford.
-2. Conway, J. H. & Sloane, N. J. A. (1999). *Sphere Packings, Lattices and Groups* (3rd ed.). Springer.
-3. Coxeter, H. S. M. (1973). *Regular Polytopes* (3rd ed.). Dover.
-4. Unicode Consortium. (2025). *The Unicode Standard, Version 17.0*.
-5. Warren, H. S. (2012). *Hacker's Delight* (2nd ed.). Addison-Wesley.
-6. JSON Canvas Spec Working Group. (2024). *JSON Canvas Specification 1.0*.
-7. Hennessy, J. L. & Patterson, D. A. (2017). *Computer Architecture: A Quantitative Approach* (6th ed.). Morgan Kaufmann.
-
----
-
-*The computing engine is officially live. The canonical test suite is located at `test/` and the reference implementation at `src/omi/`.*
+That is the purpose of this repository.
