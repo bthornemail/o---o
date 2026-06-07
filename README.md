@@ -27,7 +27,7 @@ The zero-point is:
 From that zero-point, OMI builds a complete object doctrine:
 
 ```text
-validate -> resolve -> record -> project -> inspect
+validate -> resolve -> record -> materialize -> project -> inspect
 ```
 
 A portal may show an OMI object as a card, map pin, QR code, JSON Canvas node, SVG widget, local file, receipt row, event page, or timeline entry. Those are projections. They help humans inspect the object, but they do not authorize it.
@@ -201,6 +201,10 @@ MM resolves from NN under the LL-modulated Delta Law
   ↓
 receipt writes into the 5040-slot replay ring
   ↓
+LL selects rule_slot = 0xE0 + (LL & 0x0F)
+  ↓
+external rule materializer consumes the accepted envelope
+  ↓
 Q_xy projects accepted state into readable geometry
   ↓
 portal surfaces inspect the accepted object
@@ -218,15 +222,19 @@ A truth row is accepted iff MM resolves from NN under the LL-modulated Delta Law
 
 An accepted row writes a replayable receipt into the 5040-slot ring.
 
-Only after validation, resolution, and receipt may the object be projected into DOM, SVG, JSON Canvas, IPv6, QR, portal UI, or reader lenses.
+Only after validation, resolution, and receipt may a rule block be materialized and projected into DOM, SVG, JSON Canvas, IPv6, QR, portal UI, or reader lenses.
 
 Projection is never authority.
 ```
 
+`start.sh` is therefore policy-blind: it validates, resolves, records, and emits the accepted `0xE_` rule address using `LL & 0x0F`. Named semantics such as snub truncation, DOM patching, CSSOM import/export, page-frame projection, and the `0xEC-0xEF` outer control surface live in `rules/registry.json` and the materializer layer, not in the shell gate.
+
+The viewport is receipt-bound when controlled through `0xEC-0xEF`. A conforming projection must not treat out-of-band camera or lens changes as accepted state.
+
 This is the order that must not collapse:
 
 ```text
-validate -> resolve -> record -> project -> inspect
+validate -> resolve -> record -> materialize -> project -> inspect
 ```
 
 Not:

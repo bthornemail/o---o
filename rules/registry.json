@@ -1,0 +1,108 @@
+{
+  "rule_band": "0xE0-0xEF",
+  "dispatch": "0xE0 + (LL & 0x0F)",
+  "context": "LL >> 4",
+  "authority": "materialization-after-receipt",
+  "layers": {
+    "0xE0-0xEB": {
+      "name": "inner-packing",
+      "role": "object mutators",
+      "geometry": "12 kissing spheres"
+    },
+    "0xEC-0xEF": {
+      "name": "outer-control-surface",
+      "role": "projection controllers",
+      "geometry": "bounding tetrahedron / quaternion control"
+    }
+  },
+  "blocks": {
+    "0xE0": {
+      "name": "page-frame-root",
+      "module": "rules/page-frame-root.sh",
+      "authority": "projection-after-receipt"
+    },
+    "0xE1": {
+      "name": "dom-import-export",
+      "module": "rules/dom-import-export.sh",
+      "authority": "materializer-only"
+    },
+    "0xE2": {
+      "name": "cssom-import-export",
+      "module": "rules/cssom-import-export.sh",
+      "authority": "materializer-only"
+    },
+    "0xE3": {
+      "name": "jsdom-normalization",
+      "module": "rules/jsdom-normalization.sh",
+      "authority": "materializer-only"
+    },
+    "0xE4": {
+      "name": "omi-object-patch",
+      "module": "rules/omi-object-patch.sh",
+      "authority": "materializer-only"
+    },
+    "0xE5": {
+      "name": "edge-traversal",
+      "module": "rules/edge-traversal.sh",
+      "authority": "materializer-only"
+    },
+    "0xE6": {
+      "name": "vertex-traversal",
+      "module": "rules/vertex-traversal.sh",
+      "authority": "materializer-only"
+    },
+    "0xE7": {
+      "name": "snub-bridge",
+      "module": "rules/snub-bridge.sh",
+      "authority": "materializer-only"
+    },
+    "0xE8": {
+      "name": "stellated-octahedron-mirror",
+      "module": "rules/stellated-octahedron-mirror.sh",
+      "authority": "materializer-only"
+    },
+    "0xE9": {
+      "name": "fano-triangle-selection",
+      "module": "rules/fano-triangle-selection.sh",
+      "authority": "materializer-only"
+    },
+    "0xEA": {
+      "name": "59-60-61-face-band",
+      "module": "rules/59-60-61-face-band.sh",
+      "authority": "materializer-only"
+    },
+    "0xEB": {
+      "name": "receipt-projection-export",
+      "module": "rules/receipt-projection-export.sh",
+      "authority": "projection-after-receipt"
+    },
+    "0xEC": {
+      "name": "translation-viewport",
+      "module": "rules/translation-viewport.sh",
+      "authority": "controller-after-receipt",
+      "axis": "translation",
+      "mutates_object": false
+    },
+    "0xED": {
+      "name": "scale-depth",
+      "module": "rules/scale-depth.sh",
+      "authority": "controller-after-receipt",
+      "axis": "scale",
+      "mutates_object": false
+    },
+    "0xEE": {
+      "name": "rotation-spin",
+      "module": "rules/rotation-spin.sh",
+      "authority": "controller-after-receipt",
+      "axis": "rotation",
+      "mutates_object": false
+    },
+    "0xEF": {
+      "name": "boundary-opacity",
+      "module": "rules/boundary-opacity.sh",
+      "authority": "controller-after-receipt",
+      "axis": "boundary",
+      "mutates_object": false
+    }
+  }
+}
