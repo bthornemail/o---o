@@ -1,0 +1,41 @@
+# ============================================================================
+# OMI MATRIX ADDRESS DERIVATION RULES
+# File Target: /native/omi-matrix-lookup/RULES.address-derivation.omi
+# Specification Level: draft v0
+# ============================================================================
+#
+# Grammar:
+#   <omi-address>/<claim> MUST <invariant-name>
+#   <omi-address>/<claim>/@<lens>/@<selector>/@<overlay>-imo MUST <invariant-name>
+#
+# Doctrine:
+#   /N    = CIDR claim boundary
+#   /@... = Horn-clause reader lens route
+#   -imo  = closed derivation surface
+#
+# These rows seed the refined OMI address derivation model without replacing
+# production-qualified root RULES.omi rows in omi-portal.
+
+# [Rule AD-0x01] Address Derivation Surface Grammar
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 MUST accept-esp32-s3-gpio-edge-declaration
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@hardware/@esp32-s3/@gpio/@edge-imo MUST route-gpio-edge-through-horn-clause-lens
+
+# [Rule AD-0x02] CIDR Claim and Reader Lens Separation
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128 MUST distinguish-cidr-claim-from-reader-lens-stack
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128/@syntax/@claim/@lens/@closure-imo MUST preserve-slash-at-lens-separation
+
+# [Rule AD-0x03] Lookup Table Reduction Order
+omi-0000-0000-0000-0000-0000-0000-00d4-0001/128 MUST resolve-address-derivation-through-rules-facts-closures-combinators-cons
+omi-0000-0000-0000-0000-0000-0000-00d4-0001/128/@lookup/@rules-facts-closures-combinators-cons/@receipt-imo MUST preserve-declarative-table-reduction-order
+
+# [Rule AD-0x04] Pure Function Rewrite Table Boundary
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128 MUST treat-omi-declarative-modules-as-pure-function-rewrite-tables
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128/@rewrite/@join/@compose/@encode-decode-imo MUST route-join-compose-encode-decode-as-fexpr-combinators
+
+# [Rule AD-0x05] OMI Matrix Bitboard Inspection Export
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@matrix/@bitboard/@hex-inspector-imo MUST export-gpio-edge-bitboard-to-omi-matrix
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@matrix/@bitblit/@projection-imo MUST preserve-bitblit-projection-as-inspection-not-authority
+
+# [Rule AD-0x06] Receipt Authority Boundary
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@receipt/@accepted/@memory-imo MUST accept-gpio-edge-memory-only-after-lookup-closure
+omi-0000-0000-0000-0000-0000-0000-00d6-0001/128 MUST preserve-receipt-as-acceptance-authority
