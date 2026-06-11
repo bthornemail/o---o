@@ -229,6 +229,8 @@ Projection is never authority.
 
 `start.sh` is therefore policy-blind: it validates, resolves, records, and emits the accepted `0xE_` rule address using `LL & 0x0F`. Named semantics such as snub truncation, DOM patching, CSSOM import/export, page-frame projection, and the `0xEC-0xEF` outer control surface live in `rules/registry.json` and the materializer layer, not in the shell gate.
 
+The `LL` byte is the ket-like scope selector of the truth row: its high nibble carries context, and its low nibble selects one address in the folded `0xE_` materializer manifold. See `6_IMPLEMENTATION/6.5_LL_KET_SCOPE_AND_0xE_MANIFOLD.md`.
+
 The viewport is receipt-bound when controlled through `0xEC-0xEF`. A conforming projection must not treat out-of-band camera or lens changes as accepted state.
 
 This is the order that must not collapse:
