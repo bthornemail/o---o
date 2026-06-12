@@ -1,0 +1,14 @@
+{
+  "status": "accepted",
+  "accepted": true,
+  "LL": "0x0F",
+  "context": "0x0",
+  "slot_index": "0xF",
+  "NN": "0x7C00",
+  "MM": "0x273A",
+  "steps": 1,
+  "rule_band": "0xE0-0xEF",
+  "rule_slot": "0xEF",
+  "chirality": "right",
+  "receipt": "0x0f017c00273aef01"
+}
