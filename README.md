@@ -10,13 +10,26 @@
 
 **OMI** is the **Omicron Object Model**: a docs-first specification for turning open-world actions, claims, identities, links, events, and objects into bounded, inspectable, replayable structure.
 
-It begins with a palindrome:
+The entire model is governed by one canon:
+
+> Computation is not the mutation of data.
+> Computation is the lawful transformation of interpretation.
+
+The binary source remains. The reading changes. The rewrite is the computation.
+
+This is the OMI Manifesto. For the full philosophical lens, read [MANIFESTO.md](MANIFESTO.md) first.
+
+## Notation as Cipher
+
+OMI begins with a palindrome:
 
 ```text
 omi---imo
 ```
 
-Read forward, `omi` is the opening side of the relation. Read backward, `imo` is the closing side of the relation. The hyphen bridge is the bus between them.
+Read forward, `omi` is the opening side of the relation. Read backward, `imo` is the closing side. The hyphen bridge is the join field, the rewrite bus, and the compiler lane.
+
+The palindrome is not merely a mnemonic. It is the visible surface of a deeper principle: **notation as cipher, cipher as notation**. The same binary surface can be read as text, address, proof, graph, route, receipt, or rewrite table depending on the declared interpretation.
 
 The zero-point is:
 
@@ -52,6 +65,7 @@ It is not trying to be a package manager artifact, production runtime, or single
 The repo is organized as a progressive reader path:
 
 ```text
+MANIFESTO.md       the philosophical lens (read first)
 1_FOUNDATIONS      what OMI is
 2_MATH             why the laws work
 3_ARCHITECTURE     how accepted state projects into DOM/portal space
@@ -785,24 +799,38 @@ Project
 
 Thinking has both a timeline and a structure. OMI preserves both.
 
+## Reading Order
+
+The [MANIFESTO.md](MANIFESTO.md) is the philosophical lens for all documentation. Read it first.
+
+Then follow the progressive path below. New files deriving from the manifesto are marked with `†`.
+
 ## Repository Map
 
 ```text
 .
+├── MANIFESTO.md                 ← philosophical lens (read first)
+├── README.md                    ← this file
 ├── 1_FOUNDATIONS
+│   ├── 1.0_THE_THIRD_COLLAPSE.md     † notation as cipher, rewrite register
 │   ├── 1.1_THE_PALINDROME.md
 │   ├── 1.2_THE_OMICRON_ANCHORS.md
 │   ├── 1.3_THE_OMI_RING.md
-│   └── 1.4_THE_OMI_UNIVERSAL_CONSTANT.md
+│   ├── 1.4_THE_OMI_UNIVERSAL_CONSTANT.md
+│   └── 1.5_THE_SLASH_PATH.md         † declared interpretation route
 ├── 2_MATH
 │   ├── 2.1_THE_QUADRATIC_LAW.md
 │   ├── 2.2_THE_DELTA_LAW.md
 │   ├── 2.3_SEXAGESIMAL_SYSTEM.md
-│   └── 2.4_POLYCUBES_AND_GROUPS.md
+│   ├── 2.4_POLYCUBES_AND_GROUPS.md
+│   ├── 2.5_PROJECTIVE_CLOSURE_AND_THE_EMPTY_LIST.md  † 15-of-16, () as atom and list
+│   ├── 2.6_UNICODE_AS_INCIDENCE_GEOMETRY.md          † codepoints as incidence cells
+│   └── 2.7_OMI_NOMOGRAM.md                           † nomogram scale row
 ├── 3_ARCHITECTURE
 │   ├── 3.1_DOM_HIERARCHY.md
 │   ├── 3.2_WORMHOLE_PORTALS.md
-│   └── 3.3_META_CIRCULAR_COMPILER.md
+│   ├── 3.3_META_CIRCULAR_COMPILER.md
+│   └── 3.4_CONTROL_CODES_AND_PRINTABLE_PROJECTIONS.md  † ASCII rewrite surface
 ├── 4_NETWORK
 │   ├── 4.1_IPv6_FRAME_MAPPING.md
 │   ├── 4.2_RULES_OMI.md
@@ -850,10 +878,12 @@ The story begins with `omi---imo`: a bounded relation between source-side intell
 
 Read this section first if you want to understand why OMI begins with a mnemonic relation instead of a conventional object ID.
 
+- [1.0 The Third Collapse: Notation as Cipher](1_FOUNDATIONS/1.0_THE_THIRD_COLLAPSE.md) — philosophical foundation derived from the MANIFESTO
 - [1.1 The Palindrome: omi---imo](1_FOUNDATIONS/1.1_THE_PALINDROME.md)
 - [1.2 The Omicron Anchors: 0x03BF and 0x039F](1_FOUNDATIONS/1.2_THE_OMICRON_ANCHORS.md)
 - [1.3 The Omi-Ring: Atomic Waveform Enclosure](1_FOUNDATIONS/1.3_THE_OMI_RING.md)
 - [1.4 The OMI Universal Constant: Ω₀ = 0! = omi---imo](1_FOUNDATIONS/1.4_THE_OMI_UNIVERSAL_CONSTANT.md)
+- [1.5 The Slash Path: Declared Interpretation Route](1_FOUNDATIONS/1.5_THE_SLASH_PATH.md) — the `omi-<frame>/<control>/<scale>/<relation>/<unit>-imo` form
 
 ### [2. Math](2_MATH/)
 
@@ -867,6 +897,9 @@ Read this section if you want to understand why OMI treats agreement as a bounde
 - [2.2 The Delta Law](2_MATH/2.2_THE_DELTA_LAW.md)
 - [2.3 The Sexagesimal System](2_MATH/2.3_SEXAGESIMAL_SYSTEM.md)
 - [2.4 Polycubes and Symmetry Groups](2_MATH/2.4_POLYCUBES_AND_GROUPS.md)
+- [2.5 Projective Closure and the Empty List](2_MATH/2.5_PROJECTIVE_CLOSURE_AND_THE_EMPTY_LIST.md) — 15-of-16, 7-of-8, `()` as both atom and list
+- [2.6 Unicode as Incidence Geometry](2_MATH/2.6_UNICODE_AS_INCIDENCE_GEOMETRY.md) — codepoints as points, blocks as surfaces, edges as lawful traversals
+- [2.7 Omi-Nomogram and Omi-SlideRule](2_MATH/2.7_OMI_NOMOGRAM.md) — the canonical scale row (0x30–0x3F)
 
 ### [3. Architecture](3_ARCHITECTURE/)
 
@@ -891,6 +924,7 @@ Read this section if you want to understand how OMI becomes visible in the brows
 - [3.1 The DOM Hierarchy](3_ARCHITECTURE/3.1_DOM_HIERARCHY.md)
 - [3.2 Wormhole Portals](3_ARCHITECTURE/3.2_WORMHOLE_PORTALS.md)
 - [3.3 The Meta-Circular Chronograph Compiler](3_ARCHITECTURE/3.3_META_CIRCULAR_COMPILER.md)
+- [3.4 Control Codes and Printable Projections](3_ARCHITECTURE/3.4_CONTROL_CODES_AND_PRINTABLE_PROJECTIONS.md) — ASCII 0x00–0x1F as rewrite operators, 0x20–0x7F as projection surface
 
 ### [4. Network](4_NETWORK/)
 
