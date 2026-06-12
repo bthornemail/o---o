@@ -1,0 +1,35 @@
+# ============================================================================
+# OMI MATRIX ADDRESS DERIVATION FACTS
+# File Target: /native/omi-matrix-lookup/FACTS.address-derivation.omi
+# Specification Level: draft v0
+# ============================================================================
+#
+# Grammar:
+#   <omi-address>/<claim> FACT <fact-name>
+#   <omi-address>/<claim>/@<lens>/@<selector>/@<overlay>-imo FACT <fact-name>
+#
+# FACTS rows are applied/observed states grounded by RULES rows.
+
+# [Fact AD-0x01] ESP32-S3 GPIO Edge Observation
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 FACT esp32-s3-gpio-edge-observed
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@hardware/@esp32-s3/@gpio/@edge-imo FACT horn-clause-path-normalized
+
+# [Fact AD-0x02] Claim/Lens Syntax Grounded
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128 FACT cidr-claim-and-reader-lens-syntax-grounded
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128/@syntax/@claim/@lens/@closure-imo FACT slash-at-lens-separation-observed
+
+# [Fact AD-0x03] Declarative Lookup Reduction Grounded
+omi-0000-0000-0000-0000-0000-0000-00d4-0001/128 FACT rules-facts-closures-combinators-cons-reduction-order-declared
+omi-0000-0000-0000-0000-0000-0000-00d4-0001/128/@lookup/@rules-facts-closures-combinators-cons/@receipt-imo FACT lookup-route-reduces-to-receipt-candidate
+
+# [Fact AD-0x04] Rewrite Table Combinator Surface Grounded
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128 FACT omi-declarative-modules-available-as-rewrite-tables
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128/@rewrite/@join/@compose/@encode-decode-imo FACT join-compose-encode-decode-route-declared
+
+# [Fact AD-0x05] OMI Matrix Inspection Grounded
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@matrix/@bitboard/@hex-inspector-imo FACT gpio-edge-bitboard-exportable-to-omi-matrix
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@matrix/@bitblit/@projection-imo FACT bitblit-projection-marked-as-inspection-surface
+
+# [Fact AD-0x06] Receipt Authority Grounded
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@receipt/@accepted/@memory-imo FACT gpio-edge-memory-accepted-after-lookup-closure
+omi-0000-0000-0000-0000-0000-0000-00d6-0001/128 FACT receipt-authority-boundary-declared

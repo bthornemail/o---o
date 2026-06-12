@@ -1,0 +1,57 @@
+# ============================================================================
+# OMI MATRIX ADDRESS DERIVATION CONS TABLE
+# File Target: /native/omi-matrix-lookup/CONS.address-derivation.omi
+# Specification Level: draft v0
+# ============================================================================
+#
+# CONS rows are monotone lookup pairs. They fold scope with payload.
+#
+# Forms:
+#   (address . claim)
+#   (frame . path)
+#   (LL . value)
+#   (NN . value)
+#   (MM . value)
+#   (join . value)
+#   (compose . value)
+#   (encode . value)
+#   (decode . value)
+
+# [CONS AD-0x01] Primary GPIO Edge Pairing
+(omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 . esp32-s3-gpio-edge)
+(frame . 0100-03bf-0001-2b01-2f01-0000-039f-01ff)
+(claim . 128)
+(path . @hardware/@esp32-s3/@gpio/@edge)
+(close . imo)
+
+# [CONS AD-0x02] LL / NN / MM Role Bindings
+(LL . 01)
+(NN . 0001)
+(MM . 0000)
+(OO . receipt-candidate)
+
+# [CONS AD-0x03] Pure Function Route Bindings
+(join . device-world)
+(compose . previous-state-edge-state)
+(encode . omi-matrix-projection)
+(decode . returned-gpio-level)
+(receipt . accepted-memory-candidate)
+
+# [CONS AD-0x04] Declarative Table Route
+(RULES . accept-esp32-s3-gpio-edge-declaration)
+(FACTS . esp32-s3-gpio-edge-observed)
+(CLOSURES . gpio-debounce-window)
+(COMBINATORS . decode-returned-gpio-level-to-edge-state)
+(CONS . esp32-s3-gpio-edge)
+
+# [CONS AD-0x05] Matrix Inspection Route
+(bitboard . hex-inspector-export)
+(bitblit . projection-inspection)
+(matrix . omi-matrix-route)
+(authority . receipt)
+
+# [CONS AD-0x06] Claim/Lens Syntax Route
+(/N . cidr-claim-boundary)
+(/N-M . cidr-claim-backoff)
+(/@N . reader-lens)
+(-imo . closed-derivation-surface)

@@ -1,0 +1,44 @@
+# ============================================================================
+# OMI MATRIX ADDRESS DERIVATION COMBINATORS
+# File Target: /native/omi-matrix-lookup/COMBINATORS.address-derivation.omi
+# Specification Level: draft v0
+# ============================================================================
+#
+# Grammar:
+#   <omi-address>/<claim> MAPS <input> TO <output>
+#   <omi-address>/<claim> JOIN <left> WITH <right> AS <joined>
+#   <omi-address>/<claim> COMPOSE <left> WITH <right> AS <state>
+#   <omi-address>/<claim> ENCODE <state> AS <projection>
+#   <omi-address>/<claim> DECODE <carrier> AS <state>
+#
+# COMBINATORS rows define pure function rewrite routes and f-expression
+# cohomology surfaces. They do not accept memory; receipts accept memory.
+
+# [Combinator AD-0x01] GPIO Decode and Edge-State Mapping
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 MAPS returned-gpio-level TO edge-state
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 DECODE carrier AS returned-gpio-level
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 ENCODE edge-state AS omi-matrix-projection
+
+# [Combinator AD-0x02] Join / Compose / Receipt Candidate
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 JOIN device WITH world AS device-world
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 COMPOSE previous-state WITH edge-state AS receipt-candidate
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 MAPS receipt-candidate TO accepted-memory-candidate
+
+# [Combinator AD-0x03] Lens Path to Horn Clause Route
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@hardware/@esp32-s3/@gpio/@edge-imo MAPS reader-lens-path TO horn-clause-route
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@hardware/@esp32-s3/@gpio/@edge-imo COMPOSE rule fact closure combinator cons AS derivation-route
+
+# [Combinator AD-0x04] Claim/Lens Parser Rewrite
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128 DECODE omi-surface AS claim-plus-lens-stack
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128 MAPS slash-prefix TO cidr-claim
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128 MAPS slash-at-prefix TO reader-lens
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128 MAPS dash-imo TO closed-derivation-surface
+
+# [Combinator AD-0x05] Bitboard and Bitblit Export
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@matrix/@bitboard/@hex-inspector-imo ENCODE frame-segments AS bitboard-hex-inspector
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@matrix/@bitblit/@projection-imo MAPS bitboard-hex-inspector TO bitblit-projection
+
+# [Combinator AD-0x06] F-Expression Cohomology Route
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128/@rewrite/@join/@compose/@encode-decode-imo DECODE fexpr-base64url AS quoted-derivation-candidate
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128/@rewrite/@join/@compose/@encode-decode-imo COMPOSE join compose encode decode AS fexpr-cohomology-route
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128/@rewrite/@join/@compose/@encode-decode-imo ENCODE fexpr-cohomology-route AS omi-matrix-route

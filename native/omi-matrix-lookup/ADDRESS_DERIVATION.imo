@@ -1,0 +1,25 @@
+# ============================================================================
+# OMI MATRIX ADDRESS DERIVATION IMO MIRROR
+# File Target: /native/omi-matrix-lookup/ADDRESS_DERIVATION.imo
+# Specification Level: draft v0 inspection mirror
+# ============================================================================
+#
+# This is a readable inspection mirror for future .omi -> .imo lowering.
+# Compiled .imo records should be Omicron-delimited with ο as entry and Ο as exit.
+#
+# These records intentionally mirror the route in compact form.
+
+οomi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128Ο
+ο/@hardware/@esp32-s3/@gpio/@edgeΟ
+οRULES:accept-esp32-s3-gpio-edge-declarationΟ
+οFACTS:esp32-s3-gpio-edge-observedΟ
+οCLOSURES:gpio-debounce-windowΟ
+οCOMBINATORS:decode-returned-gpio-level-to-edge-stateΟ
+οCONS:LL.01 NN.0001 MM.0000 OO.receipt-candidateΟ
+οJOIN:device.world->device-worldΟ
+οCOMPOSE:previous-state.edge-state->receipt-candidateΟ
+οENCODE:edge-state->omi-matrix-projectionΟ
+οDECODE:carrier->returned-gpio-levelΟ
+οBITBOARD:0100.03bf.0001.2b01.2f01.0000.039f.01ffΟ
+οBITBLIT:hex-inspector->omi-matrix-projectionΟ
+οRECEIPT:accepted-memory-candidateΟ

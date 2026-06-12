@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omi.local/schema/omi-address-derivation-v0.schema.json",
+  "title": "OMI Address Derivation v0",
+  "description": "Normalized object form for OMI address derivation surfaces. The source string may have many aliases, but normalization must produce this shape.",
+  "type": "object",
+  "required": ["version", "source", "normalized", "path_type"],
+  "additionalProperties": true,
+  "properties": {
+    "version": {
+      "const": "omi-address-derivation-v0"
+    },
+    "source": {
+      "type": "string",
+      "description": "Original OMI address surface, such as omi-<frame>/<path...>-imo."
+    },
+    "normalized": {
+      "type": "object",
+      "required": ["open", "frame", "frames", "path", "close"],
+      "additionalProperties": true,
+      "properties": {
+        "open": {
+          "enum": ["omi", null]
+        },
+        "frame": {
+          "type": ["string", "null"],
+          "description": "Primary 128-bit frame identity when present. May be hyphenated 8x16-bit or compact 32-hex form."
+        },
+        "frames": {
+          "type": "array",
+          "description": "One or more frames for composed surfaces such as omi<frame><frame>imo.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "path": {
+          "type": "array",
+          "description": "Slash-delimited derivation path segments, interpreted as Horn-clause selectors.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "close": {
+          "enum": ["imo", null]
+        }
+      }
+    },
+    "path_type": {
+      "enum": [
+        "empty",
+        "prefix",
+        "hd",
+        "hardware",
+        "semantic",
+        "overlay",
+        "agreement_role",
+        "quadratic_fexpr",
+        "control_separator",
+        "mixed"
+      ]
+    },
+    "derivation": {
+      "type": "object",
+      "description": "Classified derivation fields such as depth, domain, selector, overlay, modality, or f-expression."
+    },
+    "clauses": {
+      "type": "array",
+      "description": "Derived clause facts or Horn-clause selectors produced from the path.",
+      "items": {
+        "type": ["object", "string"]
+      }
+    },
+    "payload": {
+      "description": "Optional payload carried by the packet or surface."
+    },
+    "receipt": {
+      "type": "object",
+      "description": "Receipt candidate or accepted receipt for the derivation traversal."
+    }
+  },
+  "examples": [
+    {
+      "version": "omi-address-derivation-v0",
+      "source": "omi-0500-03bf-000c-2b05-2f05-0002-039f-05ff/128/hardware/i2c:0x28/euler-imo",
+      "normalized": {
+        "open": "omi",
+        "frame": "0500-03bf-000c-2b05-2f05-0002-039f-05ff",
+        "frames": ["0500-03bf-000c-2b05-2f05-0002-039f-05ff"],
+        "path": ["128", "hardware", "i2c:0x28", "euler"],
+        "close": "imo"
+      },
+      "path_type": "hardware",
+      "derivation": {
+        "depth": 128,
+        "domain": "hardware",
+        "selector": "i2c:0x28",
+        "overlay": "euler"
+      },
+      "clauses": [],
+      "receipt": {}
+    }
+  ]
+}

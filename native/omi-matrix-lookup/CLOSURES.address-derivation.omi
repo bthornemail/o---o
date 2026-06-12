@@ -1,0 +1,35 @@
+# ============================================================================
+# OMI MATRIX ADDRESS DERIVATION CLOSURES
+# File Target: /native/omi-matrix-lookup/CLOSURES.address-derivation.omi
+# Specification Level: draft v0
+# ============================================================================
+#
+# Grammar:
+#   <omi-address>/<claim> CLOSES <closure-name>
+#   <omi-address>/<claim>/@<lens>/@<selector>/@<overlay>-imo CLOSES <closure-name>
+#
+# CLOSURES rows bound when a route may become eligible for receipt.
+
+# [Closure AD-0x01] ESP32-S3 GPIO Edge Closure
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128 CLOSES gpio-debounce-window
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@hardware/@esp32-s3/@gpio/@edge-imo CLOSES esp32-gpio-receipt-surface
+
+# [Closure AD-0x02] Claim/Lens Syntax Closure
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128 CLOSES cidr-claim-reader-lens-syntax-surface
+omi-0000-0000-0000-0000-0000-0000-00ae-0001/128/@syntax/@claim/@lens/@closure-imo CLOSES slash-at-lens-derivation-surface
+
+# [Closure AD-0x03] Declarative Table Reduction Closure
+omi-0000-0000-0000-0000-0000-0000-00d4-0001/128 CLOSES declarative-lookup-reduction-order
+omi-0000-0000-0000-0000-0000-0000-00d4-0001/128/@lookup/@rules-facts-closures-combinators-cons/@receipt-imo CLOSES lookup-to-receipt-candidate-surface
+
+# [Closure AD-0x04] Rewrite Combinator Closure
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128 CLOSES pure-function-rewrite-table-surface
+omi-0000-0000-0000-0000-0000-0000-00d5-0001/128/@rewrite/@join/@compose/@encode-decode-imo CLOSES fexpr-combinator-cohomology-surface
+
+# [Closure AD-0x05] OMI Matrix Inspection Closure
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@matrix/@bitboard/@hex-inspector-imo CLOSES bitboard-hex-inspector-export-surface
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@matrix/@bitblit/@projection-imo CLOSES bitblit-projection-inspection-surface
+
+# [Closure AD-0x06] Receipt Acceptance Closure
+omi-0100-03bf-0001-2b01-2f01-0000-039f-01ff/128/@receipt/@accepted/@memory-imo CLOSES accepted-memory-receipt-surface
+omi-0000-0000-0000-0000-0000-0000-00d6-0001/128 CLOSES receipt-authority-boundary
