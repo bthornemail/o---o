@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OMI Portable Static Portal</title>
+<style>
+:root {
+  --bg: #0f1117;
+  --panel: #171b24;
+  --panel2: #202637;
+  --text: #eef2ff;
+  --muted: #aeb8d6;
+  --line: #30384d;
+  --accent: #83d2ff;
+  --accent2: #d6a4ff;
+  --ok: #8ff0bf;
+  --warn: #ffd27a;
+  --bad: #ff8f8f;
+  --cell: 14px;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: radial-gradient(circle at top, #1e2840 0, var(--bg) 44rem); color: var(--text); }
+header { padding: 24px; border-bottom: 1px solid var(--line); background: rgba(15,17,23,0.72); position: sticky; top: 0; z-index: 5; backdrop-filter: blur(12px); }
+h1 { margin: 0 0 6px; font-size: clamp(24px, 5vw, 42px); letter-spacing: -0.04em; }
+.subtitle { color: var(--muted); max-width: 980px; line-height: 1.45; }
+main { padding: 22px; display: grid; gap: 18px; max-width: 1480px; margin: 0 auto; }
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(12, 1fr); }
+.card { background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015)), var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 18px 48px rgba(0,0,0,0.22); }
+.span-12 { grid-column: span 12; } .span-8 { grid-column: span 8; } .span-6 { grid-column: span 6; } .span-4 { grid-column: span 4; }
+@media (max-width: 980px) { .span-8,.span-6,.span-4 { grid-column: span 12; } }
+h2 { margin: 0 0 10px; font-size: 18px; }
+h3 { margin: 16px 0 8px; color: var(--accent); font-size: 14px; text-transform: uppercase; letter-spacing: .09em; }
+code, pre, textarea, input, select, button { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+pre { white-space: pre-wrap; word-break: break-word; background: #0b0d12; border: 1px solid #252b3d; border-radius: 12px; padding: 12px; color: #dfe7ff; max-height: 360px; overflow: auto; }
+label { display:block; color: var(--muted); margin: 8px 0 5px; font-size: 13px; }
+input, select, textarea { width: 100%; background: #0c0f16; color: var(--text); border: 1px solid #30384d; border-radius: 10px; padding: 10px; outline: none; }
+input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(131,210,255,0.15); }
+button { background: linear-gradient(135deg, #2c79ff, #9a5cff); color: white; border: 0; border-radius: 12px; padding: 10px 14px; cursor: pointer; font-weight: 700; }
+button.secondary { background: #2a3144; color: #dce5ff; }
+button.danger { background: #7a2a3a; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.kv { display:grid; grid-template-columns: 150px 1fr; gap: 6px 12px; font-size: 13px; }
+.kv div:nth-child(odd) { color: var(--muted); }
+.badge { display:inline-flex; border:1px solid var(--line); background: #101520; border-radius:999px; padding: 4px 8px; color: var(--muted); font-size: 12px; margin: 2px; }
+.badge.ok { color: #001e10; background: var(--ok); border-color: transparent; }
+.badge.warn { color: #241600; background: var(--warn); border-color: transparent; }
+.ring { display:grid; grid-template-columns: repeat(16, minmax(0, 1fr)); gap: 3px; font-size: 11px; }
+.cell { height: var(--cell); min-width: 0; border-radius: 4px; background: #0b0d12; border: 1px solid #252b3d; display:flex; align-items:center; justify-content:center; color:#dfe7ff; overflow:hidden; }
+.cell.hot { background: #27405a; border-color: #486f96; }
+.slide { display:grid; gap: 10px; }
+.scale { display:grid; grid-template-columns: 90px 1fr; gap: 10px; align-items:center; }
+.scale-label { color: var(--muted); font-size: 12px; }
+.track { position: relative; height: 26px; border-radius: 999px; background: #0b0d12; border:1px solid var(--line); overflow:hidden; }
+.track .mark { position:absolute; top:0; bottom:0; width:2px; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+.track .fill { position:absolute; inset:0 auto 0 0; background: linear-gradient(90deg, rgba(131,210,255,0.22), rgba(214,164,255,0.22)); }
+canvas { width: 100%; image-rendering: pixelated; background: #05070a; border:1px solid var(--line); border-radius: 14px; }
+.projection { min-height: 220px; padding: 12px; border: 1px dashed var(--line); border-radius: 12px; background: #0b0d12; }
+.dom-node { margin: 4px; padding: 8px; display:inline-block; border-radius: 10px; border:1px solid var(--line); background: var(--panel2); }
+.footer-note { color: var(--muted); font-size: 12px; line-height: 1.4; }
+</style>
+</head>
+<body>
+<header>
+  <h1>OMI Portable Static Portal</h1>
+  <div class="subtitle">One-file deterministic rewrite portal: Base64 BLOB pure functions, 16×16×4 local rewrite ring, 64×64×16 canonical bitboard reference, DOM/CSSOM/VirtualDOM projections, and receipt logging. No network. No external libraries.</div>
+</header>
+<main>
+  <section class="grid">
+    <div class="card span-8">
+      <h2>Root frame and reducer</h2>
+      <label>Root address / pos-part</label>
+      <input id="root" value="omi-0000-0000-0000-000b-0000-0000-0000-0000/48 MUST pos-part">
+      <div class="grid" style="grid-template-columns: repeat(12, 1fr); margin-top:10px;">
+        <div style="grid-column: span 3"><label>seed</label><input id="seed" value="0x000B"></div>
+        <div style="grid-column: span 3"><label>C carry</label><input id="carry" value="0x0049"></div>
+        <div style="grid-column: span 2"><label>tick</label><input id="tick" type="number" value="0"></div>
+        <div style="grid-column: span 2"><label>x</label><input id="xval" type="number" value="3"></div>
+        <div style="grid-column: span 2"><label>y</label><input id="yval" type="number" value="3"></div>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <button id="run">Run deterministic projection</button>
+        <button id="next" class="secondary">Step tick</button>
+        <button id="export" class="secondary">Export state</button>
+        <button id="importBtn" class="secondary">Import state</button>
+        <input id="importFile" type="file" accept="application/json" style="display:none">
+      </div>
+      <h3>Current receipt</h3>
+      <pre id="receipt">loading…</pre>
+    </div>
+
+    <div class="card span-4">
+      <h2>Base64 BLOB function registry</h2>
+      <div id="blobStatus"><span class="badge warn">booting</span></div>
+      <h3>Loaded primitives</h3>
+      <div id="primitiveList"></div>
+      <p class="footer-note">The pure-function registry is stored below as a Base64 string and decoded at runtime. The visible page is only a projection of that deterministic function BLOB.</p>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card span-6">
+      <h2>Omi-SlideRule comparison chart</h2>
+      <div class="slide">
+        <div class="scale"><div class="scale-label">7 of 8</div><div class="track" id="track7"></div></div>
+        <div class="scale"><div class="scale-label">15 of 16</div><div class="track" id="track15"></div></div>
+        <div class="scale"><div class="scale-label">36 orbit</div><div class="track" id="track36"></div></div>
+        <div class="scale"><div class="scale-label">local240</div><div class="track" id="track240"></div></div>
+        <div class="scale"><div class="scale-label">slot5040</div><div class="track" id="track5040"></div></div>
+      </div>
+      <h3>Sequencing</h3>
+      <pre>frame → validate → ΔC → 7/8 roll → 15/16 roll → 36 orbit → block design → Qxy → local240 → slot5040 → receipt</pre>
+    </div>
+    <div class="card span-6">
+      <h2>Derived values</h2>
+      <div class="kv" id="derived"></div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card span-6">
+      <h2>1024-character rewrite ring</h2>
+      <div class="row">
+        <span class="badge">16 × 16 × 4</span>
+        <span class="badge">local active register</span>
+        <label style="margin-left:auto;display:flex;gap:8px;align-items:center;">Layer <select id="ringLayer" style="width:80px"><option>0</option><option>1</option><option>2</option><option>3</option></select></label>
+      </div>
+      <div class="ring" id="ring"></div>
+    </div>
+    <div class="card span-6">
+      <h2>65536-cell canonical bitboard</h2>
+      <div class="row">
+        <span class="badge">64 × 64 × 16</span>
+        <span class="badge">reference bitboard</span>
+        <label style="margin-left:auto;display:flex;gap:8px;align-items:center;">Plane <select id="plane" style="width:80px"></select></label>
+      </div>
+      <canvas id="board" width="512" height="512"></canvas>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card span-4">
+      <h2>DOM projection</h2>
+      <div class="projection" id="domProjection"></div>
+    </div>
+    <div class="card span-4">
+      <h2>CSSOM projection</h2>
+      <div class="projection">
+        <div class="kv" id="cssProjection"></div>
+        <p class="footer-note">CSS variables are updated from the same receipt state: this is CSSOM as projection, not authority.</p>
+      </div>
+    </div>
+    <div class="card span-4">
+      <h2>Omi-JSDOM / VirtualDOM projection</h2>
+      <pre id="vdomProjection"></pre>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card span-12">
+      <h2>Receipt log</h2>
+      <pre id="log"></pre>
+    </div>
+  </section>
+</main>
+
+<script type="application/base64" id="omi-pure-blob">Y29uc3QgT01JX1BVUkUgPSAoKCkgPT4gewogICJ1c2Ugc3RyaWN0IjsKCiAgY29uc3QgQkFTRTM2ID0gIjAxMjM0NTY3ODlBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWiI7CiAgY29uc3QgQkFTRTY0VVJMID0gIkFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXowMTIzNDU2Nzg5LV8iOwogIGNvbnN0IEJMT0NLX0IgPSBPYmplY3QuZnJlZXplKFswLCAxLCAzLCA2LCA5LCA4LCA2LCAzXSk7CiAgY29uc3QgVzM2ID0gMzY7CgogIGZ1bmN0aW9uIG1hc2tGb3IobikgewogICAgaWYgKG4gPD0gMCB8fCBuID4gMzEpIHRocm93IG5ldyBSYW5nZUVycm9yKCJuIG11c3QgYmUgMS4uMzEgZm9yIHRoaXMgcG9ydGFibGUgYml0d2lzZSBrZXJuZWwiKTsKICAgIHJldHVybiAoTWF0aC5wb3coMiwgbikgLSAxKSA+Pj4gMDsKICB9CgogIGZ1bmN0aW9uIHUzMih4KSB7IHJldHVybiB4ID4+PiAwOyB9CgogIGZ1bmN0aW9uIHJvdGwoeCwgaywgbiA9IDE2KSB7CiAgICBjb25zdCBtYXNrID0gbWFza0ZvcihuKTsKICAgIGsgPSAoKGsgJSBuKSArIG4pICUgbjsKICAgIHggPSB1MzIoeCkgJiBtYXNrOwogICAgcmV0dXJuIHUzMigoKHggPDwgaykgfCAoeCA+Pj4gKG4gLSBrKSkpICYgbWFzayk7CiAgfQoKICBmdW5jdGlvbiByb3RyKHgsIGssIG4gPSAxNikgewogICAgY29uc3QgbWFzayA9IG1hc2tGb3Iobik7CiAgICBrID0gKChrICUgbikgKyBuKSAlIG47CiAgICB4ID0gdTMyKHgpICYgbWFzazsKICAgIHJldHVybiB1MzIoKCh4ID4+PiBrKSB8ICh4IDw8IChuIC0gaykpKSAmIG1hc2spOwogIH0KCiAgZnVuY3Rpb24gZGVsdGFTdGVwKHgsIEMgPSAweDAwMDAsIG4gPSAxNikgewogICAgY29uc3QgbWFzayA9IG1hc2tGb3Iobik7CiAgICByZXR1cm4gdTMyKChyb3RsKHgsIDEsIG4pIF4gcm90bCh4LCAzLCBuKSBeIHJvdHIoeCwgMiwgbikgXiBDKSAmIG1hc2spOwogIH0KCiAgZnVuY3Rpb24gZGVsdGFPcmJpdChzZWVkLCBDID0gMHgwMDAwLCBuID0gMTYsIHRpY2tzID0gOCkgewogICAgY29uc3Qgb3V0ID0gW107CiAgICBsZXQgeCA9IHUzMihzZWVkKSAmIG1hc2tGb3Iobik7CiAgICBmb3IgKGxldCBpID0gMDsgaSA8IHRpY2tzOyBpKyspIHsKICAgICAgb3V0LnB1c2goeCk7CiAgICAgIHggPSBkZWx0YVN0ZXAoeCwgQywgbik7CiAgICB9CiAgICByZXR1cm4gb3V0OwogIH0KCiAgZnVuY3Rpb24gYWN0aXZlMTUodikgewogICAgcmV0dXJuIHUzMih2KSAmIDB4MGY7CiAgfQoKICBmdW5jdGlvbiBpc0lkZW50aXR5TmliYmxlKHYpIHsKICAgIHJldHVybiBhY3RpdmUxNSh2KSA9PT0gMDsKICB9CgogIGZ1bmN0aW9uIGZhbm83KHRpY2spIHsKICAgIHJldHVybiAoKHRpY2sgJSA3KSArIDcpICUgNzsKICB9CgogIGZ1bmN0aW9uIG9jdGFudDgodGljaykgewogICAgcmV0dXJuIHUzMih0aWNrKSAmIDB4MDc7CiAgfQoKICBmdW5jdGlvbiBvcmJpdDM2KHBvcykgewogICAgcmV0dXJuICgocG9zICUgVzM2KSArIFczNikgJSBXMzY7CiAgfQoKICBmdW5jdGlvbiBibG9ja0RpZ2l0KHBvcykgewogICAgcmV0dXJuIEJMT0NLX0JbKChwb3MgJSBCTE9DS19CLmxlbmd0aCkgKyBCTE9DS19CLmxlbmd0aCkgJSBCTE9DS19CLmxlbmd0aF07CiAgfQoKICBmdW5jdGlvbiBxeHkoeCwgeSkgewogICAgeCA9IE51bWJlcih4KTsgeSA9IE51bWJlcih5KTsKICAgIHJldHVybiA2MCAqIHggKiB4ICsgMTYgKiB4ICogeSArIDQgKiB5ICogeTsKICB9CgogIGZ1bmN0aW9uIGxvY2FsMjQwKHgsIHkpIHsKICAgIHJldHVybiAoKHF4eSh4LCB5KSAlIDI0MCkgKyAyNDApICUgMjQwOwogIH0KCiAgZnVuY3Rpb24gc2xvdDUwNDAoZmFubywgcm9sZSwgeCwgeSkgewogICAgcmV0dXJuIGZhbm83KGZhbm8pICogNzIwICsgKCgocm9sZSAlIDMpICsgMykgJSAzKSAqIDI0MCArIGxvY2FsMjQwKHgsIHkpOwogIH0KCiAgZnVuY3Rpb24gdHdvQ3ViZU1pcnJvcihieXRlKSB7CiAgICBieXRlID0gdTMyKGJ5dGUpICYgMHhmZjsKICAgIHJldHVybiAoKGJ5dGUgJiAweDBmKSA8PCA0KSB8ICgoYnl0ZSAmIDB4ZjApID4+PiA0KTsKICB9CgogIGZ1bmN0aW9uIHR3b0N1YmVEZWx0YShieXRlKSB7CiAgICBieXRlID0gdTMyKGJ5dGUpICYgMHhmZjsKICAgIHJldHVybiBieXRlIF4gdHdvQ3ViZU1pcnJvcihieXRlKTsKICB9CgogIGZ1bmN0aW9uIGdhdWdlQ2VsbChyb3csIHgsIHkpIHsKICAgIHJldHVybiAoKCh1MzIocm93KSAmIDB4MGYpIDw8IDEyKSB8ICgodTMyKHgpICYgMHgzZikgPDwgNikgfCAodTMyKHkpICYgMHgzZikpID4+PiAwOwogIH0KCiAgZnVuY3Rpb24gbG93ZXJLZXJuZWxJbmRleChsYXllciwgcm93LCBjb2wpIHsKICAgIHJldHVybiAoKCh1MzIobGF5ZXIpICYgMHgwMykgKiAyNTYpICsgKCh1MzIocm93KSAmIDB4MGYpICogMTYpICsgKHUzMihjb2wpICYgMHgwZikpID4+PiAwOwogIH0KCiAgZnVuY3Rpb24gYml0Ym9hcmRJbmRleChwbGFuZSwgeCwgeSkgewogICAgcmV0dXJuICgoKHUzMihwbGFuZSkgJiAweDBmKSAqIDQwOTYpICsgKCh1MzIoeCkgJiAweDNmKSAqIDY0KSArICh1MzIoeSkgJiAweDNmKSkgPj4+IDA7CiAgfQoKICBmdW5jdGlvbiBwYXJpdHkzMih2KSB7CiAgICB2ID0gdTMyKHYpOwogICAgdiBePSB2ID4+PiAxNjsKICAgIHYgXj0gdiA+Pj4gODsKICAgIHYgXj0gdiA+Pj4gNDsKICAgIHYgJj0gMHgwZjsKICAgIHJldHVybiAoMHg2OTk2ID4+PiB2KSAmIDE7CiAgfQoKICBmdW5jdGlvbiByaW5nQ2hhckF0KGksIHNlZWQgPSAweDAwMDAsIEMgPSAweDAwMDApIHsKICAgIGNvbnN0IGxheWVyID0gKGkgPj4+IDgpICYgMHgwMzsKICAgIGNvbnN0IHJvdyA9IChpID4+PiA0KSAmIDB4MGY7CiAgICBjb25zdCBjb2wgPSBpICYgMHgwZjsKICAgIGNvbnN0IHYgPSBkZWx0YVN0ZXAoKHNlZWQgXiAobGF5ZXIgPDwgMTIpIF4gKHJvdyA8PCA4KSBeIGNvbCkgJiAweGZmZmYsIEMsIDE2KTsKICAgIHJldHVybiBCQVNFNjRVUkxbKHYgXiBxeHkocm93ICYgMywgY29sICYgMykgXiBsYXllcikgJiAweDNmXTsKICB9CgogIGZ1bmN0aW9uIGJ1aWxkUmV3cml0ZVJpbmcoc2VlZCA9IDB4MDAwMCwgQyA9IDB4MDAwMCkgewogICAgbGV0IHMgPSAiIjsKICAgIGZvciAobGV0IGkgPSAwOyBpIDwgMTAyNDsgaSsrKSBzICs9IHJpbmdDaGFyQXQoaSwgc2VlZCwgQyk7CiAgICByZXR1cm4gczsKICB9CgogIGZ1bmN0aW9uIGJpdGJvYXJkQml0KHBsYW5lLCB4LCB5LCBzZWVkID0gMHgwMDAwLCBDID0gMHgwMDAwKSB7CiAgICBjb25zdCBpZHggPSBiaXRib2FyZEluZGV4KHBsYW5lLCB4LCB5KTsKICAgIGNvbnN0IHYgPSBkZWx0YVN0ZXAoKHNlZWQgXiBpZHggXiBnYXVnZUNlbGwocGxhbmUsIHgsIHkpKSAmIDB4ZmZmZiwgQywgMTYpOwogICAgcmV0dXJuIHBhcml0eTMyKHYgXiBxeHkoeCAmIDMsIHkgJiAzKSBeIGJsb2NrRGlnaXQoaWR4KSk7CiAgfQoKICBmdW5jdGlvbiBidWlsZEJpdGJvYXJkKHNlZWQgPSAweDAwMDAsIEMgPSAweDAwMDApIHsKICAgIGNvbnN0IGJ5dGVzID0gbmV3IFVpbnQ4QXJyYXkoODE5Mik7IC8vIDY1LDUzNiBiaXRzCiAgICBmb3IgKGxldCBpID0gMDsgaSA8IDY1NTM2OyBpKyspIHsKICAgICAgY29uc3QgcGxhbmUgPSAoaSA+Pj4gMTIpICYgMHgwZjsKICAgICAgY29uc3QgeCA9IChpID4+PiA2KSAmIDB4M2Y7CiAgICAgIGNvbnN0IHkgPSBpICYgMHgzZjsKICAgICAgaWYgKGJpdGJvYXJkQml0KHBsYW5lLCB4LCB5LCBzZWVkLCBDKSkgYnl0ZXNbaSA+Pj4gM10gfD0gMSA8PCAoaSAmIDcpOwogICAgfQogICAgcmV0dXJuIGJ5dGVzOwogIH0KCiAgZnVuY3Rpb24gcmVhZEJpdChwYWNrZWQsIGluZGV4KSB7CiAgICByZXR1cm4gKHBhY2tlZFtpbmRleCA+Pj4gM10gPj4+IChpbmRleCAmIDcpKSAmIDE7CiAgfQoKICBmdW5jdGlvbiBmbnYxYTMyQnl0ZXMoYnl0ZXMsIHN0YXJ0ID0gMHg4MTFjOWRjNSkgewogICAgbGV0IGggPSBzdGFydCA+Pj4gMDsKICAgIGZvciAoY29uc3QgYiBvZiBieXRlcykgewogICAgICBoIF49IGI7CiAgICAgIGggPSBNYXRoLmltdWwoaCwgMHgwMTAwMDE5MykgPj4+IDA7CiAgICB9CiAgICByZXR1cm4gaCA+Pj4gMDsKICB9CgogIGZ1bmN0aW9uIGZudjFhMzJTdHJpbmcocywgc3RhcnQgPSAweDgxMWM5ZGM1KSB7CiAgICBsZXQgaCA9IHN0YXJ0ID4+PiAwOwogICAgZm9yIChsZXQgaSA9IDA7IGkgPCBzLmxlbmd0aDsgaSsrKSB7CiAgICAgIGggXj0gcy5jaGFyQ29kZUF0KGkpICYgMHhmZjsKICAgICAgaCA9IE1hdGguaW11bChoLCAweDAxMDAwMTkzKSA+Pj4gMDsKICAgIH0KICAgIHJldHVybiBoID4+PiAwOwogIH0KCiAgZnVuY3Rpb24gaGV4KHZhbHVlLCB3aWR0aCA9IDQpIHsKICAgIHJldHVybiAiMHgiICsgKHUzMih2YWx1ZSkpLnRvU3RyaW5nKDE2KS50b1VwcGVyQ2FzZSgpLnBhZFN0YXJ0KHdpZHRoLCAiMCIpOwogIH0KCiAgZnVuY3Rpb24gYmFzZTM2KHZhbHVlKSB7CiAgICBpZiAodmFsdWUgPT09IDApIHJldHVybiAiMCI7CiAgICBsZXQgdiA9IE1hdGguYWJzKE1hdGgudHJ1bmModmFsdWUpKTsKICAgIGxldCBvdXQgPSAiIjsKICAgIHdoaWxlICh2ID4gMCkgewogICAgICBvdXQgPSBCQVNFMzZbdiAlIDM2XSArIG91dDsKICAgICAgdiA9IE1hdGguZmxvb3IodiAvIDM2KTsKICAgIH0KICAgIHJldHVybiB2YWx1ZSA8IDAgPyAiLSIgKyBvdXQgOiBvdXQ7CiAgfQoKICBmdW5jdGlvbiBtaXhlZEVuY29kZSh2YWx1ZSwgcmFkaWNlcykgewogICAgbGV0IHYgPSBNYXRoLnRydW5jKHZhbHVlKTsKICAgIGNvbnN0IGNvb3JkcyA9IFtdOwogICAgZm9yIChjb25zdCByIG9mIHJhZGljZXMpIHsKICAgICAgY29vcmRzLnB1c2godiAlIHIpOwogICAgICB2ID0gTWF0aC5mbG9vcih2IC8gcik7CiAgICB9CiAgICBjb29yZHMucHVzaCh2KTsKICAgIHJldHVybiBjb29yZHM7CiAgfQoKICBmdW5jdGlvbiBtaXhlZERlY29kZShjb29yZHMsIHJhZGljZXMpIHsKICAgIGxldCB2ID0gY29vcmRzW2Nvb3Jkcy5sZW5ndGggLSAxXTsKICAgIGZvciAobGV0IGkgPSByYWRpY2VzLmxlbmd0aCAtIDE7IGkgPj0gMDsgaS0tKSB2ID0gY29vcmRzW2ldICsgcmFkaWNlc1tpXSAqIHY7CiAgICByZXR1cm4gdjsKICB9CgogIGZ1bmN0aW9uIHVuaWNvZGVEZWNvbXBvc2UoY29kZXBvaW50KSB7CiAgICBjb25zdCBjcCA9IHUzMihjb2RlcG9pbnQpOwogICAgcmV0dXJuIHsgcGxhbmU6IChjcCA+Pj4gMTYpICYgMHgxMCwgb2Zmc2V0OiBjcCAmIDB4ZmZmZiB9OwogIH0KCiAgZnVuY3Rpb24gbWFrZVJlY2VpcHQoc3RhdGUpIHsKICAgIGNvbnN0IHJpbmdIYXNoID0gZm52MWEzMlN0cmluZyhzdGF0ZS5yaW5nIHx8ICIiKTsKICAgIGNvbnN0IGJvYXJkSGFzaCA9IGZudjFhMzJCeXRlcyhzdGF0ZS5iaXRib2FyZCB8fCBuZXcgVWludDhBcnJheSgpKTsKICAgIGNvbnN0IHBheWxvYWQgPSBbc3RhdGUuc2VlZCwgc3RhdGUuQywgc3RhdGUudGljaywgc3RhdGUueCwgc3RhdGUueSwgc3RhdGUuZmFubywgc3RhdGUucm9sZSwgc3RhdGUubG9jYWwyNDAsIHN0YXRlLnNsb3Q1MDQwLCByaW5nSGFzaCwgYm9hcmRIYXNoXQogICAgICAubWFwKHYgPT4gaGV4KHYsIDgpKS5qb2luKCI7Iik7CiAgICBjb25zdCByZWNlaXB0ID0gZm52MWEzMlN0cmluZyhwYXlsb2FkKTsKICAgIHJldHVybiB7CiAgICAgIHR5cGU6ICJvbWktcmVjZWlwdDpsb2NhbC1zdGF0aWMiLAogICAgICByb290OiBzdGF0ZS5yb290LAogICAgICBzZWVkOiBoZXgoc3RhdGUuc2VlZCwgNCksCiAgICAgIEM6IGhleChzdGF0ZS5DLCA0KSwKICAgICAgdGljazogc3RhdGUudGljaywKICAgICAgZmFubzc6IHN0YXRlLmZhbm8sCiAgICAgIGFjdGl2ZTE1OiBzdGF0ZS5hY3RpdmUxNSwKICAgICAgb3JiaXQzNjogc3RhdGUub3JiaXQzNiwKICAgICAgcXh5OiBzdGF0ZS5xLAogICAgICBsb2NhbDI0MDogc3RhdGUubG9jYWwyNDAsCiAgICAgIHNsb3Q1MDQwOiBzdGF0ZS5zbG90NTA0MCwKICAgICAgcmluZ0hhc2g6IGhleChyaW5nSGFzaCwgOCksCiAgICAgIGJpdGJvYXJkSGFzaDogaGV4KGJvYXJkSGFzaCwgOCksCiAgICAgIHJlY2VpcHQ6IGhleChyZWNlaXB0LCA4KQogICAgfTsKICB9CgogIHJldHVybiBPYmplY3QuZnJlZXplKHsKICAgIEJBU0UzNiwgQkFTRTY0VVJMLCBCTE9DS19CLCBXMzYsCiAgICByb3RsLCByb3RyLCBkZWx0YVN0ZXAsIGRlbHRhT3JiaXQsCiAgICBhY3RpdmUxNSwgaXNJZGVudGl0eU5pYmJsZSwgZmFubzcsIG9jdGFudDgsIG9yYml0MzYsIGJsb2NrRGlnaXQsCiAgICBxeHksIGxvY2FsMjQwLCBzbG90NTA0MCwKICAgIHR3b0N1YmVNaXJyb3IsIHR3b0N1YmVEZWx0YSwKICAgIGdhdWdlQ2VsbCwgbG93ZXJLZXJuZWxJbmRleCwgYml0Ym9hcmRJbmRleCwKICAgIHBhcml0eTMyLCByaW5nQ2hhckF0LCBidWlsZFJld3JpdGVSaW5nLCBiaXRib2FyZEJpdCwgYnVpbGRCaXRib2FyZCwgcmVhZEJpdCwKICAgIGZudjFhMzJCeXRlcywgZm52MWEzMlN0cmluZywgaGV4LCBiYXNlMzYsCiAgICBtaXhlZEVuY29kZSwgbWl4ZWREZWNvZGUsIHVuaWNvZGVEZWNvbXBvc2UsCiAgICBtYWtlUmVjZWlwdAogIH0pOwp9KSgpOw==</script>
+<script>
+(function () {
+  "use strict";
+
+  let OMI = null;
+  let receiptLog = [];
+  let current = null;
+
+  function decodePureBlob() {
+    const b64 = document.getElementById("omi-pure-blob").textContent.trim();
+    const src = atob(b64);
+    const registry = Function(src + "
+return OMI_PURE;")();
+    return { src, registry };
+  }
+
+  function parseNum(v) {
+    v = String(v).trim();
+    if (/^0x/i.test(v)) return parseInt(v, 16) >>> 0;
+    return parseInt(v || "0", 10) >>> 0;
+  }
+
+  function setTrack(id, value, max, label) {
+    const el = document.getElementById(id);
+    const pct = max <= 0 ? 0 : Math.max(0, Math.min(1, value / max));
+    el.innerHTML = '<div class="fill" style="width:' + (pct * 100).toFixed(3) + '%"></div><div class="mark" style="left:' + (pct * 100).toFixed(3) + '%"></div><span style="position:absolute;left:10px;top:4px;color:#dfe7ff;font-size:12px;">' + label + '</span>';
+  }
+
+  function renderKV(id, pairs) {
+    const el = document.getElementById(id);
+    el.innerHTML = "";
+    for (const [k, v] of pairs) {
+      const a = document.createElement("div"); a.textContent = k;
+      const b = document.createElement("div"); b.textContent = v;
+      el.append(a, b);
+    }
+  }
+
+  function renderRing(ring) {
+    const layer = parseInt(document.getElementById("ringLayer").value, 10);
+    const start = layer * 256;
+    const el = document.getElementById("ring");
+    el.innerHTML = "";
+    for (let i = 0; i < 256; i++) {
+      const d = document.createElement("div");
+      const ch = ring[start + i];
+      d.className = "cell" + (/[AEIOUaeiou0]/.test(ch) ? " hot" : "");
+      d.title = "index=" + (start + i) + " char=" + ch;
+      d.textContent = ch;
+      el.appendChild(d);
+    }
+  }
+
+  function renderBoard(bitboard) {
+    const plane = parseInt(document.getElementById("plane").value, 10);
+    const canvas = document.getElementById("board");
+    const ctx = canvas.getContext("2d");
+    const img = ctx.createImageData(512, 512);
+    for (let py = 0; py < 512; py++) {
+      for (let px = 0; px < 512; px++) {
+        const x = px >>> 3;
+        const y = py >>> 3;
+        const idx = OMI.bitboardIndex(plane, x, y);
+        const bit = OMI.readBit(bitboard, idx);
+        const p = (py * 512 + px) * 4;
+        const grid = (px % 8 === 0 || py % 8 === 0);
+        img.data[p + 0] = bit ? 130 : (grid ? 30 : 8);
+        img.data[p + 1] = bit ? 210 : (grid ? 38 : 12);
+        img.data[p + 2] = bit ? 255 : (grid ? 55 : 20);
+        img.data[p + 3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+  }
+
+  function renderProjections(receipt) {
+    const dom = document.getElementById("domProjection");
+    dom.innerHTML = "";
+    const fields = ["root", "seed", "C", "fano7", "active15", "orbit36", "local240", "slot5040", "receipt"];
+    for (const f of fields) {
+      const n = document.createElement("div");
+      n.className = "dom-node";
+      n.setAttribute("data-omi", f);
+      n.textContent = f + "=" + receipt[f];
+      dom.appendChild(n);
+    }
+
+    const hue = receipt.orbit36 * 10;
+    document.documentElement.style.setProperty("--accent", "hsl(" + hue + " 90% 74%)");
+    document.documentElement.style.setProperty("--accent2", "hsl(" + ((hue + 80) % 360) + " 90% 80%)");
+    renderKV("cssProjection", [
+      ["--accent", "hsl(" + hue + " 90% 74%)"],
+      ["--accent2", "hsl(" + ((hue + 80) % 360) + " 90% 80%)"],
+      ["--cell", getComputedStyle(document.documentElement).getPropertyValue("--cell").trim()],
+      ["CSSOM authority", "projection-only"]
+    ]);
+
+    const vdom = {
+      type: "omi-virtual-root",
+      props: { address: receipt.root, receipt: receipt.receipt },
+      children: fields.map(f => ({ type: "omi-node", props: { key: f, value: receipt[f] }, children: [] }))
+    };
+    document.getElementById("vdomProjection").textContent = JSON.stringify(vdom, null, 2);
+  }
+
+  function compute() {
+    const root = document.getElementById("root").value.trim();
+    const seed = parseNum(document.getElementById("seed").value) & 0xffff;
+    const C = parseNum(document.getElementById("carry").value) & 0xffff;
+    const tick = parseInt(document.getElementById("tick").value || "0", 10);
+    const x0 = parseInt(document.getElementById("xval").value || "0", 10);
+    const y0 = parseInt(document.getElementById("yval").value || "0", 10);
+
+    let stepped = seed;
+    for (let i = 0; i < tick; i++) stepped = OMI.deltaStep(stepped, C, 16);
+
+    const active = OMI.active15(stepped);
+    const fano = OMI.fano7(tick);
+    const role = tick % 3;
+    const orbit = OMI.orbit36(tick + OMI.blockDigit(tick));
+    const x = (x0 + active + fano) & 0x0f;
+    const y = (y0 + orbit + role) & 0x0f;
+    const q = OMI.qxy(x, y);
+    const local = OMI.local240(x, y);
+    const slot = OMI.slot5040(fano, role, x, y);
+    const ring = OMI.buildRewriteRing(seed, C);
+    const bitboard = OMI.buildBitboard(seed, C);
+    const state = { root, seed, C, tick, stepped, active15: active, fano, role, orbit36: orbit, x, y, q, local240: local, slot5040: slot, ring, bitboard };
+    const receipt = OMI.makeReceipt(state);
+    current = { state, receipt };
+
+    document.getElementById("receipt").textContent = JSON.stringify(receipt, null, 2);
+    renderKV("derived", [
+      ["Δ state", OMI.hex(stepped, 4)],
+      ["B[tick mod 8]", String(OMI.blockDigit(tick))],
+      ["W", String(OMI.W36)],
+      ["7 of 8", fano + " active / octant " + OMI.octant8(tick)],
+      ["15 of 16", active === 0 ? "identity diagonal" : active + " active"],
+      ["36 orbit", orbit + " / base36 " + OMI.base36(orbit)],
+      ["x,y", x + ", " + y],
+      ["Qxy", String(q)],
+      ["Qxy / 6", String(q / 6)],
+      ["Qxy mod 240", String(local)],
+      ["slot5040", String(slot)],
+      ["ring hash", receipt.ringHash],
+      ["bitboard hash", receipt.bitboardHash]
+    ]);
+
+    setTrack("track7", fano, 7, "fano7=" + fano + " / octant8=" + OMI.octant8(tick));
+    setTrack("track15", active, 15, active === 0 ? "identity" : "active15=" + active);
+    setTrack("track36", orbit, 35, "orbit36=" + orbit + " (" + OMI.base36(orbit) + ")");
+    setTrack("track240", local, 239, "local240=" + local);
+    setTrack("track5040", slot, 5039, "slot5040=" + slot);
+
+    renderRing(ring);
+    renderBoard(bitboard);
+    renderProjections(receipt);
+    receiptLog.push(receipt);
+    document.getElementById("log").textContent = receiptLog.map((r, i) => "#" + i + " " + JSON.stringify(r)).join("
+");
+  }
+
+  function exportState() {
+    const payload = { exportedBy: "omi-portable-static-portal", current: current ? current.receipt : null, inputs: {
+      root: document.getElementById("root").value,
+      seed: document.getElementById("seed").value,
+      C: document.getElementById("carry").value,
+      tick: document.getElementById("tick").value,
+      x: document.getElementById("xval").value,
+      y: document.getElementById("yval").value,
+      plane: document.getElementById("plane").value,
+      ringLayer: document.getElementById("ringLayer").value
+    }, log: receiptLog };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "omi-static-portal-state.json";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  function importState(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const data = JSON.parse(reader.result);
+      const input = data.inputs || {};
+      if (input.root) document.getElementById("root").value = input.root;
+      if (input.seed) document.getElementById("seed").value = input.seed;
+      if (input.C) document.getElementById("carry").value = input.C;
+      if (input.tick) document.getElementById("tick").value = input.tick;
+      if (input.x) document.getElementById("xval").value = input.x;
+      if (input.y) document.getElementById("yval").value = input.y;
+      if (input.plane) document.getElementById("plane").value = input.plane;
+      if (input.ringLayer) document.getElementById("ringLayer").value = input.ringLayer;
+      receiptLog = Array.isArray(data.log) ? data.log : [];
+      compute();
+    };
+    reader.readAsText(file);
+  }
+
+  function boot() {
+    const loaded = decodePureBlob();
+    OMI = loaded.registry;
+    const srcHash = OMI.fnv1a32String(loaded.src);
+    document.getElementById("blobStatus").innerHTML = '<span class="badge ok">decoded</span> <span class="badge">source hash ' + OMI.hex(srcHash, 8) + '</span> <span class="badge">' + loaded.src.length + ' chars</span>';
+    const names = Object.keys(OMI).filter(k => typeof OMI[k] === "function");
+    document.getElementById("primitiveList").innerHTML = names.map(n => '<span class="badge">' + n + '</span>').join(" ");
+    const plane = document.getElementById("plane");
+    for (let i = 0; i < 16; i++) {
+      const opt = document.createElement("option");
+      opt.value = String(i);
+      opt.textContent = String(i);
+      plane.appendChild(opt);
+    }
+    plane.value = "8";
+    document.getElementById("run").addEventListener("click", compute);
+    document.getElementById("next").addEventListener("click", () => { document.getElementById("tick").value = String(parseInt(document.getElementById("tick").value || "0", 10) + 1); compute(); });
+    document.getElementById("export").addEventListener("click", exportState);
+    document.getElementById("importBtn").addEventListener("click", () => document.getElementById("importFile").click());
+    document.getElementById("importFile").addEventListener("change", e => e.target.files[0] && importState(e.target.files[0]));
+    document.getElementById("ringLayer").addEventListener("change", () => current && renderRing(current.state.ring));
+    document.getElementById("plane").addEventListener("change", () => current && renderBoard(current.state.bitboard));
+    compute();
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>

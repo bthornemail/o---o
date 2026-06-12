@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combinatorial Designs — Bitwise Catalog</title>
+<style>
+  :root {
+    --bg:       #0d0f14;
+    --surface:  #13161e;
+    --border:   #1e2333;
+    --accent1:  #5b8dee; /* electric blue  */
+    --accent2:  #e05c6c; /* signal red     */
+    --accent3:  #44d9a2; /* mint           */
+    --text:     #c9d1e0;
+    --muted:    #5a6278;
+    --mono:     'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --sans:     'Inter', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 2.5rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: #fff;
+  }
+  header h1 span { color: var(--accent1); }
+  .header-meta { color: var(--muted); font-size: 12px; max-width: 520px; }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 2.5rem;
+    overflow-x: auto;
+  }
+  .tab-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted);
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    padding: .75rem 1.1rem;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent1); border-bottom-color: var(--accent1); }
+
+  /* ── Layout ── */
+  main { display: flex; gap: 0; height: calc(100vh - 120px); }
+  .sidebar {
+    width: 280px; min-width: 220px;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 1rem 0;
+    flex-shrink: 0;
+  }
+  .design-list-item {
+    display: flex; align-items: center; gap: .6rem;
+    padding: .5rem 1.25rem;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background .1s, border-color .1s;
+  }
+  .design-list-item:hover { background: var(--surface); }
+  .design-list-item.active { background: var(--surface); border-left-color: var(--accent1); }
+  .design-list-item .tag {
+    font-size: 10px; font-weight: 700; letter-spacing: .05em;
+    padding: 2px 6px; border-radius: 3px; flex-shrink: 0;
+  }
+  .tag.bitwise  { background: #1a2f4a; color: var(--accent1); }
+  .tag.pure     { background: #2a1a2f; color: #c97ef0; }
+  .tag.hybrid   { background: #1a2a20; color: var(--accent3); }
+  .design-list-item .name { font-size: 12.5px; color: var(--text); }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: .1em;
+    color: var(--muted); text-transform: uppercase;
+    padding: .8rem 1.25rem .3rem;
+  }
+
+  /* ── Detail panel ── */
+  .detail {
+    flex: 1; overflow-y: auto;
+    padding: 2rem 2.5rem;
+  }
+  .design-card { display: none; }
+  .design-card.visible { display: block; }
+
+  .card-header { margin-bottom: 1.5rem; }
+  .card-title {
+    font-size: 1.25rem; font-weight: 700; color: #fff;
+    display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+  }
+  .card-params {
+    font-family: var(--mono); font-size: 12px; color: var(--accent3);
+    background: #0c1a13; border: 1px solid #1d3326;
+    border-radius: 4px; padding: 2px 8px; white-space: nowrap;
+  }
+  .card-desc { color: var(--muted); font-size: 13px; margin-top: .5rem; max-width: 700px; }
+
+  /* operation classification bar */
+  .op-class {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-size: 11px; font-weight: 700; letter-spacing: .06em;
+    padding: 4px 10px; border-radius: 4px; margin: .75rem 0 1.25rem;
+  }
+  .op-class.bitwise  { background:#0e1f35; color: var(--accent1); border:1px solid #1a3a6a;}
+  .op-class.pure     { background:#1e0e2e; color: #c97ef0; border:1px solid #3a1a5a;}
+  .op-class.hybrid   { background:#0e2018; color: var(--accent3); border:1px solid #1a3a28;}
+  .op-class::before { font-size: 14px; }
+  .op-class.bitwise::before  { content: '⚡'; }
+  .op-class.pure::before     { content: 'ƒ'; }
+  .op-class.hybrid::before   { content: '⊕'; }
+
+  /* code blocks */
+  .code-section { margin-bottom: 2rem; }
+  .code-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .08em;
+    color: var(--muted); text-transform: uppercase;
+    margin-bottom: .4rem; display: flex; align-items: center; gap: .5rem;
+  }
+  .code-label .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent1);
+  }
+  .code-label .dot.red  { background: var(--accent2); }
+  .code-label .dot.green{ background: var(--accent3); }
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    tab-size: 2;
+  }
+  /* syntax highlight */
+  .kw  { color: #7aa2f7; }
+  .ty  { color: #bb9af7; }
+  .cm  { color: #565f89; font-style: italic; }
+  .st  { color: #9ece6a; }
+  .nm  { color: #ff9e64; }
+  .fn  { color: #7dcfff; }
+  .op  { color: var(--accent2); }
+
+  /* rationale box */
+  .rationale {
+    background: #0e1520;
+    border-left: 3px solid var(--accent1);
+    border-radius: 0 6px 6px 0;
+    padding: .9rem 1.2rem;
+    font-size: 12.5px;
+    color: #8899bb;
+    margin-bottom: 2rem;
+  }
+  .rationale strong { color: var(--accent1); }
+
+  /* search */
+  .search-bar {
+    padding: .75rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .search-bar input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    font-family: var(--sans); font-size: 12px;
+    padding: .4rem .75rem;
+    outline: none;
+  }
+  .search-bar input:focus { border-color: var(--accent1); }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Combinatorial Designs <span>∷</span> Bitwise Catalog</h1>
+    <p class="header-meta">Every design from the Wikipedia article expressed in TypeScript —
+      ⚡ <b style="color:var(--accent1)">bitwise</b> where integer arithmetic suffices,
+      ƒ <b style="color:#c97ef0">pure</b> where it doesn't,
+      ⊕ <b style="color:var(--accent3)">hybrid</b> where both layers coexist.
+    </p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="filterAll()">All designs</button>
+  <button class="tab-btn" onclick="filterTag('bitwise')">⚡ Bitwise</button>
+  <button class="tab-btn" onclick="filterTag('pure')">ƒ Pure</button>
+  <button class="tab-btn" onclick="filterTag('hybrid')">⊕ Hybrid</button>
+</div>
+
+<main>
+  <aside class="sidebar">
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="Filter designs…" oninput="onSearch(this.value)">
+    </div>
+    <div id="sidebar-list"></div>
+  </aside>
+  <section class="detail" id="detail"></section>
+</main>
+
+<script>
+// ─────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────
+const DESIGNS = [
+  {
+    id: "bibd",
+    name: "BIBD / 2-Design",
+    params: "2-(v,k,λ)",
+    tag: "hybrid",
+    desc: "A collection of b blocks over v points where every element appears in r blocks and every pair of distinct elements co-occurs in exactly λ blocks.",
+    classification: "hybrid",
+    classNote: "Block membership is a bitset per block (v ≤ 64 → single bigint). Pair-coverage counting is arithmetic over those bitsets — bitwise AND + popcount.",
+    bitwiseCode: `// ── Bitwise core: incidence matrix as bigint bitsets ──────────────
+type Block = bigint;          // bit i set ⟺ point i is in block
+
+/** How many points are in both blocks? → popcount(A & B) */
+function blockIntersection(a: Block, b: Block): number {
+  let x = a & b, n = 0;
+  while (x) { n += Number(x & 1n); x >>= 1n; }
+  return n;
+}
+
+/** Point membership: O(1) */
+const inBlock = (b: Block, point: number): boolean =>
+  Boolean((b >> BigInt(point)) & 1n);
+
+/** Build block as bigint from point list */
+const makeBlock = (...pts: number[]): Block =>
+  pts.reduce((acc, p) => acc | (1n << BigInt(p)), 0n);`,
+    pureCode: `// ── Pure functions: validation (no bitwise shortcut here) ────────
+function isBIBD(
+  v: number, k: number, lambda: number,
+  blocks: Block[]
+): { valid: boolean; r: number; b: number } {
+  const b = blocks.length;
+  // Fisher: b >= v
+  if (b < v) return { valid: false, r: 0, b };
+  // Each point in exactly r = lambda*(v-1)/(k-1) blocks
+  const r = (lambda * (v - 1)) / (k - 1);
+  if (!Number.isInteger(r)) return { valid: false, r, b };
+
+  // Verify point replication
+  for (let p = 0; p < v; p++) {
+    const count = blocks.filter(bl => inBlock(bl, p)).length;
+    if (count !== r) return { valid: false, r, b };
+  }
+
+  // Verify pair coverage (bitwise AND per pair)
+  for (let i = 0; i < v; i++)
+    for (let j = i + 1; j < v; j++) {
+      const pi = 1n << BigInt(i), pj = 1n << BigInt(j);
+      const cov = blocks.filter(bl => (bl & pi) && (bl & pj)).length;
+      if (cov !== lambda) return { valid: false, r, b };
+    }
+  return { valid: true, r, b };
+}
+
+// Example: Fano plane as BIBD 2-(7,3,1)
+const fanoBlocks: Block[] = [
+  makeBlock(0,1,3), makeBlock(1,2,4), makeBlock(2,3,5),
+  makeBlock(3,4,6), makeBlock(4,5,0), makeBlock(5,6,1),
+  makeBlock(6,0,2),
+];
+console.log(isBIBD(7, 3, 1, fanoBlocks)); // { valid: true, r: 3, b: 7 }`
+  },
+
+  {
+    id: "sbibd",
+    name: "Symmetric BIBD",
+    params: "v = b",
+    tag: "bitwise",
+    desc: "A BIBD where the number of points equals the number of blocks (v = b). Projective planes, biplanes, and Hadamard 2-designs are all SBIBDs.",
+    classification: "bitwise",
+    classNote: "v = b means the incidence matrix is square. Symmetry check is a pure bitwise transpose-equality test on a bigint array.",
+    bitwiseCode: `// ── SBIBD: square incidence matrix, bigint rows ──────────────────
+
+/** Transpose a v×v bigint incidence matrix */
+function transposeIncidence(M: bigint[], v: number): bigint[] {
+  const T: bigint[] = Array(v).fill(0n);
+  for (let r = 0; r < v; r++)
+    for (let c = 0; c < v; c++)
+      if ((M[r] >> BigInt(c)) & 1n)
+        T[c] |= 1n << BigInt(r);
+  return T;
+}
+
+/** Is M symmetric (self-transpose)? — only possible if v = b */
+function isSymmetric(M: bigint[], v: number): boolean {
+  const T = transposeIncidence(M, v);
+  return M.every((row, i) => row === T[i]);
+}
+
+/** v = b check is just a length comparison + BIBD validation */
+function isSBIBD(v: number, k: number, lambda: number, M: bigint[]): boolean {
+  if (M.length !== v) return false;          // b must equal v
+  // every pair of distinct blocks intersects in exactly λ points
+  for (let i = 0; i < v; i++)
+    for (let j = i + 1; j < v; j++) {
+      const shared = blockIntersection(M[i], M[j]);
+      if (shared !== lambda) return false;
+    }
+  return true;
+}
+
+// Helper from BIBD section (repeated for standalone use)
+function blockIntersection(a: bigint, b: bigint): number {
+  let x = a & b, n = 0;
+  while (x) { n += Number(x & 1n); x >>= 1n; }
+  return n;
+}`,
+    pureCode: `// ── Pure: dual / complementary design ────────────────────────────
+function dualDesign(M: bigint[], v: number): bigint[] {
+  return transposeIncidence(M, v); // blocks become points, points become blocks
+}
+
+// Verify complement: each block Bᵢ replaced by its complement B̄ᵢ
+function complementDesign(M: bigint[], v: number): bigint[] {
+  const allPts = (1n << BigInt(v)) - 1n;   // v-bit mask of all points
+  return M.map(b => allPts ^ b);            // XOR flips membership
+}`
+  },
+
+  {
+    id: "fano",
+    name: "Fano Plane",
+    params: "2-(7,3,1)",
+    tag: "bitwise",
+    desc: "The unique projective plane of order 2: 7 points, 7 lines, each line holds 3 points, each point on 3 lines, any two lines meet in exactly 1 point. Arises from the (7,3,1) difference set {1,2,4} in ℤ/7ℤ.",
+    classification: "bitwise",
+    classNote: "Seven 7-bit integers suffice. All incidence, intersection, and collinearity queries are single-cycle bitwise ops. The difference set generator is pure modular arithmetic then bit-shifts.",
+    bitwiseCode: `// ── Fano plane: all 7 lines packed as 7-bit integers ─────────────
+//   Points  :  0 1 2 3 4 5 6  (bit positions)
+//   Lines   :  generated from difference set {1,2,4} in ℤ/7ℤ
+
+const FANO_LINES: number[] = (() => {
+  const diff = [1, 2, 4];                     // (7,3,1) difference set
+  return Array.from({ length: 7 }, (_, i) =>
+    diff.reduce((mask, d) => mask | (1 << ((i + d) % 7)), 0)
+  );
+})();
+// FANO_LINES = [0b0010110, 0b0101100, 0b1011000, ...]  (7 values)
+
+/** Are three points collinear? */
+const collinear = (p: number, q: number, r: number): boolean =>
+  FANO_LINES.some(line => (line & (1 << p)) &&
+                           (line & (1 << q)) &&
+                           (line & (1 << r)));
+
+/** Line through two distinct points (unique in PG(2,2)) */
+function lineThroughPoints(p: number, q: number): number {
+  return FANO_LINES.find(l => (l >> p & 1) && (l >> q & 1))!;
+}
+
+/** Intersection point of two lines */
+function intersect(l1: number, l2: number): number {
+  const both = l1 & l2;               // exactly 1 bit set
+  return 31 - Math.clz32(both);       // bit position
+}
+
+/** All lines through a given point */
+const linesThrough = (p: number): number[] =>
+  FANO_LINES.filter(l => (l >> p) & 1);`,
+    pureCode: `// ── Pure: Fano plane from first principles (projective space) ────
+// PG(2,2): homogeneous coords over GF(2)
+type Vec3 = [number, number, number];
+
+function gf2Dot(a: Vec3, b: Vec3): number {
+  return (a[0]*b[0] ^ a[1]*b[1] ^ a[2]*b[2]);   // XOR = GF(2) add
+}
+
+function gf2Cross(a: Vec3, b: Vec3): Vec3 {
+  return [
+    a[1]*b[2] ^ a[2]*b[1],
+    a[2]*b[0] ^ a[0]*b[2],
+    a[0]*b[1] ^ a[1]*b[0],
+  ];
+}
+
+// All 7 non-zero GF(2)^3 vectors (homogeneous points / lines)
+const PG22: Vec3[] = [
+  [0,0,1],[0,1,0],[0,1,1],[1,0,0],[1,0,1],[1,1,0],[1,1,1]
+];
+
+const incidentPL = (point: Vec3, line: Vec3): boolean =>
+  gf2Dot(point, line) === 0;
+
+const joinPoints = (p: Vec3, q: Vec3): Vec3 => gf2Cross(p, q);
+const meetLines  = (l: Vec3, m: Vec3): Vec3 => gf2Cross(l, m);`
+  },
+
+  {
+    id: "diffset",
+    name: "Difference Set",
+    params: "(v,k,λ)-DS",
+    tag: "hybrid",
+    desc: "A k-subset D of a group G of order v such that every nonidentity element can be expressed as d₁·d₂⁻¹ in exactly λ ways. Generates an SBIBD via its translates.",
+    classification: "hybrid",
+    classNote: "Difference multiset counting is modular arithmetic. Translate generation uses bitwise shifts when G = ℤ/nℤ and n ≤ 32.",
+    bitwiseCode: `// ── Bitwise translate generation for ℤ/nℤ difference sets ────────
+//   n ≤ 32: represent D as a 32-bit bitmask
+
+function diffSetToMask(D: number[], n: number): number {
+  return D.reduce((m, d) => m | (1 << d), 0);
+}
+
+/** Cyclic left-rotate a block by t positions mod n (n ≤ 32) */
+function cyclicTranslate(mask: number, t: number, n: number): number {
+  const mod = ((mask << t) | (mask >>> (n - t)));
+  return mod & ((1 << n) - 1);   // keep only n bits
+}
+
+/** All v translates → SBIBD incidence matrix as bitmask array */
+function developDiffSet(D: number[], n: number): number[] {
+  const base = diffSetToMask(D, n);
+  return Array.from({ length: n }, (_, t) => cyclicTranslate(base, t, n));
+}
+
+// Example: (7,3,1) → Fano plane
+const fanoDS   = developDiffSet([1, 2, 4], 7);
+// fanoDS[i] is a 7-bit integer representing the i-th block`,
+    pureCode: `// ── Pure: verify difference set property ─────────────────────────
+function verifyDiffSet(D: number[], n: number, lambda: number): boolean {
+  const counts = new Map<number, number>();
+  for (let i = 0; i < D.length; i++)
+    for (let j = 0; j < D.length; j++) {
+      if (i === j) continue;
+      const diff = ((D[i] - D[j]) % n + n) % n;   // d1 - d2 mod n
+      counts.set(diff, (counts.get(diff) ?? 0) + 1);
+    }
+  // Every nonzero element should appear exactly lambda times
+  for (let x = 1; x < n; x++)
+    if ((counts.get(x) ?? 0) !== lambda) return false;
+  return true;
+}
+
+console.log(verifyDiffSet([1, 2, 4], 7, 1));  // true  → Fano
+console.log(verifyDiffSet([1, 2, 4, 8, 16], 31, 2));  // check (31,5,2)`
+  },
+
+  {
+    id: "hadamard-matrix",
+    name: "Hadamard Matrix",
+    params: "H·Hᵀ = mIₘ",
+    tag: "hybrid",
+    desc: "An m×m ±1 matrix where H·Hᵀ = m·I. Order m > 2 must be divisible by 4. Foundation for Hadamard 2-designs.",
+    classification: "hybrid",
+    classNote: "Sylvester construction is pure tensor product. ±1 → 0/1 conversion for incidence matrix is a single XOR/right-shift per entry.",
+    bitwiseCode: `// ── ±1 ↔ 0/1 via bit tricks (for incidence matrix conversion) ────
+//   Hadamard entry h ∈ {+1, -1}: sign bit of (h - 1) >> 1 is 1 iff h = -1
+
+/** Convert ±1 value to 0/1 incidence bit: -1→1, +1→0 */
+const hadToBit = (h: number): number => (h - 1) >>> 31; // 1 if h=-1, 0 if h=+1
+
+/** Pack a row of ±1 entries into a BigInt bitmask */
+function packHadamardRow(row: number[]): bigint {
+  return row.reduce((mask, h, i) =>
+    mask | (BigInt(hadToBit(h)) << BigInt(i)), 0n);
+}
+
+/** Extract ±1 from bit */
+const bitToHad = (bit: number): number => 1 - 2 * bit;  // 0→+1, 1→-1`,
+    pureCode: `// ── Pure: Sylvester / Hadamard construction ──────────────────────
+type HMatrix = number[][];   // entries ∈ {+1, -1}
+
+const H1: HMatrix = [[1]];
+
+/** Sylvester doubling: H_{2n} = H_n ⊗ H_2 */
+function sylvester(H: HMatrix): HMatrix {
+  const n = H.length;
+  const out: HMatrix = Array.from({ length: 2*n }, () => Array(2*n).fill(0));
+  for (let i = 0; i < n; i++)
+    for (let j = 0; j < n; j++) {
+      const v = H[i][j];
+      out[i][j]     =  v;  out[i][j+n]   =  v;
+      out[i+n][j]   =  v;  out[i+n][j+n] = -v;
+    }
+  return out;
+}
+
+/** Hadamard 2-design: remove row 0 & col 0, map -1→0 */
+function hadamard2Design(H: HMatrix): bigint[] {
+  const m = H.length;
+  return H.slice(1).map(row =>
+    packHadamardRow(row.slice(1).map(x => x === -1 ? -1 : 1))
+  );
+}
+
+/** Verify HHᵀ = mI */
+function verifyHadamard(H: HMatrix): boolean {
+  const m = H.length;
+  for (let i = 0; i < m; i++)
+    for (let j = 0; j < m; j++) {
+      const dot = H[i].reduce((s, _, k) => s + H[i][k]*H[j][k], 0);
+      if (dot !== (i === j ? m : 0)) return false;
+    }
+  return true;
+}
+
+// Build H₄ via Sylvester
+const H2 = sylvester(H1);
+const H4 = sylvester(H2);
+console.log(verifyHadamard(H4));  // true`
+  },
+
+  {
+    id: "latin-square",
+    name: "Latin Square",
+    params: "n×n, each symbol once/row/col",
+    tag: "bitwise",
+    desc: "An n×n array with n symbols where each symbol appears exactly once in every row and column. Foundation for many combinatorial structures.",
+    classification: "bitwise",
+    classNote: "For n ≤ 32 each row and each column is a bitmask of which symbols are used. Validation is O(n) bitwise ORs — a complete row/col has all n bits set.",
+    bitwiseCode: `// ── Latin square validation via bitmasks (n ≤ 32) ───────────────
+//   Entry at (r,c) is a symbol 0..n-1 encoded as bit offset
+
+function validateLatinSquare(grid: number[][], n: number): boolean {
+  const full = (1 << n) - 1;           // n bits set = all symbols present
+  for (let i = 0; i < n; i++) {
+    let rowMask = 0, colMask = 0;
+    for (let j = 0; j < n; j++) {
+      rowMask |= 1 << grid[i][j];
+      colMask |= 1 << grid[j][i];
+    }
+    if (rowMask !== full || colMask !== full) return false;
+  }
+  return true;
+}
+
+/** Check two squares are orthogonal: all n² ordered pairs distinct */
+function areOrthogonal(A: number[][], B: number[][], n: number): boolean {
+  const seen = new Set<number>();
+  for (let i = 0; i < n; i++)
+    for (let j = 0; j < n; j++) {
+      const pair = A[i][j] * n + B[i][j];   // encode pair as single int
+      if (seen.has(pair)) return false;
+      seen.add(pair);
+    }
+  return true;   // n² distinct pairs → orthogonal
+}
+
+/** MOLS count using bitmask set: how many are mutually orthogonal? */
+function maxMOLS(squares: number[][][], n: number): number {
+  let count = 1;
+  for (let i = 1; i < squares.length; i++)
+    if (squares.slice(0, i).every(s => areOrthogonal(s, squares[i], n)))
+      count++;
+  return count;
+}`,
+    pureCode: `// ── Pure: cyclic Latin square of order n ─────────────────────────
+function cyclicLatinSquare(n: number): number[][] {
+  return Array.from({ length: n }, (_, r) =>
+    Array.from({ length: n }, (_, c) => (r + c) % n)
+  );
+}
+
+/** Hall's theorem: extend r×n Latin rectangle to (r+1)×n ──────── */
+function extendLatinRect(rect: number[][], n: number): number[][] | null {
+  // For each column, track which symbols are still available
+  const colAvail: Set<number>[] = Array.from({ length: n }, () =>
+    new Set(Array.from({ length: n }, (_, i) => i))
+  );
+  for (const row of rect)
+    for (let c = 0; c < n; c++) colAvail[c].delete(row[c]);
+
+  // Greedily assign new row (simplified; full solution needs bipartite matching)
+  const usedInRow = new Set<number>();
+  const newRow: number[] = [];
+  for (let c = 0; c < n; c++) {
+    const choice = [...colAvail[c]].find(s => !usedInRow.has(s));
+    if (choice === undefined) return null;  // need backtracking
+    newRow.push(choice);
+    usedInRow.add(choice);
+  }
+  return [...rect, newRow];
+}`
+  },
+
+  {
+    id: "resolvable-bibd",
+    name: "Resolvable BIBD",
+    params: "partition into parallel classes",
+    tag: "hybrid",
+    desc: "A BIBD whose blocks can be partitioned into parallel classes, each of which partitions the point set. The 15-schoolgirl problem is the canonical example (v=15, k=3, λ=1).",
+    classification: "hybrid",
+    classNote: "Each parallel class is a partition of all v points — bitwise: the XOR of all blocks in a class equals the all-ones mask. Class disjointness is AND = 0.",
+    bitwiseCode: `// ── Parallel class validation via bitwise partition check ─────────
+
+/** A parallel class: blocks whose union = all points, pairwise disjoint */
+function isParallelClass(blocks: bigint[], v: number): boolean {
+  const allPts = (1n << BigInt(v)) - 1n;
+  // Pairwise disjoint
+  for (let i = 0; i < blocks.length; i++)
+    for (let j = i + 1; j < blocks.length; j++)
+      if (blocks[i] & blocks[j]) return false;       // non-empty intersection
+  // Union covers all points
+  const union = blocks.reduce((u, b) => u | b, 0n);
+  return union === allPts;
+}
+
+/** Given blocks as bigints, find one parallel class greedily */
+function findParallelClass(blocks: bigint[], v: number): bigint[] | null {
+  const allPts = (1n << BigInt(v)) - 1n;
+  let covered = 0n;
+  const cls: bigint[] = [];
+  for (const b of blocks) {
+    if (!(b & covered)) {          // no overlap with already-covered points
+      cls.push(b);
+      covered |= b;
+      if (covered === allPts) return cls;
+    }
+  }
+  return null;
+}`,
+    pureCode: `// ── Pure: check full resolution (all blocks partitioned into classes)
+function isResolution(classes: bigint[][], v: number): boolean {
+  if (!classes.every(cls => isParallelClass(cls, v))) return false;
+  // Every block appears exactly once across all classes
+  const allBlocks = classes.flat().map(String).sort();
+  const unique = new Set(allBlocks);
+  return unique.size === allBlocks.length;
+}
+
+// Schoolgirl problem: BIBD(15,3,1) with 5 parallel classes of 5 triples
+// (one classic solution — 7 rounds, but λ=1 version needs 7 classes)
+const schoolgirl15: bigint[][] = [
+  // class 0: {0,1,2}, {3,4,5}, {6,7,8}, {9,10,11}, {12,13,14}
+  [0b000_000_000_000_111n, 0b000_000_000_111_000n,
+   0b000_000_111_000_000n, 0b000_111_000_000_000n,
+   0b111_000_000_000_000n],
+  // …additional classes omitted for brevity…
+];`
+  },
+
+  {
+    id: "pbd",
+    name: "Pairwise Balanced Design",
+    params: "PBD(v,K,λ)",
+    tag: "hybrid",
+    desc: "A set X with a family of subsets (blocks of varying sizes) such that every pair of distinct elements appears in exactly λ blocks. Fisher's inequality: v ≤ b.",
+    classification: "hybrid",
+    classNote: "Pair coverage uses bigint AND per block. The variable block sizes mean no single bitmask width works — we use bigints dynamically.",
+    bitwiseCode: `// ── Pair coverage using bigint AND ────────────────────────────────
+function pairCoverage(
+  pi: bigint, pj: bigint,     // single-bit masks for points i, j
+  blocks: bigint[]
+): number {
+  return blocks.filter(b => (b & pi) && (b & pj)).length;
+}
+
+/** Build point masks once, reuse for all pair checks */
+function buildPointMasks(v: number): bigint[] {
+  return Array.from({ length: v }, (_, i) => 1n << BigInt(i));
+}`,
+    pureCode: `// ── Pure: PBD validity + Fisher's inequality ─────────────────────
+function isPBD(v: number, lambda: number, blocks: bigint[]): boolean {
+  const masks = buildPointMasks(v);
+  // Check every pair
+  for (let i = 0; i < v; i++)
+    for (let j = i + 1; j < v; j++)
+      if (pairCoverage(masks[i], masks[j], blocks) !== lambda) return false;
+  // Fisher's inequality
+  if (blocks.length < v) return false;
+  return true;
+}
+
+/** Erdős–De Bruijn: equality v = b ↔ projective plane or near-pencil */
+function fishersEquality(v: number, blocks: bigint[]): "projective-plane" | "near-pencil" | "strict" {
+  if (blocks.length > v) return "strict";
+  // Check all block sizes == k (projective plane candidate)
+  const sizes = blocks.map(b => { let n=0n, x=b; while(x){n+=x&1n;x>>=1n;} return Number(n); });
+  if (new Set(sizes).size === 1) return "projective-plane";
+  return "near-pencil";
+}`
+  },
+
+  {
+    id: "bal-ternary",
+    name: "Balanced Ternary Design",
+    params: "BTD(V,B;ρ₁,ρ₂,R;K,Λ)",
+    tag: "pure",
+    desc: "Blocks are multisets over V points. Each point appears R = ρ₁ + 2ρ₂ times total, with multiplicity one in ρ₁ blocks and multiplicity two in ρ₂ blocks. Every pair co-occurs Λ times (counted with multiplicity).",
+    classification: "pure",
+    classNote: "Multiplicity 2 means a point can appear twice in one block — simple bitsets can't represent this. We need integer arrays and multiplication in the pair-coverage sum.",
+    bitwiseCode: `// ── Bitwise-adjacent: fast single-bit element check ──────────────
+//   (still useful for the ρ₁ part of each block)
+
+/** Multiplicity-1 mask: elements that appear exactly once */
+function singletonMask(block: number[], v: number): bigint {
+  const once = new Map<number, number>();
+  for (const p of block) once.set(p, (once.get(p) ?? 0) + 1);
+  return [...once.entries()].filter(([,c]) => c === 1)
+    .reduce((m, [p]) => m | (1n << BigInt(p)), 0n);
+}`,
+    pureCode: `// ── Pure: BTD representation and validation ──────────────────────
+type BTDBlock = Map<number, number>;   // point → multiplicity (1 or 2)
+
+function makeBTDBlock(entries: [number, number][]): BTDBlock {
+  return new Map(entries);
+}
+
+/** Weighted pair coverage: Σ_b m(v,b)·m(w,b) */
+function pairCoverBTD(v: number, w: number, blocks: BTDBlock[]): number {
+  return blocks.reduce((sum, b) =>
+    sum + (b.get(v) ?? 0) * (b.get(w) ?? 0), 0);
+}
+
+function verifyBTD(
+  V: number, rho1: number, rho2: number,
+  K: number, Lambda: number,
+  blocks: BTDBlock[]
+): boolean {
+  const R = rho1 + 2 * rho2;
+  // Verify point replication counts
+  for (let p = 0; p < V; p++) {
+    const totalR = blocks.reduce((s,b) => s + (b.get(p) ?? 0), 0);
+    if (totalR !== R) return false;
+    const inOnce = blocks.filter(b => b.get(p) === 1).length;
+    const inTwice = blocks.filter(b => b.get(p) === 2).length;
+    if (inOnce !== rho1 || inTwice !== rho2) return false;
+  }
+  // Verify pair coverage
+  for (let i = 0; i < V; i++)
+    for (let j = i + 1; j < V; j++)
+      if (pairCoverBTD(i, j, blocks) !== Lambda) return false;
+  return true;
+}`
+  },
+
+  {
+    id: "bal-tournament",
+    name: "Balanced Tournament Design",
+    params: "BTD(n): n×(2n-1) array",
+    tag: "pure",
+    desc: "Arranges all unordered pairs of a 2n-set into an n×(2n-1) array where every element appears once per column and at most twice per row. Columns give 1-factorizations of K₂ₙ.",
+    classification: "pure",
+    classNote: "Round-robin scheduling is graph-theoretic. The 1-factorization structure doesn't reduce to bitwise operations; it's pure combinatorial assignment.",
+    bitwiseCode: `// ── Bitwise assist: represent a round as bitmask of paired elements
+//   (sanity-check that each element appears exactly once per column)
+
+function colMask(col: [number,number][], n2: number): bigint {
+  return col.reduce((m, [a,b]) => m | (1n<<BigInt(a)) | (1n<<BigInt(b)), 0n);
+}
+
+const isValid1Factor = (col: [number,number][], n2: number): boolean =>
+  colMask(col, n2) === (1n << BigInt(n2)) - 1n;   // all 2n elements covered`,
+    pureCode: `// ── Pure: round-robin schedule via circle method ─────────────────
+//   2n players: 0..2n-2 rotate, player 2n-1 fixed
+
+type Round = [number, number][];   // list of matches
+
+function roundRobinSchedule(n: number): Round[] {
+  const total = 2 * n;
+  const fixed = total - 1;
+  const rotating = Array.from({ length: total - 1 }, (_, i) => i);
+  const rounds: Round[] = [];
+
+  for (let r = 0; r < total - 1; r++) {
+    const round: Round = [];
+    // fixed player vs rotating[0]
+    round.push([fixed, rotating[0]]);
+    // pair up the rest
+    for (let i = 1; i <= n - 1; i++)
+      round.push([rotating[i], rotating[total - 1 - i]]);
+    rounds.push(round);
+    // rotate: last element moves to front
+    rotating.unshift(rotating.pop()!);
+  }
+  return rounds;
+}
+
+// BTD(3): 3 rows (locations), 5 columns (rounds), 6 players
+const schedule3 = roundRobinSchedule(3);
+console.log(schedule3.map(r => r.map(([a,b]) => \`\${a}v\${b}\`).join(" | ")))`
+  },
+
+  {
+    id: "freq-square",
+    name: "Frequency Square (F-Square)",
+    params: "F(n; λ₁,…,λₘ)",
+    tag: "bitwise",
+    desc: "Generalized Latin square: m symbols where symbol sᵢ appears λᵢ times in each row and column. Order n = Σλᵢ. Two F-squares are orthogonal if every ordered pair (sᵢ,tⱼ) appears exactly λᵢμⱼ times.",
+    classification: "bitwise",
+    classNote: "For m ≤ 16 symbols, frequency-count per row/column fits in a 4-bit packed integer. Orthogonality verification is integer pair encoding.",
+    bitwiseCode: `// ── Bitwise: validate row/col frequencies via popcount ──────────
+//   For binary F-square (m=2): symbol 0 appears λ₀ times, symbol 1 λ₁ times
+//   Represent each row as bitmask where bit=1 means symbol-1 is placed
+
+function validateBinaryFSquare(
+  grid: number[][],   // each entry 0 or 1
+  n: number,
+  lambda1: number     // symbol 1 frequency per row/col
+): boolean {
+  for (let i = 0; i < n; i++) {
+    // popcount of row i
+    let rowBits = 0;
+    for (let j = 0; j < n; j++) rowBits += grid[i][j];
+    if (rowBits !== lambda1) return false;
+    // popcount of col i
+    let colBits = 0;
+    for (let j = 0; j < n; j++) colBits += grid[j][i];
+    if (colBits !== lambda1) return false;
+  }
+  return true;
+}`,
+    pureCode: `// ── Pure: F-square orthogonality check ───────────────────────────
+type FSquare = number[][];   // entries are symbol indices 0..m-1
+
+function fsquaresOrthogonal(
+  F1: FSquare, lambda1: number[],
+  F2: FSquare, lambda2: number[],
+  n: number
+): boolean {
+  // pair (F1[i][j], F2[i][j]) should appear exactly lambda1[s] * lambda2[t] times
+  const expected = new Map<string, number>();
+  const observed = new Map<string, number>();
+
+  for (let s = 0; s < lambda1.length; s++)
+    for (let t = 0; t < lambda2.length; t++)
+      expected.set(\`\${s},\${t}\`, lambda1[s] * lambda2[t]);
+
+  for (let i = 0; i < n; i++)
+    for (let j = 0; j < n; j++) {
+      const key = \`\${F1[i][j]},\${F2[i][j]}\`;
+      observed.set(key, (observed.get(key) ?? 0) + 1);
+    }
+
+  for (const [key, exp] of expected)
+    if ((observed.get(key) ?? 0) !== exp) return false;
+  return true;
+}`
+  },
+
+  {
+    id: "howell",
+    name: "Howell Design",
+    params: "H(s,2n)",
+    tag: "hybrid",
+    desc: "An s×s array where each non-empty cell holds an unordered pair, each symbol appears once per row and column, and every unordered pair appears in at most one cell. H(2n-1, 2n) is a Room square.",
+    classification: "hybrid",
+    classNote: "Symbol-per-row/col uniqueness is a bitmask check. Pair uniqueness requires a hash set — pure.",
+    bitwiseCode: `// ── Bitwise: symbol uniqueness per row/col ───────────────────────
+type HCell = [number, number] | null;
+type HDesign = HCell[][];
+
+/** Check each symbol appears exactly once per row and column */
+function checkSymbolUniqueness(H: HDesign, s: number, n2: number): boolean {
+  const full = (1 << n2) - 1;
+  for (let i = 0; i < s; i++) {
+    let rowMask = 0, colMask = 0;
+    for (let j = 0; j < s; j++) {
+      const rc = H[i][j], cc = H[j][i];
+      if (rc) { rowMask |= 1<<rc[0]; rowMask |= 1<<rc[1]; }
+      if (cc) { colMask |= 1<<cc[0]; colMask |= 1<<cc[1]; }
+    }
+    if (rowMask !== full || colMask !== full) return false;
+  }
+  return true;
+}`,
+    pureCode: `// ── Pure: pair uniqueness check ──────────────────────────────────
+function checkPairUniqueness(H: HDesign, s: number): boolean {
+  const seen = new Set<string>();
+  for (let i = 0; i < s; i++)
+    for (let j = 0; j < s; j++) {
+      const cell = H[i][j];
+      if (!cell) continue;
+      const key = cell[0] < cell[1]
+        ? \`\${cell[0]},\${cell[1]}\`
+        : \`\${cell[1]},\${cell[0]}\`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+    }
+  return true;
+}
+
+function isHowellDesign(H: HDesign, s: number, n2: number): boolean {
+  return checkSymbolUniqueness(H, s, n2) && checkPairUniqueness(H, s);
+}
+
+// Room square: H(2n-1, 2n); here n=3 → H(5,6)
+const isRoomSquare = (H: HDesign, n: number) =>
+  H.length === 2*n-1 && isHowellDesign(H, 2*n-1, 2*n);`
+  },
+
+  {
+    id: "lotto",
+    name: "Lotto Design",
+    params: "(n,k,p,t)-lotto",
+    tag: "hybrid",
+    desc: "A family of k-subsets of an n-set such that any p-subset intersects at least one block in t or more elements. L(n,k,p,t) is the minimum number of blocks needed.",
+    classification: "hybrid",
+    classNote: "Block-vs-subset intersection is bitwise AND + popcount. Enumerating all p-subsets to verify coverage requires combinatorial iteration — pure.",
+    bitwiseCode: `// ── Bitwise: check one p-subset is t-covered ─────────────────────
+function isCovered(
+  pSubset: bigint,   // p-bit mask
+  blocks: bigint[],  // k-bit masks
+  t: number
+): boolean {
+  return blocks.some(b => {
+    let x = b & pSubset, cnt = 0;
+    while (x) { cnt += Number(x & 1n); x >>= 1n; }
+    return cnt >= t;
+  });
+}`,
+    pureCode: `// ── Pure: enumerate all p-subsets and verify full coverage ────────
+function* subsets(n: number, k: number): Generator<bigint> {
+  function* helper(start: number, rem: number, cur: bigint): Generator<bigint> {
+    if (rem === 0) { yield cur; return; }
+    for (let i = start; i <= n - rem; i++)
+      yield* helper(i + 1, rem - 1, cur | (1n << BigInt(i)));
+  }
+  yield* helper(0, k, 0n);
+}
+
+function isLottoDesign(
+  n: number, k: number, p: number, t: number,
+  blocks: bigint[]
+): boolean {
+  for (const ps of subsets(n, p))
+    if (!isCovered(ps, blocks, t)) return false;
+  return true;
+}
+
+// Verify the 3-block (7,5,4,3)-lotto design from the article
+const lotto7: bigint[] = [
+  makeBlock(0,1,2,3,6),   // {1,2,3,4,7} → 0-indexed
+  makeBlock(0,1,4,5,6),
+  makeBlock(2,3,4,5,6),
+];
+function makeBlock(...pts: number[]): bigint {
+  return pts.reduce((m,p) => m | (1n << BigInt(p)), 0n);
+}
+console.log(isLottoDesign(7, 5, 4, 3, lotto7));  // true`
+  },
+
+  {
+    id: "mendelsohn",
+    name: "Mendelsohn Triple System",
+    params: "MTS(v,λ)",
+    tag: "pure",
+    desc: "A collection of ordered 3-tuples such that each ordered pair (x,y) with x≠y is cyclically adjacent in exactly λ blocks. Equivalent to a semisymmetric quasigroup.",
+    classification: "pure",
+    classNote: "Ordered pairs and cyclic adjacency require index arithmetic, not bitwise. The quasigroup table is a 2D array of pure arithmetic.",
+    bitwiseCode: `// ── Bitwise-adjacent: fast ordered-pair membership via packed int ─
+//   For small v (≤ 8) encode ordered pair (x,y) as x*8+y → 1 byte
+
+function encodePair(x: number, y: number, v: number): number {
+  return x * v + y;
+}
+
+/** Build a bitmask of all ordered pairs covered by a block (a,b,c) */
+function blockCyclicPairs(a: number, b: number, c: number): number[] {
+  // cyclic adjacencies: (a,b), (b,c), (c,a)
+  return [encodePair(a,b,8), encodePair(b,c,8), encodePair(c,a,8)];
+}`,
+    pureCode: `// ── Pure: MTS validation and quasigroup construction ─────────────
+type OTriple = [number, number, number];
+
+function isMTS(v: number, lambda: number, blocks: OTriple[]): boolean {
+  const counts = new Map<number, number>();
+  for (const [a,b,c] of blocks) {
+    // cyclic pairs: (a,b), (b,c), (c,a)
+    for (const p of [[a,b],[b,c],[c,a]] as [number,number][]) {
+      const key = encodePair(p[0], p[1], v);
+      counts.set(key, (counts.get(key) ?? 0) + 1);
+    }
+  }
+  for (let x = 0; x < v; x++)
+    for (let y = 0; y < v; y++) {
+      if (x === y) continue;
+      if ((counts.get(encodePair(x,y,v)) ?? 0) !== lambda) return false;
+    }
+  return true;
+}
+
+/** Semisymmetric idempotent quasigroup → MTS ─────────────────────
+ *  x*(y*x) = y, x*x = x. For ℤ/vℤ: x*y = (2x - y) mod v
+ */
+function cyclicQuasigroup(v: number): OTriple[] {
+  const blocks: OTriple[] = [];
+  for (let x = 0; x < v; x++)
+    for (let y = 0; y < v; y++) {
+      if (x === y) continue;
+      const z = ((2*x - y) % v + v) % v;
+      blocks.push([x, y, z]);
+    }
+  return blocks;
+}
+
+const mts4 = isMTS(4, 1, [[0,1,2],[1,0,3],[2,1,3],[0,2,3]]);
+console.log(mts4);  // true`
+  },
+
+  {
+    id: "quasi-symmetric",
+    name: "Quasi-Symmetric Design",
+    params: "intersection numbers x, y",
+    tag: "bitwise",
+    desc: "A 2-design where every two distinct blocks intersect in either x or y points (x < y). Every quasisymmetric block design yields a strongly regular graph as its block graph.",
+    classification: "bitwise",
+    classNote: "Block intersection sizes are computed by AND + popcount. The strongly regular graph adjacency matrix is built from these — pure adjacency structure, bitwise computation.",
+    bitwiseCode: `// ── Bitwise: classify all pairwise intersections ─────────────────
+function classifyIntersections(
+  blocks: bigint[], x: number, y: number
+): { valid: boolean; adjMatrix: boolean[][] } {
+  const b = blocks.length;
+  const adj: boolean[][] = Array.from({length:b}, () => Array(b).fill(false));
+  let valid = true;
+
+  for (let i = 0; i < b; i++)
+    for (let j = i + 1; j < b; j++) {
+      const sz = popcount(blocks[i] & blocks[j]);
+      if (sz !== x && sz !== y) { valid = false; continue; }
+      if (sz === y) adj[i][j] = adj[j][i] = true;  // y-intersection = edge in block graph
+    }
+  return { valid, adjMatrix: adj };
+}
+
+function popcount(n: bigint): number {
+  let c = 0;
+  while (n) { c += Number(n & 1n); n >>= 1n; }
+  return c;
+}`,
+    pureCode: `// ── Pure: verify strongly regular graph parameters ───────────────
+//   Block graph: adj ↔ blocks share y points
+//   SRG(b, k_srg, lambda_srg, mu_srg)
+
+function srgParams(adj: boolean[][], b: number) {
+  const deg = adj[0].filter(Boolean).length;   // k: valency (same for all if SRG)
+  let lambda_srg = 0, mu_srg = 0, checked = false;
+  for (let i = 0; i < b && !checked; i++)
+    for (let j = i+1; j < b && !checked; j++) {
+      // count common neighbours
+      const common = adj[i].filter((_,k) => adj[i][k] && adj[j][k]).length;
+      if (adj[i][j]) lambda_srg = common;
+      else { mu_srg = common; checked = true; }
+    }
+  return { b, k: deg, lambda: lambda_srg, mu: mu_srg };
+}`
+  },
+
+  {
+    id: "tuscan-square",
+    name: "Tuscan / Roman / Vatican Square",
+    params: "n×n, hamiltonian paths",
+    tag: "hybrid",
+    desc: "An n×n Tuscan-k rectangle where each row is a permutation and for any two symbols a,b and each m from 1 to k, b is at most m steps right of a in one row. Tuscan squares decompose K_n into Hamiltonian directed paths.",
+    classification: "hybrid",
+    classNote: "Relative-offset checking per pair is arithmetic. Hamiltonian path decomposition is graph-theoretic — pure. Row validation is a bitmask uniqueness check.",
+    bitwiseCode: `// ── Bitwise: row is a permutation (all n symbols present) ─────────
+function isPermutationRow(row: number[], n: number): boolean {
+  let mask = 0;
+  for (const s of row) {
+    if (s < 0 || s >= n || (mask >> s & 1)) return false;
+    mask |= 1 << s;
+  }
+  return mask === (1 << n) - 1;
+}`,
+    pureCode: `// ── Pure: tuscan-k validation ─────────────────────────────────────
+function isTuscanK(square: number[][], n: number, k: number): boolean {
+  for (let r = 0; r < n; r++)
+    if (!isPermutationRow(square[r], n)) return false;
+
+  // For each ordered pair (a,b) and each offset m in 1..k: at most 1 row
+  // has b exactly m positions right of a
+  for (let m = 1; m <= k; m++) {
+    const seen = new Set<number>();
+    for (const row of square)
+      for (let c = 0; c + m < n; c++) {
+        const a = row[c], b = row[c + m];
+        const key = a * n + b;
+        if (seen.has(key)) return false;
+        seen.add(key);
+      }
+  }
+  return true;
+}
+
+/** Hamiltonian directed path from a row: edges (row[i] → row[i+1]) */
+function rowToDirectedPath(row: number[]): [number,number][] {
+  return row.slice(0,-1).map((v,i) => [v, row[i+1]]);
+}
+
+/** Full decomposition: n rows → n edge-disjoint Hamiltonian paths in K_n */
+function tuscanDecomposition(square: number[][], n: number): [number,number][][] {
+  return square.map(rowToDirectedPath);
+}`
+  },
+
+  {
+    id: "t-design",
+    name: "t-wise Balanced Design",
+    params: "t-(v,K,λ)",
+    tag: "hybrid",
+    desc: "A v-set with blocks of sizes in K such that every t-subset of distinct elements appears in exactly λ blocks. Generalizes BIBDs to higher-order uniformity.",
+    classification: "hybrid",
+    classNote: "t-subset enumeration is O(C(v,t)) — pure iteration. Coverage test per t-subset against all blocks is bitwise AND popcount.",
+    bitwiseCode: `// ── Bitwise: check if a t-subset is covered by a block ───────────
+const tSubsetInBlock = (tset: bigint, block: bigint): boolean =>
+  (block & tset) === tset;     // all bits of tset present in block
+
+function tSubsetCoverage(tset: bigint, blocks: bigint[]): number {
+  return blocks.filter(b => tSubsetInBlock(tset, b)).length;
+}`,
+    pureCode: `// ── Pure: full t-design validation ───────────────────────────────
+function isTDesign(
+  v: number, t: number, lambda: number,
+  blocks: bigint[]
+): boolean {
+  for (const ts of subsets(v, t))
+    if (tSubsetCoverage(ts, blocks) !== lambda) return false;
+  return true;
+}
+
+// subsets() generator from lotto section is reused here
+
+// Example check: Fano plane as 2-(7,3,1) is also a 2-design
+// (isBIBD already verified this; here we use generic t-design checker)
+console.log(isTDesign(7, 2, 1, fanoBlocks));  // true
+console.log(isTDesign(7, 1, 3, fanoBlocks));  // true (each point in 3 blocks)`
+  },
+
+  {
+    id: "youden",
+    name: "Youden Square",
+    params: "k×v Latin rectangle + SBIBD columns",
+    tag: "hybrid",
+    desc: "A k×v rectangular array (k < v) of v symbols where each symbol appears once per row and every column-set forms a block of a symmetric (v,k,λ) design.",
+    classification: "hybrid",
+    classNote: "Row-permutation checking is bitwise. The SBIBD column structure requires full BIBD validation — pure arithmetic.",
+    bitwiseCode: `// ── Bitwise: each row is a permutation of v symbols ──────────────
+function validateYoudenRows(grid: number[][], k: number, v: number): boolean {
+  const full = (1 << v) - 1;
+  return grid.every(row => {
+    const mask = row.reduce((m, s) => m | (1<<s), 0);
+    return mask === full;    // all v symbols appear
+  });
+}`,
+    pureCode: `// ── Pure: columns form blocks of an SBIBD ────────────────────────
+function youdenColumnBlocks(grid: number[][], k: number, v: number): bigint[] {
+  return Array.from({ length: v }, (_, c) =>
+    grid.reduce((m, row) => m | (1n << BigInt(row[c])), 0n)
+  );
+}
+
+function isYoudenSquare(
+  grid: number[][], k: number, v: number, lambda: number
+): boolean {
+  if (grid.length !== k || grid[0].length !== v) return false;
+  if (!validateYoudenRows(grid, k, v)) return false;
+  const colBlocks = youdenColumnBlocks(grid, k, v);
+  return isSBIBD(v, k, lambda, colBlocks);
+}
+
+// 4×7 Youden square from the article (1-indexed → 0-indexed)
+const youden4x7: number[][] = [
+  [0,1,2,3,4,5,6],
+  [1,2,3,4,5,6,0],
+  [2,3,4,5,6,0,1],
+  [4,5,6,0,1,2,3],
+];
+console.log(isYoudenSquare(youden4x7, 4, 7, 2));  // true → symmetric (7,4,2)-design`
+  },
+
+  {
+    id: "hall-triple",
+    name: "Hall Triple System",
+    params: "HTS ⊆ STS, affine AG(2,3) closure",
+    tag: "pure",
+    desc: "A Steiner triple system where the substructure generated by any two intersecting lines is isomorphic to AG(2,3). Equivalent to a distributive Steiner quasigroup. Point count is 3ᵐ.",
+    classification: "pure",
+    classNote: "Distributivity a(xy)=(ax)(ay) in the quasigroup is a purely algebraic condition over triple sets. No bitwise shortcut exists for the substructure isomorphism test.",
+    bitwiseCode: `// ── Bitwise-adjacent: encode triple as sorted 3-byte packed int ───
+const packTriple = (a: number, b: number, c: number): number => {
+  const [x,y,z] = [a,b,c].sort((p,q) => p-q);
+  return (x << 16) | (y << 8) | z;    // fits in 24 bits for v ≤ 255
+};`,
+    pureCode: `// ── Pure: HTS / distributive Steiner quasigroup ──────────────────
+type STS = Map<number, Map<number, number>>;   // op[x][y] = third point in triple
+
+function buildSteinerQG(triples: [number,number,number][]): STS {
+  const op: STS = new Map();
+  const set = (x: number, y: number, z: number) => {
+    if (!op.has(x)) op.set(x, new Map());
+    op.get(x)!.set(y, z);
+  };
+  for (const [a,b,c] of triples) {
+    set(a,b,c); set(b,a,c);
+    set(b,c,a); set(c,b,a);
+    set(a,c,b); set(c,a,b);
+  }
+  return op;
+}
+
+const qgMul = (op: STS, x: number, y: number): number => op.get(x)!.get(y)!;
+
+/** Distributivity: a*(x*y) = (a*x)*(a*y) for all a,x,y */
+function isDistributive(op: STS, pts: number[]): boolean {
+  for (const a of pts)
+    for (const x of pts)
+      for (const y of pts) {
+        const lhs = qgMul(op, a, qgMul(op, x, y));
+        const rhs = qgMul(op, qgMul(op, a, x), qgMul(op, a, y));
+        if (lhs !== rhs) return false;
+      }
+  return true;
+}
+
+const isHTS = (triples: [number,number,number][], pts: number[]): boolean =>
+  isDistributive(buildSteinerQG(triples), pts);`
+  },
+];
+
+// ─────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────
+let activeId = DESIGNS[0].id;
+let filterTag = 'all';
+let searchQ = '';
+
+// ─────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────
+function highlight(code) {
+  return code
+    .replace(/\/\/[^\n]*/g, m => `<span class="cm">${m}</span>`)
+    .replace(/\b(const|let|type|function|return|for|if|while|of|new|true|false|null|undefined|yield|yield\*|from|import|export|default|class|extends|implements|interface|void|boolean|number|string|bigint|any|never)\b/g, '<span class="kw">$1</span>')
+    .replace(/\b([A-Z][A-Za-z0-9_]*)\b/g, '<span class="ty">$1</span>')
+    .replace(/`[^`]*`/g, m => `<span class="st">${m}</span>`)
+    .replace(/"[^"]*"/g, m => `<span class="st">${m}</span>`)
+    .replace(/\b(\d+n?)\b/g, '<span class="nm">$1</span>');
+}
+
+function renderSidebar() {
+  const list = document.getElementById('sidebar-list');
+  const groups = [
+    { label: 'Fundamental Designs', ids: ['bibd','sbibd','fano','diffset','hadamard-matrix','latin-square','resolvable-bibd','pbd'] },
+    { label: 'Other Designs', ids: ['bal-ternary','bal-tournament','freq-square','howell','lotto','mendelsohn','quasi-symmetric','tuscan-square','t-design','youden','hall-triple'] },
+  ];
+  list.innerHTML = groups.map(g => {
+    const items = g.ids
+      .map(id => DESIGNS.find(d => d.id === id))
+      .filter(d => d &&
+        (filterTag === 'all' || d.tag === filterTag) &&
+        (!searchQ || d.name.toLowerCase().includes(searchQ.toLowerCase()))
+      );
+    if (!items.length) return '';
+    return `<div class="section-label">${g.label}</div>` +
+      items.map(d => `
+        <div class="design-list-item ${d.id === activeId ? 'active' : ''}" onclick="selectDesign('${d.id}')">
+          <span class="tag ${d.tag}">${d.tag === 'bitwise' ? '⚡' : d.tag === 'pure' ? 'ƒ' : '⊕'}</span>
+          <span class="name">${d.name}</span>
+        </div>`).join('');
+  }).join('');
+}
+
+function renderDetail() {
+  const detail = document.getElementById('detail');
+  detail.innerHTML = DESIGNS.map(d => {
+    const clsLabel = d.classification === 'bitwise' ? '⚡ Bitwise-expressible'
+      : d.classification === 'pure' ? 'ƒ Pure functions required'
+      : '⊕ Hybrid — bitwise core, pure wrapper';
+    return `<div class="design-card ${d.id === activeId ? 'visible' : ''}" id="card-${d.id}">
+      <div class="card-header">
+        <div class="card-title">
+          ${d.name}
+          <span class="card-params">${d.params}</span>
+        </div>
+        <div class="card-desc">${d.desc}</div>
+        <div class="op-class ${d.classification}">${clsLabel}</div>
+      </div>
+      <div class="rationale"><strong>Why:</strong> ${d.classNote}</div>
+      ${d.bitwiseCode ? `
+      <div class="code-section">
+        <div class="code-label"><span class="dot"></span>Bitwise operations (TypeScript)</div>
+        <pre>${highlight(d.bitwiseCode)}</pre>
+      </div>` : ''}
+      ${d.pureCode ? `
+      <div class="code-section">
+        <div class="code-label"><span class="dot ${d.classification === 'pure' ? '' : 'red'}"></span>${d.classification === 'pure' ? 'Pure function implementation' : 'Pure function layer'} (TypeScript)</div>
+        <pre>${highlight(d.pureCode)}</pre>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function render() { renderSidebar(); renderDetail(); }
+
+// ─────────────────────────────────────────────────────────────
+// INTERACTION
+// ─────────────────────────────────────────────────────────────
+function selectDesign(id) {
+  activeId = id;
+  render();
+  document.getElementById(`card-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+window.filterAll = () => { filterTag = 'all'; render(); };
+window.filterTag = (t) => { filterTag = t; render(); };
+window.onSearch  = (q) => { searchQ = q; render(); };
+window.selectDesign = selectDesign;
+
+// Tab active state
+document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+render();
+</script>
+</body>
+</html>

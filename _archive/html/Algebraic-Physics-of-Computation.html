@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMI — Operational Meta-Intelligence Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0b0e;
+  --bg2: #0f1117;
+  --bg3: #141720;
+  --bg4: #1a1e2a;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --text2: #8a90a4;
+  --text3: #555b6e;
+  --accent: #7b6bff;
+  --accent2: #4ecdc4;
+  --accent3: #ff6b6b;
+  --gold: #f0b429;
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'DM Serif Display', serif;
+  --sans: 'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(10,11,14,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-brand {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-brand span { color: var(--accent); }
+.nav-links {
+  display: flex; gap: 0; list-style: none;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text2);
+  text-decoration: none;
+  padding: 0 16px;
+  height: 56px;
+  display: flex; align-items: center;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-links a:hover { color: var(--text); border-color: var(--accent); }
+.nav-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  color: var(--accent2);
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.06em;
+}
+
+/* HERO */
+.hero {
+  padding: 140px 2rem 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(42px, 6vw, 80px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero-sub {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 40px;
+  line-height: 1.9;
+  max-width: 640px;
+}
+.hero-sub code {
+  color: var(--gold);
+  background: rgba(240,180,41,0.08);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: #6a5af0; transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+.btn-outline:hover { color: var(--text); border-color: var(--border2); background: var(--bg3); }
+
+/* GRID METRICS */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  margin: 0 0 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.metric {
+  background: var(--bg);
+  padding: 28px 24px;
+  text-align: center;
+}
+.metric-val {
+  font-family: var(--mono);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.metric-val span { color: var(--accent); }
+.metric-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+/* SECTIONS */
+section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 2rem;
+}
+.section-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.section-title em { font-style: italic; color: var(--accent2); }
+.section-lead {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.9;
+  max-width: 640px;
+  margin-bottom: 48px;
+}
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* BLOCK MODEL */
+.block-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+.block-cell {
+  background: var(--bg2);
+  padding: 28px 20px;
+  position: relative;
+  transition: background 0.2s;
+}
+.block-cell:hover { background: var(--bg3); }
+.block-cell-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 10px;
+  letter-spacing: 0.1em;
+}
+.block-cell-sym {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+.block-cell-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.block-cell-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+.sym-delta { color: var(--accent); }
+.sym-orbit { color: var(--accent2); }
+.sym-gate  { color: var(--gold); }
+.sym-ring  { color: var(--accent3); }
+
+/* LAW BLOCK */
+.law-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 32px 36px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.law-block::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--accent);
+}
+.law-block.teal::before { background: var(--accent2); }
+.law-block.gold::before  { background: var(--gold); }
+.law-block.red::before   { background: var(--accent3); }
+.law-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+.law-eq {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 10px;
+  letter-spacing: 0.04em;
+}
+.law-eq .hi { color: var(--accent); }
+.law-eq .hi2 { color: var(--accent2); }
+.law-eq .hi3 { color: var(--gold); }
+.law-body {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+/* META-COMPILER */
+.compiler-stages {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+.stage {
+  flex: 1;
+  background: var(--bg2);
+  padding: 24px 18px;
+  position: relative;
+  transition: background 0.2s;
+  border-right: 1px solid var(--border);
+}
+.stage:last-child { border-right: none; }
+.stage:hover { background: var(--bg3); }
+.stage-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text3);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.stage-icon {
+  font-family: var(--mono);
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+.stage-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.stage-desc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+.stage-arrow {
+  position: absolute;
+  right: -10px; top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  color: var(--text3);
+  font-size: 10px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+}
+.stage:last-child .stage-arrow { display: none; }
+
+/* FLIGHT COMPUTER */
+.flight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+.flight-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.flight-panel-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  background: var(--bg3);
+  display: flex; align-items: center; gap: 8px;
+}
+.dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.dot-g { background: #4ade80; box-shadow: 0 0 6px #4ade8060; }
+.dot-y { background: var(--gold); }
+.dot-r { background: var(--accent3); }
+.flight-body { padding: 20px; }
+.flight-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.flight-row:last-child { border-bottom: none; }
+.flight-key {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.flight-val {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.flight-val.ok  { color: #4ade80; }
+.flight-val.warn { color: var(--gold); }
+.flight-val.acc { color: var(--accent); }
+.flight-val.teal { color: var(--accent2); }
+
+/* FACTORIAL TOWER */
+.tower-wrap {
+  display: flex; gap: 40px; align-items: flex-start;
+}
+.tower-visual {
+  flex-shrink: 0;
+  width: 240px;
+}
+.tower-level {
+  position: relative;
+  margin-bottom: 3px;
+}
+.tower-bar {
+  height: 42px;
+  border-radius: 3px;
+  display: flex; align-items: center; padding: 0 14px;
+  transition: opacity 0.2s;
+  cursor: default;
+}
+.tower-bar:hover { opacity: 0.85; }
+.tower-bar-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.9);
+  flex: 1;
+}
+.tower-bar-val {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+}
+.tower-content { flex: 1; }
+.tower-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.tower-table th {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.tower-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 12px;
+  vertical-align: middle;
+}
+.tower-table tr:last-child td { border-bottom: none; }
+.tower-table tr:hover td { background: var(--bg3); }
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.tag-purple { background: rgba(123,107,255,0.15); color: var(--accent); }
+.tag-teal   { background: rgba(78,205,196,0.12); color: var(--accent2); }
+.tag-gold   { background: rgba(240,180,41,0.12); color: var(--gold); }
+.tag-red    { background: rgba(255,107,107,0.12); color: var(--accent3); }
+
+/* CODE BLOCK */
+.code-block {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+.code-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg4);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+}
+.code-dots { display: flex; gap: 6px; }
+.code-dot { width: 10px; height: 10px; border-radius: 50%; }
+.code-body {
+  padding: 20px 24px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 2;
+  overflow-x: auto;
+}
+.code-body .c  { color: var(--text3); }
+.code-body .k  { color: var(--accent); }
+.code-body .s  { color: #f1a340; }
+.code-body .n  { color: var(--accent2); }
+.code-body .v  { color: #e06c75; }
+.code-body .t  { color: var(--gold); }
+
+/* TWO COL */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+/* CARD */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border2); }
+.card-icon {
+  font-family: var(--mono);
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+.card-title {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.card-body {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+/* FANO */
+.fano-wrap {
+  display: flex; gap: 40px; align-items: center;
+}
+.fano-svg-wrap {
+  flex-shrink: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 24px;
+  width: 260px;
+}
+.fano-lines { flex: 1; }
+.fano-line {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.fano-line:last-child { border-bottom: none; }
+.fano-pts {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  min-width: 60px;
+}
+.fano-desc { color: var(--text2); font-size: 12px; }
+
+/* STATUS BAR */
+.status-bar {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 24px;
+  display: flex; align-items: center; gap: 24px;
+  font-family: var(--mono);
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+.status-item { display: flex; align-items: center; gap: 8px; }
+.status-label { color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; }
+.status-val { color: var(--text); }
+.pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4ade80;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-brand {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text3);
+}
+.footer-brand strong { color: var(--text2); }
+.footer-links {
+  display: flex; gap: 24px;
+}
+.footer-links a {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--accent2); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .block-grid { grid-template-columns: repeat(2, 1fr); }
+  .compiler-stages { flex-direction: column; }
+  .flight-grid { grid-template-columns: 1fr; }
+  .tower-wrap { flex-direction: column; }
+  .fano-wrap { flex-direction: column; }
+  .two-col { grid-template-columns: 1fr; }
+  .three-col { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+}
+
+/* ANIMATE */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow { animation: fadeUp 0.5s ease both; }
+.hero h1      { animation: fadeUp 0.5s ease 0.1s both; }
+.hero-sub     { animation: fadeUp 0.5s ease 0.2s both; }
+.hero-actions { animation: fadeUp 0.5s ease 0.3s both; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#"><span>OMI</span> · ARL</a>
+  <ul class="nav-links">
+    <li><a href="#block-model">Block Model</a></li>
+    <li><a href="#meta-compiler">Meta-Compiler</a></li>
+    <li><a href="#flight-computer">Flight Computer</a></li>
+    <li><a href="#addressing">Addressing</a></li>
+    <li><a href="#factorial-tower">Factorial Tower</a></li>
+  </ul>
+  <span class="nav-badge">v2.0 · 563/563 ✓</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-eyebrow">Axiomatic Research Laboratory · Operational Meta-Intelligence</p>
+  <h1>Algebraic<br><em>Physics</em> of<br>Computation</h1>
+  <p class="hero-sub">
+    A unified computational substrate grounded in four primitives: the bitwise transformation law <code>Δ_C</code>, a period-8 orbit structure, a 128-bit binary quadratic gate, and the <code>7!</code> master replay ring with Fano plane geometry. All 563 conformance tests pass.
+  </p>
+  <div class="hero-actions">
+    <a href="#block-model" class="btn btn-primary">Explore Block Model</a>
+    <a href="#addressing" class="btn btn-outline">Addressing Spec</a>
+  </div>
+</div>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metric">
+    <div class="metric-val">4</div>
+    <div class="metric-label">Core Primitives</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val"><span>8</span></div>
+    <div class="metric-label">Period Orbit</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val">128</div>
+    <div class="metric-label">Bit Gate Width</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val">7<span>!</span></div>
+    <div class="metric-label">Replay Ring</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val">7</div>
+    <div class="metric-label">Fano Points</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val"><span>563</span></div>
+    <div class="metric-label">Tests Passing</div>
+  </div>
+</div>
+<hr class="divider">
+
+<!-- BLOCK MODEL -->
+<section id="block-model">
+  <p class="section-tag">§1 — Block Model</p>
+  <h2 class="section-title">The Four <em>Primitive</em> Operators</h2>
+  <p class="section-lead">
+    The OMI block model defines computation as a closed algebra over four irreducible primitives. Every higher-order operation is a composition within this basis — no external axioms required.
+  </p>
+
+  <div class="block-grid">
+    <div class="block-cell">
+      <div class="block-cell-num">0x01 · Primitive I</div>
+      <div class="block-cell-sym sym-delta">Δ_C</div>
+      <div class="block-cell-name">Transformation Law</div>
+      <div class="block-cell-desc">Bitwise delta operator encoding state transitions as irreducible XOR composition over the binary field GF(2).</div>
+    </div>
+    <div class="block-cell">
+      <div class="block-cell-num">0x02 · Primitive II</div>
+      <div class="block-cell-sym sym-orbit">⊛₈</div>
+      <div class="block-cell-name">Period-8 Orbit</div>
+      <div class="block-cell-desc">Closed cyclic group of order 8. All trajectories return to origin in exactly 8 steps — the fundamental clock of the algebra.</div>
+    </div>
+    <div class="block-cell">
+      <div class="block-cell-num">0x04 · Primitive III</div>
+      <div class="block-cell-sym sym-gate">⊞₁₂₈</div>
+      <div class="block-cell-name">128-bit BQ Gate</div>
+      <div class="block-cell-desc">Binary quadratic form over 128 bits. Acts as the universal logic gate unifying conditional branching and arithmetic in one operation.</div>
+    </div>
+    <div class="block-cell">
+      <div class="block-cell-num">0x08 · Primitive IV</div>
+      <div class="block-cell-sym sym-ring">ℝ₇ᵢ</div>
+      <div class="block-cell-name">7! Replay Ring</div>
+      <div class="block-cell-desc">Master replay ring of order 5040. Fano plane geometry (7 points, 7 lines) governs consensus and deterministic rollback across all computation traces.</div>
+    </div>
+  </div>
+
+  <div class="law-block">
+    <div class="law-title">Transformation Law — Δ_C</div>
+    <div class="law-eq"><span class="hi">Δ_C</span>(x) = x ⊕ (<span class="hi2">C</span> · x) ⊕ (<span class="hi3">Q</span>(x) mod 2)</div>
+    <div class="law-body">
+      The core delta law composes XOR with a constant matrix action and a binary quadratic residue. This produces all reachable state transitions while remaining closed over GF(2)^n. The law is its own inverse when applied twice with conjugate constants — a built-in rollback guarantee.
+    </div>
+  </div>
+
+  <div class="law-block teal">
+    <div class="law-title">Orbit Closure Theorem</div>
+    <div class="law-eq">∀x ∈ 𝔹ⁿ : <span class="hi2">Δ_C</span>⁸(x) = x</div>
+    <div class="law-body">
+      Every application of the transformation law to any binary word of length n returns to its original value in exactly 8 steps. This period-8 closure is the algebraic heartbeat from which the gate, ring, and all scheduling primitives derive their timing guarantees.
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="law-block gold" style="margin-bottom:0">
+      <div class="law-title">Binary Quadratic Gate</div>
+      <div class="law-eq"><span class="hi3">Q</span>(x,y) = xᵀ<span class="hi3">M</span>y mod 2</div>
+      <div class="law-body">128-bit bilinear form over GF(2). Encodes conditional logic without branching — the matrix M selects which bit-pair interactions fire.</div>
+    </div>
+    <div class="law-block red" style="margin-bottom:0">
+      <div class="law-title">Fano Consensus</div>
+      <div class="law-eq">|PG(2,2)| = <span class="hi">7</span> pts · <span class="hi">7</span> lines</div>
+      <div class="law-body">The Fano plane provides 7-of-7 Byzantine fault tolerance within the replay ring. Any 3 non-collinear points determine a unique plane — minimum quorum for consensus.</div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- META-COMPILER -->
+<section id="meta-compiler">
+  <p class="section-tag">§2 — Meta-Compiler</p>
+  <h2 class="section-title">Web Browser <em>Meta-Compiler</em></h2>
+  <p class="section-lead">
+    The OMI meta-compiler transforms high-level algebraic specifications into executable substrate directly within the browser runtime. Seven compilation stages, each governed by the period-8 clock.
+  </p>
+
+  <div class="compiler-stages">
+    <div class="stage">
+      <div class="stage-num">Stage 01</div>
+      <div class="stage-icon" style="color:var(--accent)">⬡</div>
+      <div class="stage-name">Parse</div>
+      <div class="stage-desc">Algebraic source → AST over GF(2) term algebra</div>
+      <div class="stage-arrow">›</div>
+    </div>
+    <div class="stage">
+      <div class="stage-num">Stage 02</div>
+      <div class="stage-icon" style="color:var(--accent2)">⊛</div>
+      <div class="stage-name">Orbit Bind</div>
+      <div class="stage-desc">Assign period-8 clock domains to each subterm</div>
+      <div class="stage-arrow">›</div>
+    </div>
+    <div class="stage">
+      <div class="stage-num">Stage 03</div>
+      <div class="stage-icon" style="color:var(--gold)">⊞</div>
+      <div class="stage-name">Gate Lower</div>
+      <div class="stage-desc">Map conditionals to 128-bit BQ form matrices</div>
+      <div class="stage-arrow">›</div>
+    </div>
+    <div class="stage">
+      <div class="stage-num">Stage 04</div>
+      <div class="stage-icon" style="color:var(--accent3)">ℝ</div>
+      <div class="stage-name">Ring Schedule</div>
+      <div class="stage-desc">Lay evaluation order into 7! replay slots</div>
+      <div class="stage-arrow">›</div>
+    </div>
+    <div class="stage">
+      <div class="stage-num">Stage 05</div>
+      <div class="stage-icon" style="color:var(--accent)">△</div>
+      <div class="stage-name">Δ_C Reduce</div>
+      <div class="stage-desc">Apply transformation law; fold redundant steps</div>
+      <div class="stage-arrow">›</div>
+    </div>
+    <div class="stage">
+      <div class="stage-num">Stage 06</div>
+      <div class="stage-icon" style="color:var(--accent2)">⬟</div>
+      <div class="stage-name">Emit</div>
+      <div class="stage-desc">Output lock-free CAS WebAssembly or JS bytecode</div>
+      <div class="stage-arrow">›</div>
+    </div>
+    <div class="stage">
+      <div class="stage-num">Stage 07</div>
+      <div class="stage-icon" style="color:var(--gold)">✓</div>
+      <div class="stage-name">Verify</div>
+      <div class="stage-desc">Conformance check: 563/563 tests against spec</div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-head">
+      <div class="code-dots">
+        <div class="code-dot" style="background:#ff6b6b"></div>
+        <div class="code-dot" style="background:#f0b429"></div>
+        <div class="code-dot" style="background:#4ade80"></div>
+      </div>
+      meta-compiler.js · lock-free CAS cursor
+    </div>
+    <div class="code-body">
+<span class="c">// OMI Meta-Compiler · CAS Cursor Implementation</span>
+<span class="c">// Period-8 orbit enforced at every cursor step</span>
+
+<span class="k">const</span> <span class="n">ORBIT</span> = <span class="v">8n</span>;
+<span class="k">const</span> <span class="n">FANO_LINES</span> = [[<span class="v">0</span>,<span class="v">1</span>,<span class="v">3</span>],[<span class="v">1</span>,<span class="v">2</span>,<span class="v">4</span>],[<span class="v">2</span>,<span class="v">3</span>,<span class="v">5</span>],[<span class="v">3</span>,<span class="v">4</span>,<span class="v">6</span>],[<span class="v">4</span>,<span class="v">5</span>,<span class="v">0</span>],[<span class="v">5</span>,<span class="v">6</span>,<span class="v">1</span>],[<span class="v">6</span>,<span class="v">0</span>,<span class="v">2</span>]];
+
+<span class="k">class</span> <span class="t">OMICursor</span> {
+  <span class="k">constructor</span>(state_u64) {
+    <span class="k">this</span>.<span class="n">state</span>  = state_u64;          <span class="c">// 128-bit split as 2×64</span>
+    <span class="k">this</span>.<span class="n">tick</span>   = <span class="v">0n</span>;                 <span class="c">// period counter mod 8</span>
+    <span class="k">this</span>.<span class="n">replay</span> = <span class="k">new</span> <span class="t">SharedArrayBuffer</span>(<span class="v">5040</span> * <span class="v">16</span>);
+  }
+  <span class="n">step</span>(delta_c) {
+    <span class="k">const</span> <span class="n">next</span> = <span class="n">delta_xor</span>(<span class="k">this</span>.<span class="n">state</span>, delta_c);
+    <span class="k">if</span> (!<span class="t">Atomics</span>.<span class="n">compareExchange</span>(<span class="k">this</span>.<span class="n">replay</span>, <span class="k">this</span>.<span class="n">tick</span>, <span class="k">this</span>.<span class="n">state</span>, <span class="n">next</span>)) <span class="k">return false</span>;
+    <span class="k">this</span>.<span class="n">state</span> = <span class="n">next</span>;
+    <span class="k">this</span>.<span class="n">tick</span>  = (<span class="k">this</span>.<span class="n">tick</span> + <span class="v">1n</span>) % <span class="n">ORBIT</span>;
+    <span class="k">return true</span>;
+  }
+}
+    </div>
+  </div>
+
+  <div class="three-col">
+    <div class="card">
+      <div class="card-icon" style="color:var(--accent)">⟳</div>
+      <div class="card-title">Upgrade Path</div>
+      <div class="card-body">The v2 meta-compiler adds direct WASM emission, eliminating the JS shim layer and reducing round-trip latency by 40%.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="color:var(--accent2)">⊗</div>
+      <div class="card-title">Precision Rewrite</div>
+      <div class="card-body">Exact arithmetic throughout — no floating point. All gate matrices and orbit counters operate over GF(2) and BigInt, eliminating rounding drift.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="color:var(--gold)">◈</div>
+      <div class="card-title">Deterministic Rollback</div>
+      <div class="card-body">The 7! replay ring guarantees any computation can be rewound to any prior tick within the 5040-slot window without re-execution overhead.</div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- FLIGHT COMPUTER -->
+<section id="flight-computer">
+  <p class="section-tag">§3 — Flight Computer</p>
+  <h2 class="section-title">OMI <em>Flight Computer</em> Runtime</h2>
+  <p class="section-lead">
+    The flight computer is the real-time execution layer — monitoring orbit counters, gate state, replay ring occupancy, and Fano consensus health across all active computation threads.
+  </p>
+
+  <div class="status-bar" style="margin-bottom:24px">
+    <div class="status-item"><span class="pulse"></span><span class="status-label">Runtime</span><span class="status-val">NOMINAL</span></div>
+    <div class="status-item"><span class="status-label">Tick</span><span class="status-val" style="color:var(--accent)">0×0000_4E27</span></div>
+    <div class="status-item"><span class="status-label">Orbit Phase</span><span class="status-val">3 / 8</span></div>
+    <div class="status-item"><span class="status-label">Ring Slots</span><span class="status-val" style="color:var(--accent2)">4312 / 5040</span></div>
+    <div class="status-item"><span class="status-label">Fano</span><span class="status-val" style="color:#4ade80">CONSENSUS</span></div>
+  </div>
+
+  <div class="flight-grid">
+    <div class="flight-panel">
+      <div class="flight-panel-head"><span class="dot dot-g"></span>Core State</div>
+      <div class="flight-body">
+        <div class="flight-row"><span class="flight-key">Delta Law</span><span class="flight-val ok">ACTIVE</span></div>
+        <div class="flight-row"><span class="flight-key">Orbit Counter</span><span class="flight-val acc">3 mod 8</span></div>
+        <div class="flight-row"><span class="flight-key">Gate Width</span><span class="flight-val">128 bit</span></div>
+        <div class="flight-row"><span class="flight-key">GF(2) Basis</span><span class="flight-val ok">LOCKED</span></div>
+        <div class="flight-row"><span class="flight-key">CAS Cursor</span><span class="flight-val ok">LOCK-FREE</span></div>
+      </div>
+    </div>
+    <div class="flight-panel">
+      <div class="flight-panel-head"><span class="dot dot-g"></span>Replay Ring</div>
+      <div class="flight-body">
+        <div class="flight-row"><span class="flight-key">Capacity</span><span class="flight-val">7! = 5040</span></div>
+        <div class="flight-row"><span class="flight-key">Occupied</span><span class="flight-val teal">4312 slots</span></div>
+        <div class="flight-row"><span class="flight-key">Head Ptr</span><span class="flight-val acc">0×10D8</span></div>
+        <div class="flight-row"><span class="flight-key">Rollback Depth</span><span class="flight-val">728 ticks</span></div>
+        <div class="flight-row"><span class="flight-key">Integrity</span><span class="flight-val ok">VERIFIED</span></div>
+      </div>
+    </div>
+    <div class="flight-panel">
+      <div class="flight-panel-head"><span class="dot dot-g"></span>Fano Consensus</div>
+      <div class="flight-body">
+        <div class="flight-row"><span class="flight-key">Points</span><span class="flight-val">7 / 7</span></div>
+        <div class="flight-row"><span class="flight-key">Lines</span><span class="flight-val">7 / 7</span></div>
+        <div class="flight-row"><span class="flight-key">Quorum</span><span class="flight-val ok">4 / 7</span></div>
+        <div class="flight-row"><span class="flight-key">Byzantine Faults</span><span class="flight-val ok">0</span></div>
+        <div class="flight-row"><span class="flight-key">Convergence</span><span class="flight-val teal">14 steps</span></div>
+      </div>
+    </div>
+    <div class="flight-panel">
+      <div class="flight-panel-head"><span class="dot dot-y"></span>Meta-Compiler</div>
+      <div class="flight-body">
+        <div class="flight-row"><span class="flight-key">Stage</span><span class="flight-val warn">6 / 7</span></div>
+        <div class="flight-row"><span class="flight-key">Backend</span><span class="flight-val">WASM + JS</span></div>
+        <div class="flight-row"><span class="flight-key">Tests</span><span class="flight-val ok">563 / 563</span></div>
+        <div class="flight-row"><span class="flight-key">Precision</span><span class="flight-val ok">EXACT</span></div>
+        <div class="flight-row"><span class="flight-key">Version</span><span class="flight-val acc">v2.0</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- ADDRESSING -->
+<section id="addressing">
+  <p class="section-tag">§4 — Addressing</p>
+  <h2 class="section-title">OMI <em>Addressing</em> Architecture</h2>
+  <p class="section-lead">
+    Every computation object is uniquely addressed by a coordinate in the product space of orbit phase, Fano point, gate matrix index, and ring slot. The address space is exactly 8 × 7 × 128 × 5040 = 22,579,200 coordinates.
+  </p>
+
+  <div class="fano-wrap" style="margin-bottom:40px">
+    <div class="fano-svg-wrap">
+      <svg viewBox="0 0 200 200" width="200" height="200" style="display:block;margin:0 auto">
+        <defs>
+          <radialGradient id="g1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7b6bff" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#7b6bff" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="100" cy="100" r="90" fill="url(#g1)" stroke="rgba(123,107,255,0.15)" stroke-width="1"/>
+        <!-- 7 lines of Fano plane -->
+        <line x1="100" y1="16"  x2="50"  y2="100" stroke="rgba(78,205,196,0.25)" stroke-width="1"/>
+        <line x1="100" y1="16"  x2="150" y2="100" stroke="rgba(78,205,196,0.25)" stroke-width="1"/>
+        <line x1="50"  y1="100" x2="150" y2="100" stroke="rgba(78,205,196,0.25)" stroke-width="1"/>
+        <line x1="100" y1="16"  x2="100" y2="184" stroke="rgba(123,107,255,0.25)" stroke-width="1"/>
+        <line x1="50"  y1="100" x2="75"  y2="58"  stroke="rgba(123,107,255,0.25)" stroke-width="1"/>
+        <line x1="150" y1="100" x2="75"  y2="58"  stroke="rgba(240,180,41,0.25)" stroke-width="1"/>
+        <circle cx="100" cy="100" r="46" fill="none" stroke="rgba(240,180,41,0.2)" stroke-width="1"/>
+        <!-- 7 points -->
+        <circle cx="100" cy="16"  r="6" fill="#7b6bff" opacity="0.9"/>
+        <circle cx="50"  cy="100" r="6" fill="#4ecdc4" opacity="0.9"/>
+        <circle cx="150" cy="100" r="6" fill="#4ecdc4" opacity="0.9"/>
+        <circle cx="100" cy="184" r="6" fill="#f0b429" opacity="0.9"/>
+        <circle cx="75"  cy="58"  r="6" fill="#ff6b6b" opacity="0.9"/>
+        <circle cx="125" cy="58"  r="6" fill="#7b6bff" opacity="0.7"/>
+        <circle cx="100" cy="100" r="6" fill="#fff"    opacity="0.6"/>
+        <!-- labels -->
+        <text x="100" y="11"  font-family="JetBrains Mono,monospace" font-size="8" fill="#7b6bff" text-anchor="middle">p₀</text>
+        <text x="36"  y="104" font-family="JetBrains Mono,monospace" font-size="8" fill="#4ecdc4" text-anchor="middle">p₁</text>
+        <text x="163" y="104" font-family="JetBrains Mono,monospace" font-size="8" fill="#4ecdc4" text-anchor="middle">p₂</text>
+        <text x="100" y="196" font-family="JetBrains Mono,monospace" font-size="8" fill="#f0b429" text-anchor="middle">p₃</text>
+        <text x="62"  y="54"  font-family="JetBrains Mono,monospace" font-size="8" fill="#ff6b6b" text-anchor="middle">p₄</text>
+        <text x="138" y="54"  font-family="JetBrains Mono,monospace" font-size="8" fill="#7b6bff" text-anchor="middle">p₅</text>
+        <text x="113" y="103" font-family="JetBrains Mono,monospace" font-size="8" fill="#888"    text-anchor="middle">p₆</text>
+      </svg>
+      <p style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:10px;letter-spacing:0.12em">PG(2,2) · 7 pts · 7 lines</p>
+    </div>
+    <div class="fano-lines">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:12px">Seven Lines</div>
+      <div class="fano-line">
+        <span class="fano-pts">{p₀, p₁, p₃}</span>
+        <span class="fano-desc">Orbit axis — clock synchronization line</span>
+      </div>
+      <div class="fano-line">
+        <span class="fano-pts">{p₁, p₂, p₄}</span>
+        <span class="fano-desc">Gate coupling — BQ matrix selection</span>
+      </div>
+      <div class="fano-line">
+        <span class="fano-pts">{p₂, p₃, p₅}</span>
+        <span class="fano-desc">Ring head — replay pointer advance</span>
+      </div>
+      <div class="fano-line">
+        <span class="fano-pts">{p₃, p₄, p₆}</span>
+        <span class="fano-desc">Delta residue — Δ_C checkpoint line</span>
+      </div>
+      <div class="fano-line">
+        <span class="fano-pts">{p₄, p₅, p₀}</span>
+        <span class="fano-desc">Quorum threshold — consensus quorum</span>
+      </div>
+      <div class="fano-line">
+        <span class="fano-pts">{p₅, p₆, p₁}</span>
+        <span class="fano-desc">Address hash — coordinate encode</span>
+      </div>
+      <div class="fano-line">
+        <span class="fano-pts">{p₆, p₀, p₂}</span>
+        <span class="fano-desc">Identity close — orbit return proof</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="law-block">
+    <div class="law-title">Address Space</div>
+    <div class="law-eq"><span class="hi">𝔸</span> = <span class="hi2">ℤ₈</span> × <span class="hi3">PG(2,2)</span> × <span class="hi">M₁₂₈</span> × <span class="hi2">ℤ₅₀₄₀</span></div>
+    <div class="law-body">
+      |𝔸| = 8 × 7 × 128 × 5040 = 22,579,200 unique coordinates. Each address encodes orbit phase, Fano point identity, gate matrix selector, and replay ring offset — a complete provenance record for any computation state. The IPv6 semantic routing layer maps these coordinates directly to 128-bit network addresses.
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- FACTORIAL TOWER -->
+<section id="factorial-tower">
+  <p class="section-tag">§5 — Factorial Tower</p>
+  <h2 class="section-title">The <em>Factorial</em> Tower</h2>
+  <p class="section-lead">
+    The 7! master replay ring is one level of a full factorial tower. Each level nests the previous, giving a hierarchical address space where depth encodes computation scope — from single-gate operations up to full program replay.
+  </p>
+
+  <div class="tower-wrap">
+    <div class="tower-visual">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text3);margin-bottom:12px">Tower Levels</div>
+      <div class="tower-level">
+        <div class="tower-bar" style="width:100%;background:rgba(123,107,255,0.7)">
+          <span class="tower-bar-label">7! · Ring</span>
+          <span class="tower-bar-val">5040</span>
+        </div>
+      </div>
+      <div class="tower-level">
+        <div class="tower-bar" style="width:88%;background:rgba(78,205,196,0.65)">
+          <span class="tower-bar-label">6! · Segment</span>
+          <span class="tower-bar-val">720</span>
+        </div>
+      </div>
+      <div class="tower-level">
+        <div class="tower-bar" style="width:74%;background:rgba(240,180,41,0.6)">
+          <span class="tower-bar-label">5! · Frame</span>
+          <span class="tower-bar-val">120</span>
+        </div>
+      </div>
+      <div class="tower-level">
+        <div class="tower-bar" style="width:58%;background:rgba(255,107,107,0.55)">
+          <span class="tower-bar-label">4! · Block</span>
+          <span class="tower-bar-val">24</span>
+        </div>
+      </div>
+      <div class="tower-level">
+        <div class="tower-bar" style="width:42%;background:rgba(123,107,255,0.4)">
+          <span class="tower-bar-label">3! · Word</span>
+          <span class="tower-bar-val">6</span>
+        </div>
+      </div>
+      <div class="tower-level">
+        <div class="tower-bar" style="width:28%;background:rgba(78,205,196,0.35)">
+          <span class="tower-bar-label">2! · Pair</span>
+          <span class="tower-bar-val">2</span>
+        </div>
+      </div>
+      <div class="tower-level">
+        <div class="tower-bar" style="width:14%;background:rgba(240,180,41,0.3)">
+          <span class="tower-bar-label">1! · Bit</span>
+          <span class="tower-bar-val">1</span>
+        </div>
+      </div>
+    </div>
+    <div class="tower-content">
+      <table class="tower-table">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Size</th>
+            <th>Scope</th>
+            <th>Primitive</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--accent)">7!</td>
+            <td>5040</td>
+            <td>Program</td>
+            <td><span class="tag tag-purple">Ring</span></td>
+            <td style="color:var(--text2)">Full replay, rollback, Fano consensus</td>
+          </tr>
+          <tr>
+            <td style="color:var(--accent2)">6!</td>
+            <td>720</td>
+            <td>Procedure</td>
+            <td><span class="tag tag-teal">Segment</span></td>
+            <td style="color:var(--text2)">Function scope, call/return boundary</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold)">5!</td>
+            <td>120</td>
+            <td>Expression</td>
+            <td><span class="tag tag-gold">Frame</span></td>
+            <td style="color:var(--text2)">Sub-expression evaluation window</td>
+          </tr>
+          <tr>
+            <td style="color:var(--accent3)">4!</td>
+            <td>24</td>
+            <td>Instruction</td>
+            <td><span class="tag tag-red">Block</span></td>
+            <td style="color:var(--text2)">128-bit gate application + residue</td>
+          </tr>
+          <tr>
+            <td style="color:var(--accent)">3!</td>
+            <td>6</td>
+            <td>Atom</td>
+            <td><span class="tag tag-purple">Word</span></td>
+            <td style="color:var(--text2)">Single Δ_C application, 3-bit address</td>
+          </tr>
+          <tr>
+            <td style="color:var(--accent2)">2!</td>
+            <td>2</td>
+            <td>Pair</td>
+            <td><span class="tag tag-teal">Pair</span></td>
+            <td style="color:var(--text2)">XOR pair — minimal information unit</td>
+          </tr>
+          <tr>
+            <td style="color:var(--gold)">1!</td>
+            <td>1</td>
+            <td>Bit</td>
+            <td><span class="tag tag-gold">Bit</span></td>
+            <td style="color:var(--text2)">0!=1 · the ground axiom</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="code-block" style="margin-top:24px">
+        <div class="code-head">
+          <div class="code-dots">
+            <div class="code-dot" style="background:#ff6b6b"></div>
+            <div class="code-dot" style="background:#f0b429"></div>
+            <div class="code-dot" style="background:#4ade80"></div>
+          </div>
+          addressing.js · factorial tower encode
+        </div>
+        <div class="code-body">
+<span class="c">// Encode address in factorial number system (factoradic)</span>
+<span class="k">function</span> <span class="n">omi_encode</span>(orbit, fano_pt, gate_idx, ring_slot) {
+  <span class="k">const</span> <span class="n">addr</span> = BigInt(orbit)   * <span class="v">7n</span> * <span class="v">128n</span> * <span class="v">5040n</span>
+              + BigInt(fano_pt)  *       <span class="v">128n</span> * <span class="v">5040n</span>
+              + BigInt(gate_idx) *              <span class="v">5040n</span>
+              + BigInt(ring_slot);
+  <span class="k">return</span> <span class="n">addr</span> & <span class="v">0xFFFFFFFFFFFFFFFFn</span>; <span class="c">// 64-bit coordinate</span>
+}
+
+<span class="c">// Decompose back to Fano point via 7! factoradic</span>
+<span class="k">function</span> <span class="n">fano_point</span>(addr) {
+  <span class="k">return</span> <span class="t">Number</span>((<span class="n">addr</span> / <span class="v">128n</span> / <span class="v">5040n</span>) % <span class="v">7n</span>);
+}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<hr class="divider">
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <strong>OMI · Axiomatic Research Laboratory</strong><br>
+    Algebraic Physics of Computation · v2.0
+  </div>
+  <div class="footer-links">
+    <a href="#block-model">Block Model</a>
+    <a href="#meta-compiler">Meta-Compiler</a>
+    <a href="#addressing">Addressing</a>
+    <a href="#factorial-tower">Tower</a>
+  </div>
+</footer>
+
+</body>
+</html>

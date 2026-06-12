@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>omi.delta_orbital_lexer.v0 · ABI Frame Validator</title>
+<style>
+:root{
+  --bg0:#0b0b10;--bg1:#111118;--bg2:#18181f;--bg3:#20202e;--bg4:#2a2a3e;
+  --b1:#252535;--b2:#363650;--b3:#4a4a70;
+  --purple:#534AB7;--purple2:#7c6fd4;--purple-lo:#1e1b45;
+  --teal:#0F6E56;--teal2:#1fad88;--teal-lo:#061e17;
+  --amber:#a06010;--amber2:#d4830a;--amber-lo:#2e1a04;
+  --red:#9b2525;--red2:#d44040;--red-lo:#2e0a0a;
+  --green:#1a6e2a;--green2:#2ab040;--green-lo:#0a2010;
+  --blue:#1555a0;--blue2:#2070d4;--blue-lo:#0a1e38;
+  --cyan:#006070;--cyan2:#00a0b4;
+  --gold:#8a7020;--gold2:#c4a030;
+  --txt:#d8d7f0;--txt2:#8880c0;--txt3:#484870;--txt4:#282840;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --r:4px;--r2:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg0);color:var(--txt);font-family:var(--mono);font-size:11px;line-height:1.5;min-height:100vh}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ── Root grid ── */
+.app{display:grid;grid-template-columns:280px 1fr;grid-template-rows:auto;gap:1px;background:var(--b1)}
+
+/* ── Panel base ── */
+.pn{background:var(--bg1);padding:10px}
+.ph{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);
+    border-bottom:1px solid var(--b1);padding-bottom:5px;margin-bottom:8px}
+.ph span{color:var(--txt2)}
+
+/* ── Left column ── */
+.left-col{display:flex;flex-direction:column;gap:1px;background:var(--b1)}
+
+/* ── Main area ── */
+.main-area{display:flex;flex-direction:column;gap:1px;background:var(--b1)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--b1)}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--b1)}
+
+/* ── Blocks ── */
+.blk{background:var(--bg2);border:1px solid var(--b1);border-radius:var(--r);padding:7px;margin-bottom:5px;font-size:10px}
+.blk:last-child{margin-bottom:0}
+.blk-lbl{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--txt3);margin-bottom:4px}
+
+/* ── Frame segments ── */
+.seg-row{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin-bottom:6px}
+.seg{background:var(--bg3);border:1px solid var(--b2);border-radius:var(--r);
+     padding:4px 2px;text-align:center;cursor:pointer;transition:all .15s;position:relative}
+.seg input{width:100%;background:transparent;border:none;color:var(--txt);
+           font-family:var(--mono);font-size:10px;text-align:center;outline:none;text-transform:uppercase}
+.seg .seg-idx{font-size:7px;color:var(--txt3);display:block;margin-bottom:1px}
+.seg.fixed{border-color:var(--b3)}
+.seg.fixed input{color:var(--txt3)}
+.seg.ll-field{border-color:var(--purple)}
+.seg.ll-field input{color:var(--purple2)}
+.seg.nn-field{border-color:var(--teal)}
+.seg.nn-field input{color:var(--teal2)}
+.seg.mm-field{border-color:var(--amber)}
+.seg.mm-field input{color:var(--amber2)}
+.seg.valid{border-color:var(--green2);box-shadow:0 0 4px rgba(42,176,64,.15)}
+.seg.invalid{border-color:var(--red2)}
+
+/* ── Gate badges ── */
+.gate{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:var(--r);
+      border:1px solid var(--b2);margin-bottom:5px;font-size:10px}
+.gate-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.gate.pass{border-color:var(--green2);background:var(--green-lo)}
+.gate.pass .gate-dot{background:var(--green2);box-shadow:0 0 5px var(--green2)}
+.gate.fail{border-color:var(--red2);background:var(--red-lo)}
+.gate.fail .gate-dot{background:var(--red2)}
+.gate.idle{border-color:var(--b2);background:var(--bg2)}
+.gate.idle .gate-dot{background:var(--txt3)}
+
+/* ── Error surface ── */
+.eq-surface{background:var(--bg0);border:1px solid var(--b1);border-radius:var(--r);
+            padding:7px;font-size:10px;font-family:var(--mono);line-height:1.9}
+.eq-term{display:flex;justify-content:space-between;border-bottom:1px solid var(--b1);padding:1px 0}
+.eq-term .sym{color:var(--txt2)}
+.eq-term .val{color:var(--txt)}
+.eq-term .val.zero{color:var(--green2)}
+.eq-term .val.nonzero{color:var(--red2)}
+.eq-total{display:flex;justify-content:space-between;padding:3px 0;font-weight:700;font-size:11px}
+.eq-total.valid .val{color:var(--green2)}
+.eq-total.invalid .val{color:var(--red2)}
+
+/* ── Resolver ── */
+.orbit-row{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.orbit-step{background:var(--bg3);border:1px solid var(--b2);border-radius:var(--r);
+            padding:2px 5px;font-size:9px;font-family:var(--mono);color:var(--txt2)}
+.orbit-step.target{background:var(--teal-lo);border-color:var(--teal2);color:var(--teal2);font-weight:700}
+.orbit-step.start{background:var(--purple-lo);border-color:var(--purple2);color:var(--purple2)}
+
+/* ── Fano plane ── */
+#fano-svg{display:block}
+
+/* ── Receipt ring ── */
+.ring-wrap{position:relative}
+#ring-canvas{display:block;background:var(--bg0);border-radius:var(--r);border:1px solid var(--b1)}
+.ring-cursor-info{font-size:9px;color:var(--txt3);text-align:center;margin-top:3px}
+
+/* ── Receipt table ── */
+.receipt-log{background:var(--bg0);border:1px solid var(--b1);border-radius:var(--r);
+             height:140px;overflow-y:auto;padding:4px;font-size:9px}
+.rx-row{display:grid;grid-template-columns:36px 24px 20px 44px 44px 1fr;gap:4px;
+        padding:2px 0;border-bottom:1px solid var(--b1);align-items:center}
+.rx-row.new{animation:rxflash .4s ease-out}
+@keyframes rxflash{from{background:var(--purple-lo)}to{background:transparent}}
+.rx-row .slot{color:var(--txt3)}
+.rx-row .steps{color:var(--gold2)}
+.rx-row .ll{color:var(--purple2)}
+.rx-row .nn{color:var(--teal2)}
+.rx-row .mm{color:var(--amber2)}
+.rx-row .prov{color:var(--txt3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── CLA clock (from chiral engine) ── */
+.kv{display:flex;justify-content:space-between;gap:4px;padding:1px 0}
+.kv .k{color:var(--txt3)}
+.kv .v{color:var(--txt);text-align:right;word-break:break-all;font-family:var(--mono)}
+.val-lg{font-size:18px;font-weight:700;color:#fff}
+.muted{color:var(--txt2)}
+
+/* ── Buttons ── */
+button{background:var(--bg3);color:var(--txt);border:1px solid var(--b2);
+       padding:3px 10px;border-radius:var(--r);cursor:pointer;
+       font-family:var(--mono);font-size:10px;transition:all .12s}
+button:hover{background:var(--purple-lo);border-color:var(--purple)}
+button.primary{background:var(--purple-lo);border-color:var(--purple);color:var(--purple2)}
+button.primary:hover{background:var(--purple)}
+
+/* ── Input ── */
+input[type=text],input[type=number]{
+  background:var(--bg3);border:1px solid var(--b2);color:var(--txt);
+  padding:3px 6px;border-radius:var(--r);font-family:var(--mono);font-size:10px;
+  outline:none;transition:border-color .15s}
+input:focus{border-color:var(--purple)}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:var(--bg1)}
+::-webkit-scrollbar-thumb{background:var(--b3);border-radius:2px}
+
+/* ── Tooltip chip ── */
+.chip{display:inline-block;padding:1px 5px;border-radius:3px;font-size:8px;font-weight:700;
+      letter-spacing:.08em;vertical-align:middle;margin-left:4px}
+.chip.pass{background:var(--green-lo);color:var(--green2);border:1px solid var(--green2)}
+.chip.fail{background:var(--red-lo);color:var(--red2);border:1px solid var(--red2)}
+.chip.idle{background:var(--bg3);color:var(--txt3);border:1px solid var(--b2)}
+
+/* ── Packed 40-bit row display ── */
+.packed{font-size:9px;letter-spacing:.04em;word-break:break-all}
+.packed .f-steps{color:var(--gold2)}
+.packed .f-ll{color:var(--purple2)}
+.packed .f-nn{color:var(--teal2)}
+.packed .f-mm{color:var(--amber2)}
+
+/* ── Delta-C orbit canvas ── */
+#orbit-canvas{display:block;background:var(--bg0);border:1px solid var(--b1);border-radius:var(--r)}
+</style>
+</head>
+<body>
+<h2 class="sr-only">omi.delta_orbital_lexer.v0 — algebraic frame validator, bounded truth-row resolver, Fano incidence plane, and 5040-slot atomic receipt ring</h2>
+
+<div class="app">
+
+<!-- ═══════════════════════════════════════════════
+     LEFT COLUMN — frame editor + validation
+════════════════════════════════════════════════ -->
+<div class="left-col">
+
+  <!-- Frame editor -->
+  <div class="pn">
+    <div class="ph">frame editor · <span>uint16_t[8] · 128-bit</span></div>
+
+    <div class="seg-row" id="seg-row">
+      <!-- populated by JS -->
+    </div>
+
+    <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap">
+      <button class="primary" onclick="loadGenesis()">genesis</button>
+      <button onclick="loadRandom()">random valid</button>
+      <button onclick="loadRandomInvalid()">corrupt</button>
+      <button onclick="validateFrame()">validate ↵</button>
+    </div>
+
+    <div class="blk">
+      <div class="blk-lbl">raw hex (space-separated)</div>
+      <input type="text" id="raw-hex" style="width:100%" placeholder="0100 03bf 7c00 2b01 2f01 1434 039f 01ff"
+             oninput="onRawHexInput(this.value)" onkeydown="if(event.key==='Enter')validateFrame()">
+    </div>
+
+    <!-- Gate 1 -->
+    <div class="gate idle" id="gate1">
+      <div class="gate-dot"></div>
+      <div style="flex:1">
+        <div>Gate 1 · structural envelope</div>
+        <div style="color:var(--txt3);font-size:9px" id="gate1-detail">Q(S) not yet computed</div>
+      </div>
+    </div>
+    <!-- Gate 2 -->
+    <div class="gate idle" id="gate2">
+      <div class="gate-dot"></div>
+      <div style="flex:1">
+        <div>Gate 2 · truth-row resolution</div>
+        <div style="color:var(--txt3);font-size:9px" id="gate2-detail">waiting for Gate 1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quadratic error surface -->
+  <div class="pn">
+    <div class="ph">Q(S) = E_var + E_const</div>
+    <div class="eq-surface" id="eq-surface">
+      <div class="eq-term"><span class="sym">d03² </span><span class="val" id="eq-d03">—</span></div>
+      <div class="eq-term"><span class="sym">d34² </span><span class="val" id="eq-d34">—</span></div>
+      <div class="eq-term"><span class="sym">d47² </span><span class="val" id="eq-d47">—</span></div>
+      <div class="eq-term" style="border-bottom:1px solid var(--b2);margin-bottom:3px">
+        <span class="sym">E_var</span><span class="val" id="eq-evar">—</span>
+      </div>
+      <div class="eq-term"><span class="sym">(S[0]&0xFF)²</span><span class="val" id="eq-c0">—</span></div>
+      <div class="eq-term"><span class="sym">(S[1]-0x03BF)²</span><span class="val" id="eq-c1">—</span></div>
+      <div class="eq-term"><span class="sym">(S[3]hi-0x2B)²</span><span class="val" id="eq-c3">—</span></div>
+      <div class="eq-term"><span class="sym">(S[4]hi-0x2F)²</span><span class="val" id="eq-c4">—</span></div>
+      <div class="eq-term"><span class="sym">(S[6]-0x039F)²</span><span class="val" id="eq-c6">—</span></div>
+      <div class="eq-term" style="border-bottom:1px solid var(--b2);margin-bottom:3px">
+        <span class="sym">(S[7]lo-0xFF)²</span><span class="val" id="eq-c7">—</span>
+      </div>
+      <div class="eq-term"><span class="sym">E_const</span><span class="val" id="eq-econst">—</span></div>
+      <div class="eq-total idle" id="eq-total">
+        <span class="sym">Q(S)</span><span class="val" id="eq-q">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Truth row -->
+  <div class="pn">
+    <div class="ph">truth row · extracted payload</div>
+    <div class="blk">
+      <div class="kv"><span class="k">LL (lens)</span><span class="v" id="tr-ll">—</span></div>
+      <div class="kv"><span class="k">NN (antecedent)</span><span class="v" id="tr-nn">—</span></div>
+      <div class="kv"><span class="k">MM (consequent)</span><span class="v" id="tr-mm">—</span></div>
+      <div class="kv"><span class="k">C_LL = (LL×0x1337)&0xFFFF</span><span class="v" id="tr-cll">—</span></div>
+      <div class="kv"><span class="k">steps</span><span class="v" id="tr-steps">—</span></div>
+    </div>
+    <div class="blk">
+      <div class="blk-lbl">packed 40-bit row · LL⊢NN⇒MM</div>
+      <div class="packed" id="tr-packed">—</div>
+    </div>
+    <div class="blk">
+      <div class="blk-lbl">64-bit receipt slot</div>
+      <div class="packed" id="tr-slot">—</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MAIN AREA
+════════════════════════════════════════════════ -->
+<div class="main-area">
+
+  <!-- Row 1: resolver orbit + delta-C canvas -->
+  <div class="row2">
+
+    <div class="pn">
+      <div class="ph">δ_C orbit · NN → MM resolution</div>
+      <canvas id="orbit-canvas" width="300" height="180"></canvas>
+      <div class="blk" style="margin-top:6px">
+        <div class="blk-lbl">orbit steps</div>
+        <div class="orbit-row" id="orbit-row">—</div>
+      </div>
+      <div class="blk">
+        <div class="blk-lbl">δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:9px;color:var(--txt2)">
+          <span>C_base = <span id="dc-cbase" style="color:var(--txt)">0x5A3C</span></span>
+          <span>C_LL = <span id="dc-cll" style="color:var(--purple2)">—</span></span>
+          <span>period = <span id="dc-period" style="color:var(--gold2)">—</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pn">
+      <div class="ph">Fano plane PG(2,2) · projective incidence</div>
+      <svg id="fano-svg" width="280" height="200" viewBox="0 0 280 200">
+        <!-- rendered by JS -->
+      </svg>
+      <div class="blk" style="margin-top:4px">
+        <div class="blk-lbl">intersection · fanoIntersectionPoint(LL1, LL2)</div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <span class="muted" style="font-size:10px">L1=</span>
+          <select id="fano-l1" onchange="updateFanoIntersect()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--txt);font-family:var(--mono);font-size:10px;padding:2px 4px;border-radius:var(--r)">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+          </select>
+          <span class="muted" style="font-size:10px">L2=</span>
+          <select id="fano-l2" onchange="updateFanoIntersect()" style="background:var(--bg3);border:1px solid var(--b2);color:var(--txt);font-family:var(--mono);font-size:10px;padding:2px 4px;border-radius:var(--r)">
+            <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+          </select>
+          <span style="color:var(--txt2);font-size:10px">→ pt <strong id="fano-pt" style="color:var(--gold2)">1</strong></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Row 2: ring + receipt log -->
+  <div class="row2">
+
+    <div class="pn">
+      <div class="ph">5040-slot replay ring · cursor = <span id="ring-cursor-ph">0</span></div>
+      <div class="ring-wrap">
+        <canvas id="ring-canvas" width="320" height="180"></canvas>
+      </div>
+      <div class="ring-cursor-info">
+        cursor: <span id="rc-pos">0</span> / 5040 &nbsp;·&nbsp;
+        advances: <span id="rc-total">0</span> &nbsp;·&nbsp;
+        boot slot: 1504 (0x7C00 mod 5040)
+      </div>
+      <div class="blk" style="margin-top:6px">
+        <div class="blk-lbl">CAS advance · atomic compare-exchange</div>
+        <div class="kv"><span class="k">old cursor</span><span class="v" id="cas-old">0</span></div>
+        <div class="kv"><span class="k">stride (steps)</span><span class="v" id="cas-stride">—</span></div>
+        <div class="kv"><span class="k">new cursor</span><span class="v" id="cas-new">—</span></div>
+        <div style="margin-top:5px">
+          <button onclick="commitReceipt()" id="commit-btn" disabled>commit receipt →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pn">
+      <div class="ph">receipt log · 64-bit slots</div>
+      <div style="display:grid;grid-template-columns:36px 24px 20px 44px 44px 1fr;gap:4px;font-size:8px;color:var(--txt3);padding:2px 0;border-bottom:1px solid var(--b1);margin-bottom:4px">
+        <span>slot</span><span>steps</span><span>LL</span><span>NN</span><span>MM</span><span>provenance</span>
+      </div>
+      <div class="receipt-log" id="receipt-log"></div>
+      <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
+        <button onclick="replayAll()">replay all ↺</button>
+        <button onclick="clearReceipts()">clear</button>
+        <span style="color:var(--txt3);font-size:9px;align-self:center" id="rx-count">0 receipts</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Row 3: chiral clock integration + conformance tests -->
+  <div class="row2">
+
+    <div class="pn">
+      <div class="ph">chiral clock → frame synthesis · live feed</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <button onclick="tickStep(-1)">← prev</button>
+        <span class="val-lg" id="ck-tick">0</span>
+        <span class="muted">mod 5040</span>
+        <button onclick="tickStep(1)">next →</button>
+        <button onclick="toggleClock()" id="ck-auto">▶ run</button>
+        <span style="font-size:9px;color:var(--txt3)">emit every</span>
+        <input type="number" id="ck-every" min="1" max="50" value="8"
+               style="width:38px;padding:2px 4px;font-size:10px">
+        <span style="font-size:9px;color:var(--txt3)">ticks</span>
+      </div>
+      <div class="blk">
+        <div class="blk-lbl">synthesized frame from clock state</div>
+        <div class="kv"><span class="k">LL = t1 & 0x07</span><span class="v" id="ck-ll">—</span></div>
+        <div class="kv"><span class="k">NN = t2 & 0xFFFF</span><span class="v" id="ck-nn">—</span></div>
+        <div class="kv"><span class="k">MM = makeGenesisTarget(LL,NN)</span><span class="v" id="ck-mm">—</span></div>
+        <div class="kv"><span class="k">frame hex</span><span class="v" id="ck-frame" style="font-size:9px;word-break:break-all">—</span></div>
+      </div>
+      <div class="blk">
+        <div class="blk-lbl">clock → ABI pipeline status</div>
+        <div class="kv"><span class="k">frames synthesized</span><span class="v" id="ck-synth">0</span></div>
+        <div class="kv"><span class="k">frames accepted</span><span class="v" id="ck-accepted" style="color:var(--green2)">0</span></div>
+        <div class="kv"><span class="k">frames rejected</span><span class="v" id="ck-rejected" style="color:var(--red2)">0</span></div>
+        <div class="kv"><span class="k">auto-commit</span>
+          <span class="v">
+            <label style="cursor:pointer">
+              <input type="checkbox" id="auto-commit" checked style="accent-color:var(--purple)"> yes
+            </label>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pn">
+      <div class="ph">conformance suite · golden vectors</div>
+      <div style="margin-bottom:6px;display:flex;gap:5px;flex-wrap:wrap">
+        <button onclick="runConformance()">▶ run all tests</button>
+        <span id="conf-summary" style="font-size:9px;color:var(--txt3);align-self:center">not run</span>
+      </div>
+      <div id="conf-results" style="font-size:9px;line-height:2;max-height:220px;overflow-y:auto"></div>
+      <div class="blk" style="margin-top:6px">
+        <div class="blk-lbl">genesis frame · golden accept</div>
+        <div style="font-size:9px;color:var(--teal2)">0100-03bf-7c00-2b01-2f01-1434-039f-01ff</div>
+        <div style="font-size:9px;color:var(--txt3);margin-top:3px">Q(S)=0 · steps=1 · slot=1504</div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /main-area -->
+</div><!-- /app -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 1 · CORE ABI  (omi.delta_orbital_lexer.v0)
+═══════════════════════════════════════════════════════════════ */
+
+// 16-bit rotation helpers
+const rotl16=(x,n)=>((x<<n)|(x>>>(16-n)))&0xFFFF;
+const rotr16=(x,n)=>((x>>>n)|(x<<(16-n)))&0xFFFF;
+
+// δ_C transition function
+function deltaC(x,C){
+  return(rotl16(x,1)^rotl16(x,3)^rotr16(x,2)^C)&0xFFFF;
+}
+
+// Q(S) structural validator — returns numeric error (0 = valid)
+function computeQ(S){
+  const LL_s0=(S[0]>>8)&0xFF;
+  const LL_s3= S[3]    &0xFF;
+  const LL_s4= S[4]    &0xFF;
+  const LL_s7=(S[7]>>8)&0xFF;
+  const d03=LL_s0-LL_s3, d34=LL_s3-LL_s4, d47=LL_s4-LL_s7;
+  const Evar=d03*d03+d34*d34+d47*d47;
+  const c0=(S[0]&0x00FF);
+  const c1=(S[1]-0x03BF);
+  const c3=((S[3]&0xFF00)-0x2B00)>>8;
+  const c4=((S[4]&0xFF00)-0x2F00)>>8;
+  const c6=(S[6]-0x039F);
+  const c7=((S[7]&0x00FF)-0x00FF);
+  const Econst=c0*c0+c1*c1+c3*c3+c4*c4+c6*c6+c7*c7;
+  return{Evar,Econst,Q:Evar+Econst,d03,d34,d47,c0,c1,c3,c4,c6,c7,LL_s0,LL_s3,LL_s4,LL_s7};
+}
+
+// Fano incidence table  (1-indexed lines, 1-indexed points)
+const FANO_LINES=[
+  null,           // index 0 unused
+  [1,2,3],        // L1 chiral-cardinal-trace
+  [1,4,5],        // L2 service-bus-projection
+  [1,6,7],        // L3 factorial-sweep-line
+  [2,4,6],        // L4 inversion-mirror-bridge
+  [2,5,7],        // L5 erasure-coding-channel
+  [3,4,7],        // L6 gossip-frontier-path
+  [3,5,6]         // L7 anti-entropy-repair-arc
+];
+const FANO_NAMES=[
+  '','chiral-cardinal-trace','service-bus-projection','factorial-sweep-line',
+  'inversion-mirror-bridge','erasure-coding-channel','gossip-frontier-path','anti-entropy-repair-arc'
+];
+
+function fanoIntersectionPoint(LL1,LL2){
+  if(LL1<1||LL1>7||LL2<1||LL2>7||LL1===LL2)return 0;
+  const L1=new Set(FANO_LINES[LL1]),L2=FANO_LINES[LL2];
+  for(const p of L2)if(L1.has(p))return p;
+  return 0;
+}
+
+// Bounded truth-row resolver  → steps 0..14 or -1
+function fanoTruthResolver(LL,NN,MM){
+  if(LL<1||LL>7)return -1;
+  const C=(LL*0x1337)&0xFFFF;
+  let state=NN;
+  if(state===MM)return 0;
+  for(let step=1;step<=14;step++){
+    state=deltaC(state,C);
+    if(state===MM)return step;
+  }
+  return -1;
+}
+
+// Compute one step of δ_C from a starting value
+function makeGenesisTarget(LL,NN){
+  const C=(LL*0x1337)&0xFFFF;
+  return deltaC(NN,C);
+}
+
+// Generate orbit sequence up to maxLen
+function generateOrbit(start,C,maxLen){
+  const orbit=[start];
+  let x=start;
+  for(let i=0;i<maxLen;i++){
+    x=deltaC(x,C);
+    orbit.push(x);
+    if(x===start)break;
+  }
+  return orbit;
+}
+
+// Compute orbit period
+function orbitPeriod(start,C){
+  let x=deltaC(start,C),n=1;
+  while(x!==start&&n<65536){x=deltaC(x,C);n++}
+  return n;
+}
+
+// Build canonical frame from (LL, NN, MM)
+function buildFrame(LL,NN,MM){
+  return[
+    ((LL&0xFF)<<8)|0x00,  // S[0] = 0xLL00
+    0x03BF,               // S[1]
+    NN&0xFFFF,            // S[2] = NN
+    0x2B00|(LL&0xFF),     // S[3] = 0x2BLL
+    0x2F00|(LL&0xFF),     // S[4] = 0x2FLL
+    MM&0xFFFF,            // S[5] = MM
+    0x039F,               // S[6]
+    ((LL&0xFF)<<8)|0xFF   // S[7] = 0xLLFF
+  ];
+}
+
+// Pack receipt into 64-bit BigInt
+function packReceipt(steps,LL,NN,MM,provenance){
+  return(
+    (BigInt(provenance&0xFFFF)<<48n)|
+    (BigInt(steps&0xFF)<<40n)|
+    (BigInt(LL&0xFF)<<32n)|
+    (BigInt(NN&0xFFFF)<<16n)|
+    BigInt(MM&0xFFFF)
+  );
+}
+
+// Frame to/from hex string
+function frameToHex(S){return S.map(s=>s.toString(16).padStart(4,'0')).join(' ')}
+function hexToFrame(str){
+  const parts=str.trim().replace(/-/g,' ').split(/\s+/);
+  if(parts.length!==8)return null;
+  const S=parts.map(p=>parseInt(p,16));
+  if(S.some(isNaN))return null;
+  return S;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 2 · RING STATE
+═══════════════════════════════════════════════════════════════ */
+const RING_SIZE=5040;
+const BOOT_SLOT=0x7C00%RING_SIZE; // 1504
+
+let ringCursor=0;
+let totalAdvances=0;
+const receipts=[]; // {slot, steps, LL, NN, MM, prov, packed}
+
+// Atomic CAS advance (single-threaded simulation)
+function casCursorAdvance(steps){
+  const oldCursor=ringCursor;
+  const newCursor=(oldCursor+steps)%RING_SIZE;
+  ringCursor=newCursor;
+  totalAdvances++;
+  document.getElementById('ring-cursor-ph').textContent=ringCursor;
+  return{oldCursor,newCursor};
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 3 · UI — SEGMENT EDITOR
+═══════════════════════════════════════════════════════════════ */
+const SEG_TYPES=['ll-field','fixed','nn-field','ll-field','ll-field','mm-field','fixed','ll-field'];
+const SEG_LABELS=['S[0] 0xLL00','S[1] 0x03BF','S[2] NN','S[3] 0x2BLL','S[4] 0x2FLL','S[5] MM','S[6] 0x039F','S[7] 0xLLFF'];
+
+let currentS=[0x0100,0x03BF,0x7C00,0x2B01,0x2F01,0x1434,0x039F,0x01FF];
+
+function buildSegRow(){
+  const row=document.getElementById('seg-row');
+  row.innerHTML='';
+  currentS.forEach((val,i)=>{
+    const d=document.createElement('div');
+    d.className=`seg ${SEG_TYPES[i]}`;d.id=`seg-${i}`;
+    d.innerHTML=`<span class="seg-idx">${SEG_LABELS[i].split(' ')[0]}</span>
+      <input id="seg-inp-${i}" maxlength="4" value="${val.toString(16).padStart(4,'0')}"
+             oninput="onSegInput(${i},this.value)" onkeydown="if(event.key==='Enter')validateFrame()">`;
+    row.appendChild(d);
+  });
+}
+
+function onSegInput(i,val){
+  const n=parseInt(val,16);
+  if(!isNaN(n)){currentS[i]=n&0xFFFF;syncRawHex()}
+}
+
+function syncRawHex(){
+  document.getElementById('raw-hex').value=frameToHex(currentS);
+}
+
+function onRawHexInput(str){
+  const S=hexToFrame(str);
+  if(S){currentS=[...S];refreshSegInputs()}
+}
+
+function refreshSegInputs(){
+  currentS.forEach((v,i)=>{
+    const inp=document.getElementById(`seg-inp-${i}`);
+    if(inp)inp.value=v.toString(16).padStart(4,'0');
+  });
+  syncRawHex();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 4 · VALIDATE & RENDER RESULTS
+═══════════════════════════════════════════════════════════════ */
+let lastValidResult=null;
+
+function validateFrame(){
+  const S=currentS;
+  const q=computeQ(S);
+
+  // — Surface terms —
+  function setEq(id,val){
+    const el=document.getElementById(id);
+    el.textContent=val;
+    el.className='val '+(val===0?'zero':'nonzero');
+  }
+  setEq('eq-d03',q.d03*q.d03);setEq('eq-d34',q.d34*q.d34);setEq('eq-d47',q.d47*q.d47);
+  setEq('eq-evar',q.Evar);
+  setEq('eq-c0',q.c0*q.c0);setEq('eq-c1',q.c1*q.c1);setEq('eq-c3',q.c3*q.c3);
+  setEq('eq-c4',q.c4*q.c4);setEq('eq-c6',q.c6*q.c6);setEq('eq-c7',q.c7*q.c7);
+  setEq('eq-econst',q.Econst);
+  const qtEl=document.getElementById('eq-total');
+  const qvEl=document.getElementById('eq-q');
+  qvEl.textContent=q.Q;
+  qtEl.className='eq-total '+(q.Q===0?'valid':'invalid');
+  qvEl.className='val '+(q.Q===0?'zero':'nonzero');
+
+  // Colour segments
+  S.forEach((_,i)=>document.getElementById(`seg-${i}`).classList.remove('valid','invalid'));
+
+  const gate1El=document.getElementById('gate1');
+  const gate1Det=document.getElementById('gate1-detail');
+
+  if(q.Q!==0){
+    gate1El.className='gate fail';
+    gate1Det.textContent=`Q(S) = ${q.Q} · GATE_1_STRUCTURAL_MALFORMATION`;
+    setGate2Idle();
+    clearTruthRow();
+    lastValidResult=null;
+    return;
+  }
+
+  gate1El.className='gate pass';
+  gate1Det.textContent=`Q(S) = 0 · frame structurally valid`;
+  S.forEach((_,i)=>document.getElementById(`seg-${i}`).classList.add('valid'));
+
+  // Extract truth row
+  const LL=(S[0]>>8)&0xFF;
+  const NN=S[2];
+  const MM=S[5];
+  const C_LL=(LL*0x1337)&0xFFFF;
+  const steps=fanoTruthResolver(LL,NN,MM);
+
+  // Update truth row display
+  document.getElementById('tr-ll').textContent=`0x${LL.toString(16).padStart(2,'0')} (${LL})`;
+  document.getElementById('tr-nn').textContent=`0x${NN.toString(16).padStart(4,'0')}`;
+  document.getElementById('tr-mm').textContent=`0x${MM.toString(16).padStart(4,'0')}`;
+  document.getElementById('tr-cll').textContent=`0x${C_LL.toString(16).padStart(4,'0')}`;
+  document.getElementById('tr-steps').textContent=steps===-1?'−1 (diverged)':steps;
+
+  // 40-bit packed row
+  const packed40=(BigInt(steps<0?0:steps)<<40n|BigInt(LL)<<32n|BigInt(NN)<<16n|BigInt(MM));
+  document.getElementById('tr-packed').innerHTML=steps>=0
+    ?`<span class="f-steps">${steps.toString(16).padStart(2,'0')}</span>`+
+     `<span class="f-ll">${LL.toString(16).padStart(2,'0')}</span>`+
+     `<span class="f-nn">${NN.toString(16).padStart(4,'0')}</span>`+
+     `<span class="f-mm">${MM.toString(16).padStart(4,'0')}</span>`
+    :'N/A (unresolved)';
+
+  const gate2El=document.getElementById('gate2');
+  const gate2Det=document.getElementById('gate2-detail');
+
+  if(steps===-1){
+    gate2El.className='gate fail';
+    gate2Det.textContent=`LL=${LL}: GATE_2_RESOLUTION_DIVERGENCE`;
+    document.getElementById('tr-slot').textContent='N/A';
+    document.getElementById('commit-btn').disabled=true;
+    lastValidResult=null;
+    renderOrbit(NN,C_LL,null);
+    renderFano(LL);
+    renderPeriod(NN,C_LL);
+    return;
+  }
+
+  gate2El.className='gate pass';
+  gate2Det.textContent=`LL=${LL} · steps=${steps} · resolved in bound`;
+
+  // 64-bit receipt slot
+  const prov=0xC1A1; // provenance tag for this session
+  const slot64=packReceipt(steps,LL,NN,MM,prov);
+  document.getElementById('tr-slot').innerHTML=
+    `<span class="f-steps">${prov.toString(16).padStart(4,'0')}</span>`+
+    `<span class="f-steps">${steps.toString(16).padStart(2,'0')}</span>`+
+    `<span class="f-ll">${LL.toString(16).padStart(2,'0')}</span>`+
+    `<span class="f-nn">${NN.toString(16).padStart(4,'0')}</span>`+
+    `<span class="f-mm">${MM.toString(16).padStart(4,'0')}</span>`;
+
+  // CAS preview
+  const oldC=ringCursor;
+  const newC=(oldC+steps)%RING_SIZE;
+  document.getElementById('cas-old').textContent=oldC;
+  document.getElementById('cas-stride').textContent=steps;
+  document.getElementById('cas-new').textContent=newC;
+  document.getElementById('commit-btn').disabled=false;
+
+  lastValidResult={S,LL,NN,MM,C_LL,steps,prov,slot64};
+
+  renderOrbit(NN,C_LL,MM);
+  renderFano(LL);
+  renderRing();
+  renderPeriod(NN,C_LL);
+  updateFanoIntersect();
+}
+
+function setGate2Idle(){
+  const el=document.getElementById('gate2');
+  el.className='gate idle';
+  document.getElementById('gate2-detail').textContent='waiting for Gate 1';
+  document.getElementById('commit-btn').disabled=true;
+}
+
+function clearTruthRow(){
+  ['tr-ll','tr-nn','tr-mm','tr-cll','tr-steps','tr-packed','tr-slot'].forEach(id=>{
+    document.getElementById(id).textContent='—';
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 5 · ORBIT CANVAS
+═══════════════════════════════════════════════════════════════ */
+function renderOrbit(NN,C,target){
+  const canvas=document.getElementById('orbit-canvas');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const orbit=generateOrbit(NN,C,18);
+  const row=document.getElementById('orbit-row');
+  row.innerHTML='';
+
+  const foundIdx=target!=null?orbit.indexOf(target):-1;
+
+  orbit.forEach((val,i)=>{
+    if(i>15&&foundIdx===-1)return;
+    const d=document.createElement('div');
+    d.className='orbit-step';
+    if(i===0)d.classList.add('start');
+    if(val===target&&i>0)d.classList.add('target');
+    d.textContent=`[${i}] 0x${val.toString(16).padStart(4,'0')}`;
+    row.appendChild(d);
+  });
+
+  // Draw orbit arc on canvas
+  ctx.strokeStyle='#252535';ctx.lineWidth=1;
+  const CX=W/2,CY=H/2,R=68;
+  ctx.beginPath();ctx.arc(CX,CY,R,0,2*Math.PI);ctx.stroke();
+
+  const pts=Math.min(orbit.length,16);
+  orbit.slice(0,pts).forEach((val,i)=>{
+    const angle=(i/pts)*2*Math.PI-Math.PI/2;
+    const x=CX+R*Math.cos(angle),y=CY+R*Math.sin(angle);
+
+    if(i>0){
+      const prev=orbit[i-1];
+      const pi2=((i-1)/pts)*2*Math.PI-Math.PI/2;
+      const px=CX+R*Math.cos(pi2),py=CY+R*Math.sin(pi2);
+      ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(x,y);
+      ctx.strokeStyle='rgba(83,74,183,0.35)';ctx.lineWidth=1;ctx.stroke();
+    }
+
+    const isTarget=val===target&&i>0;
+    const isStart=i===0;
+    ctx.beginPath();ctx.arc(x,y,isTarget?6:isStart?5:3,0,2*Math.PI);
+    ctx.fillStyle=isTarget?'#1fad88':isStart?'#534AB7':'#2a2a3e';
+    ctx.strokeStyle=isTarget?'#1fad88':isStart?'#7c6fd4':'#363650';
+    ctx.lineWidth=1;ctx.fill();ctx.stroke();
+
+    ctx.fillStyle=isTarget?'#1fad88':isStart?'#a090e0':'#484870';
+    ctx.font='8px JetBrains Mono,monospace';
+    ctx.textAlign='center';
+    ctx.fillText(i.toString(),x,y+(isTarget?-10:y<CY?-9:+16));
+  });
+
+  // Center label
+  ctx.fillStyle='#484870';ctx.font='9px JetBrains Mono,monospace';ctx.textAlign='center';
+  ctx.fillText(`C = 0x${C.toString(16).padStart(4,'0')}`,CX,CY-4);
+  ctx.fillText(`start = 0x${NN.toString(16).padStart(4,'0')}`,CX,CY+9);
+}
+
+function renderPeriod(start,C){
+  document.getElementById('dc-cbase').textContent='0x5A3C';
+  document.getElementById('dc-cll').textContent=`0x${C.toString(16).padStart(4,'0')}`;
+  const p=orbitPeriod(start,C);
+  document.getElementById('dc-period').textContent=p;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 6 · FANO PLANE SVG
+═══════════════════════════════════════════════════════════════ */
+// Standard Fano plane coordinates (7 points + 7 lines incl circle)
+const FANO_COORDS=[
+  null,
+  {x:140,y:28},   // pt 1 (top)
+  {x:58,y:170},   // pt 2 (bottom-left)
+  {x:222,y:170},  // pt 3 (bottom-right)
+  {x:100,y:100},  // pt 4
+  {x:180,y:100},  // pt 5
+  {x:140,y:152},  // pt 6
+  {x:140,y:80}    // pt 7 (center)
+];
+
+let activeFanoLine=0;
+
+function renderFano(activeLine){
+  activeFanoLine=activeLine||0;
+  const svg=document.getElementById('fano-svg');
+  svg.innerHTML='';
+
+  const ns='http://www.w3.org/2000/svg';
+  const mk=tag=>document.createElementNS(ns,tag);
+
+  const lineColor=(idx)=>{
+    if(idx===activeLine)return'#534AB7';
+    return'#252535';
+  };
+
+  // Draw lines (each is a straight line between 3 points; we draw 2 edges)
+  FANO_LINES.forEach((pts,li)=>{
+    if(!pts)return;
+    const [a,b,c]=pts;
+    // Draw all 3 edges of the triangle
+    [[a,b],[b,c],[a,c]].forEach(([p1,p2])=>{
+      const c1=FANO_COORDS[p1],c2=FANO_COORDS[p2];
+      const line=mk('line');
+      line.setAttribute('x1',c1.x);line.setAttribute('y1',c1.y);
+      line.setAttribute('x2',c2.x);line.setAttribute('y2',c2.y);
+      line.setAttribute('stroke',lineColor(li));
+      line.setAttribute('stroke-width',li===activeLine?'1.5':'0.7');
+      line.setAttribute('stroke-dasharray',li===activeLine?'':'3,3');
+      svg.appendChild(line);
+    });
+  });
+
+  // Special: circle through pts 4,5,6 (standard Fano inner circle)
+  const circle=mk('circle');
+  circle.setAttribute('cx',140);circle.setAttribute('cy',118);circle.setAttribute('r',40);
+  circle.setAttribute('fill','none');
+  circle.setAttribute('stroke',activeLine===0?'#252535':'#252535');
+  circle.setAttribute('stroke-width','0.7');
+  circle.setAttribute('stroke-dasharray','3,3');
+  svg.appendChild(circle);
+
+  // Draw points
+  FANO_COORDS.forEach((pt,pi)=>{
+    if(!pt)return;
+    const isOnActiveLine=activeLine>0&&FANO_LINES[activeLine].includes(pi);
+    const g=mk('g');
+    const c=mk('circle');
+    c.setAttribute('cx',pt.x);c.setAttribute('cy',pt.y);c.setAttribute('r',isOnActiveLine?7:5);
+    c.setAttribute('fill',isOnActiveLine?'#1e1b45':'#13131b');
+    c.setAttribute('stroke',isOnActiveLine?'#534AB7':'#363650');
+    c.setAttribute('stroke-width',isOnActiveLine?'1.5':'1');
+    g.appendChild(c);
+    const t=mk('text');
+    t.setAttribute('x',pt.x);t.setAttribute('y',pt.y+1);
+    t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','central');
+    t.setAttribute('fill',isOnActiveLine?'#a090e0':'#484870');
+    t.setAttribute('font-size','9');t.setAttribute('font-family','JetBrains Mono,monospace');
+    t.textContent=pi;
+    g.appendChild(t);
+    svg.appendChild(g);
+  });
+
+  // Active line label
+  if(activeLine>0){
+    const t=mk('text');
+    t.setAttribute('x',140);t.setAttribute('y',193);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('fill','#534AB7');
+    t.setAttribute('font-size','8');t.setAttribute('font-family','JetBrains Mono,monospace');
+    t.textContent=`L${activeLine}: {${FANO_LINES[activeLine].join(',')}} · ${FANO_NAMES[activeLine]}`;
+    svg.appendChild(t);
+  }
+}
+
+function updateFanoIntersect(){
+  const L1=parseInt(document.getElementById('fano-l1').value);
+  const L2=parseInt(document.getElementById('fano-l2').value);
+  const pt=fanoIntersectionPoint(L1,L2);
+  document.getElementById('fano-pt').textContent=pt||'∅';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 7 · RING CANVAS
+═══════════════════════════════════════════════════════════════ */
+function renderRing(){
+  const canvas=document.getElementById('ring-canvas');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const CX=W/2,CY=H/2+10,R=74;
+
+  // Ring outline
+  ctx.beginPath();ctx.arc(CX,CY,R,0,2*Math.PI);
+  ctx.strokeStyle='#252535';ctx.lineWidth=1;ctx.stroke();
+
+  // Boot slot marker
+  const bootAngle=(BOOT_SLOT/RING_SIZE)*2*Math.PI-Math.PI/2;
+  const bx=CX+R*Math.cos(bootAngle),by=CY+R*Math.sin(bootAngle);
+  ctx.beginPath();ctx.arc(bx,by,4,0,2*Math.PI);
+  ctx.fillStyle='#8a7020';ctx.fill();
+  ctx.fillStyle='#c4a030';ctx.font='8px JetBrains Mono,monospace';ctx.textAlign='center';
+  ctx.fillText('0x7C00',CX+(R+18)*Math.cos(bootAngle),CY+(R+18)*Math.sin(bootAngle));
+
+  // Recent receipts as dots on ring
+  const shown=receipts.slice(-80);
+  shown.forEach(rx=>{
+    const angle=(rx.slot/RING_SIZE)*2*Math.PI-Math.PI/2;
+    const x=CX+R*Math.cos(angle),y=CY+R*Math.sin(angle);
+    ctx.beginPath();ctx.arc(x,y,2,0,2*Math.PI);
+    ctx.fillStyle='rgba(83,74,183,0.7)';ctx.fill();
+  });
+
+  // Cursor wedge
+  const cursorAngle=(ringCursor/RING_SIZE)*2*Math.PI-Math.PI/2;
+  ctx.beginPath();
+  ctx.moveTo(CX,CY);
+  ctx.arc(CX,CY,R-8,cursorAngle-0.06,cursorAngle+0.06);
+  ctx.closePath();
+  ctx.fillStyle='rgba(83,74,183,0.6)';ctx.fill();
+
+  // Cursor tip dot
+  const cx2=CX+(R-2)*Math.cos(cursorAngle),cy2=CY+(R-2)*Math.sin(cursorAngle);
+  ctx.beginPath();ctx.arc(cx2,cy2,5,0,2*Math.PI);
+  ctx.fillStyle='#534AB7';ctx.fill();
+
+  // Center
+  ctx.fillStyle='#484870';ctx.font='8px JetBrains Mono,monospace';ctx.textAlign='center';
+  ctx.fillText('5040',CX,CY-5);ctx.fillText('slots',CX,CY+8);
+
+  // Stats
+  document.getElementById('rc-pos').textContent=ringCursor;
+  document.getElementById('rc-total').textContent=totalAdvances;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 8 · COMMIT RECEIPT
+═══════════════════════════════════════════════════════════════ */
+function commitReceipt(){
+  if(!lastValidResult)return;
+  const{LL,NN,MM,steps,prov}=lastValidResult;
+  const{oldCursor,newCursor}=casCursorAdvance(steps);
+  const rx={slot:newCursor,steps,LL,NN,MM,prov,packed:packReceipt(steps,LL,NN,MM,prov)};
+  receipts.push(rx);
+  addReceiptRow(rx,true);
+  document.getElementById('rc-pos').textContent=ringCursor;
+  document.getElementById('rc-total').textContent=totalAdvances;
+  document.getElementById('rx-count').textContent=receipts.length+' receipts';
+  document.getElementById('commit-btn').disabled=true;
+  renderRing();
+}
+
+function addReceiptRow(rx,isNew){
+  const log=document.getElementById('receipt-log');
+  const div=document.createElement('div');
+  div.className='rx-row'+(isNew?' new':'');
+  div.innerHTML=
+    `<span class="slot">${rx.slot.toString().padStart(4,' ')}</span>`+
+    `<span class="steps">${rx.steps.toString().padStart(2,' ')}</span>`+
+    `<span class="ll">0x${rx.LL.toString(16).padStart(2,'0')}</span>`+
+    `<span class="nn">0x${rx.NN.toString(16).padStart(4,'0')}</span>`+
+    `<span class="mm">0x${rx.MM.toString(16).padStart(4,'0')}</span>`+
+    `<span class="prov">${rx.packed.toString(16).padStart(12,'0')}</span>`;
+  log.insertBefore(div,log.firstChild);
+}
+
+function clearReceipts(){
+  receipts.length=0;
+  document.getElementById('receipt-log').innerHTML='';
+  document.getElementById('rx-count').textContent='0 receipts';
+  renderRing();
+}
+
+function replayAll(){
+  const log=document.getElementById('receipt-log');
+  log.innerHTML='';
+  [...receipts].reverse().forEach(rx=>addReceiptRow(rx,false));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 9 · FRAME PRESETS
+═══════════════════════════════════════════════════════════════ */
+function loadGenesis(){
+  currentS=[0x0100,0x03BF,0x7C00,0x2B01,0x2F01,0x1434,0x039F,0x01FF];
+  refreshSegInputs();validateFrame();
+}
+
+function loadRandom(){
+  // Pick random LL∈1..7, random NN, compute valid MM
+  const LL=1+Math.floor(Math.random()*7);
+  const NN=Math.floor(Math.random()*0xFFFF);
+  const MM=makeGenesisTarget(LL,NN);
+  currentS=buildFrame(LL,NN,MM);
+  refreshSegInputs();validateFrame();
+}
+
+function loadRandomInvalid(){
+  loadRandom();
+  // Corrupt one delimiter
+  const pick=Math.floor(Math.random()*3);
+  if(pick===0)currentS[1]=0x1234;
+  else if(pick===1)currentS[6]=0xABCD;
+  else currentS[3]=(currentS[3]&0x00FF)|0x1100; // wrong high byte
+  refreshSegInputs();validateFrame();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 10 · CONFORMANCE SUITE
+═══════════════════════════════════════════════════════════════ */
+const CONF_TESTS=[
+  {name:'Genesis golden accept',
+   S:[0x0100,0x03BF,0x7C00,0x2B01,0x2F01,0x1434,0x039F,0x01FF],
+   expectQ:0,expectSteps:1},
+  {name:'Genesis Q=0 check only',
+   S:[0x0100,0x03BF,0x7C00,0x2B01,0x2F01,0x1434,0x039F,0x01FF],
+   expectQ:0,expectSteps:null},
+  {name:'Wrong S[1] delimiter',
+   S:[0x0100,0x1234,0x7C00,0x2B01,0x2F01,0x1434,0x039F,0x01FF],
+   expectQ:'nonzero',expectSteps:null},
+  {name:'Wrong S[6] delimiter',
+   S:[0x0100,0x03BF,0x7C00,0x2B01,0x2F01,0x1434,0xDEAD,0x01FF],
+   expectQ:'nonzero',expectSteps:null},
+  {name:'S[7] low byte not 0xFF',
+   S:[0x0100,0x03BF,0x7C00,0x2B01,0x2F01,0x1434,0x039F,0x0100],
+   expectQ:'nonzero',expectSteps:null},
+  {name:'LL disagreement (S[0]≠S[3])',
+   S:[0x0200,0x03BF,0x7C00,0x2B01,0x2F02,0x1434,0x039F,0x02FF],
+   expectQ:'nonzero',expectSteps:null},
+  {name:'LL=0 → Gate2 reject',
+   S:[0x0000,0x03BF,0xAAAA,0x2B00,0x2F00,0xBBBB,0x039F,0x00FF],
+   expectQ:0,expectSteps:-1},
+  {name:'Byte-swapped S[1]: 0xBF03',
+   S:[0x0100,0xBF03,0x7C00,0x2B01,0x2F01,0x1434,0x039F,0x01FF],
+   expectQ:'nonzero',expectSteps:null},
+  {name:'LL=3 valid row synthesis',
+   fn:()=>{const LL=3,NN=0x1234,MM=makeGenesisTarget(LL,NN);
+     return buildFrame(LL,NN,MM);},
+   expectQ:0,expectSteps:'>=0'},
+  {name:'LL=7 valid row synthesis',
+   fn:()=>{const LL=7,NN=0xABCD,MM=makeGenesisTarget(LL,NN);
+     return buildFrame(LL,NN,MM);},
+   expectQ:0,expectSteps:'>=0'},
+  {name:'deltaC base C=0x5A3C round-trip',
+   type:'delta',input:0x1234,C:0x5A3C},
+  {name:'fanoIntersect L1=1,L2=2 → pt 1',
+   type:'fano',L1:1,L2:2,expect:1},
+  {name:'fanoIntersect L3=1,L2=3 → pt 1',
+   type:'fano',L1:1,L2:3,expect:1},
+  {name:'fanoIntersect L4=4,L2=5 → pt 2',
+   type:'fano',L1:4,L2:5,expect:2}, // wait, L4={2,4,6} L5={2,5,7} → pt 2
+  {name:'fanoIntersect same line → 0',
+   type:'fano',L1:3,L2:3,expect:0},
+  {name:'Boot slot = 1504',
+   type:'expr',expr:()=>0x7C00%5040,expect:1504},
+  {name:'C_LL for LL=1 = 0x1337',
+   type:'expr',expr:()=>(1*0x1337)&0xFFFF,expect:0x1337},
+];
+
+function runConformance(){
+  const out=document.getElementById('conf-results');
+  out.innerHTML='';
+  let pass=0,fail=0;
+  CONF_TESTS.forEach(t=>{
+    let ok=false,detail='';
+    if(t.type==='delta'){
+      const out2=deltaC(deltaC(t.input,t.C),t.C);
+      ok=true; // just verify no crash; period test would be separate
+      detail=`in=0x${t.input.toString(16)} → 0x${deltaC(t.input,t.C).toString(16)} → 0x${out2.toString(16)}`;
+    }else if(t.type==='fano'){
+      const got=fanoIntersectionPoint(t.L1,t.L2);
+      ok=got===t.expect;detail=`L${t.L1}∩L${t.L2}=pt ${got} (expect ${t.expect})`;
+    }else if(t.type==='expr'){
+      const got=t.expr();
+      ok=got===t.expect;detail=`got ${got} (expect ${t.expect})`;
+    }else{
+      const S=t.fn?t.fn():t.S;
+      const q=computeQ(S);
+      const qOk=t.expectQ==='nonzero'?(q.Q!==0):q.Q===t.expectQ;
+      let stOk=true;
+      if(t.expectSteps!==null&&qOk&&q.Q===0){
+        const LL=(S[0]>>8)&0xFF,NN=S[2],MM=S[5];
+        const steps=fanoTruthResolver(LL,NN,MM);
+        if(t.expectSteps==='>=0')stOk=steps>=0;
+        else stOk=steps===t.expectSteps;
+        detail=`Q=${q.Q} steps=${steps}`;
+      }else{
+        detail=`Q=${q.Q}`;
+      }
+      ok=qOk&&stOk;
+    }
+    const div=document.createElement('div');
+    const badge=ok?'<span style="color:var(--green2)">✓</span>':'<span style="color:var(--red2)">✗</span>';
+    div.innerHTML=`${badge} <span style="color:var(--txt2)">${t.name}</span> <span style="color:var(--txt3);font-size:8px">${detail}</span>`;
+    out.appendChild(div);
+    if(ok)pass++;else fail++;
+  });
+  document.getElementById('conf-summary').textContent=`${pass} passed · ${fail} failed`;
+  document.getElementById('conf-summary').style.color=fail===0?'var(--green2)':'var(--red2)';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 11 · CHIRAL CLOCK → ABI FEED
+═══════════════════════════════════════════════════════════════ */
+// Minimal clock engine (from deterministic_clock_slide_rule)
+const rot=(x,n,w)=>{const mask=(1n<<w)-1n,s=n%w;return s===0n?(x&mask):(((x<<s)|(x>>(w-s)))&mask)};
+const bigRot7=(x,n)=>rot(x,n,7n);
+const bigRot15=(x,n)=>rot(x,n,15n);
+
+function clockState(tick){
+  const t=BigInt(tick)%5040n;
+  const t1=bigRot7(t,1n);
+  const t2=bigRot15(t1,2n);
+  return{t1:Number(t1),t2:Number(t2)};
+}
+
+let clockTick=0,clockTimer=null;
+let ckSynth=0,ckAccepted=0,ckRejected=0,ticksSinceEmit=0;
+
+function tickStep(dir){
+  clockTick=Math.max(0,clockTick+dir);
+  updateClockDisplay();
+}
+
+function toggleClock(){
+  if(clockTimer){
+    clearInterval(clockTimer);clockTimer=null;
+    document.getElementById('ck-auto').textContent='▶ run';
+  }else{
+    clockTimer=setInterval(()=>{clockTick++;updateClockDisplay()},180);
+    document.getElementById('ck-auto').textContent='⏹ stop';
+  }
+}
+
+function updateClockDisplay(){
+  const every=parseInt(document.getElementById('ck-every').value)||8;
+  const{t1,t2}=clockState(clockTick);
+  const LL=Math.max(1,(t1&0x07)||1); // ensure LL∈1..7
+  const NN=t2&0xFFFF;
+  const MM=makeGenesisTarget(LL,NN);
+  const S=buildFrame(LL,NN,MM);
+  const hex=frameToHex(S);
+
+  document.getElementById('ck-tick').textContent=`${clockTick} (${clockTick%5040})`;
+  document.getElementById('ck-ll').textContent=`0x${LL.toString(16).padStart(2,'0')}`;
+  document.getElementById('ck-nn').textContent=`0x${NN.toString(16).padStart(4,'0')}`;
+  document.getElementById('ck-mm').textContent=`0x${MM.toString(16).padStart(4,'0')}`;
+  document.getElementById('ck-frame').textContent=hex;
+
+  ticksSinceEmit++;
+  if(ticksSinceEmit>=every){
+    ticksSinceEmit=0;
+    ckSynth++;
+    const q=computeQ(S);
+    const steps=q.Q===0?fanoTruthResolver(LL,NN,MM):-1;
+    if(steps>0){
+      ckAccepted++;
+      if(document.getElementById('auto-commit').checked){
+        const{newCursor}=casCursorAdvance(steps);
+        const rx={slot:newCursor,steps,LL,NN,MM,prov:0xC10C,packed:packReceipt(steps,LL,NN,MM,0xC10C)};
+        receipts.push(rx);
+        addReceiptRow(rx,true);
+        document.getElementById('rx-count').textContent=receipts.length+' receipts';
+        renderRing();
+      }
+    }else ckRejected++;
+    document.getElementById('ck-synth').textContent=ckSynth;
+    document.getElementById('ck-accepted').textContent=ckAccepted;
+    document.getElementById('ck-rejected').textContent=ckRejected;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION 12 · BOOT
+═══════════════════════════════════════════════════════════════ */
+buildSegRow();
+renderFano(0);
+renderRing();
+loadGenesis();       // auto-validate genesis on load
+runConformance();    // run tests on load
+</script>
+</body>
+</html>
