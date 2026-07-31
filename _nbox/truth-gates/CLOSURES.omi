@@ -1,0 +1,138 @@
+# ============================================================================
+# OMICRON OBJECT MODEL (OMI) — CANONICAL CLOSURES DIRECTORY
+# File Target: truth-gates/CLOSURES.omi
+# Specification Level: Sealed Bounded States
+# ============================================================================
+#
+# CLOSURES seal bounded states. They do not invent operations,
+# ground implementations, or authorize symbolic projection.
+
+# [Closure 0x01]: Frame Validation Before Projection
+omi-0000-0000-0000-0000-0000-0000-0000-c001/128 CLOSE frame-validation-before-projection
+
+omi-
+  (
+    (requires . (Q_frame(S) = 0))
+    (seals . 128-bit-envelope)
+    (forbids .
+      (symbolic-projection-authorizes-invalid-frame
+       dot-notation-replaces-frame-validation
+       palindrome-authorizes-invalid-frame))
+    (boundary .
+      (Q_frame-validates-first
+       Q_xy-projects-second))
+  )
+-imo
+
+# [Closure 0x02]: Slot5040 Replay Ring
+omi-0000-0000-0000-0000-0000-0000-5040-c002/128 CLOSE slot5040-replay-ring
+
+omi-
+  (
+    (requires .
+      ((fano7 . 0..6)
+       (role3 . 0..2)
+       (local240 . 0..239)))
+    (form . "slot5040 = fano7×720 + role3×240 + local240")
+    (seals . "slot5040 ∈ 0..5039")
+    (forbids . replay-slot-outside-5040-ring)
+  )
+-imo
+
+# [Closure 0x03]: Local240 Boundedness
+omi-0000-0000-0000-0000-0000-0000-0240-c003/128 CLOSE local240-boundedness
+
+omi-
+  (
+    (requires . "Q_xy(x,y) = 60x² + 16xy + 4y²")
+    (form . "local240 = Q_xy(x,y) mod 240")
+    (seals . "local240 ∈ 0..239")
+    (property . "240 = 2×5! = 15×16 = 6!/3")
+  )
+-imo
+
+# [Closure 0x04]: Q Frame / Q XY Non-Collapse
+omi-0000-0000-0000-0000-0000-0000-0000-c004/128 CLOSE q-frame-q-xy-non-collapse
+
+omi-
+  (
+    (truth .
+      ("Q_frame(S) validates the 128-bit OMI envelope"
+       "Q_xy(x,y) projects decoded state into geometry"))
+    (forbids .
+      (deriving-validity-from-projection
+       collapsing-frame-and-projection))
+    (boundary .
+      (validate-first
+       project-second
+       replay-third
+       show-fourth))
+  )
+-imo
+
+# [Closure 0x05]: Projection Authority Boundary
+omi-0000-0000-0000-0000-0000-0000-0000-c005/128 CLOSE projection-authority-boundary
+
+omi-
+  (
+    (requires .
+      (pointer rule implementation test replay-path))
+    (seals . projection-only-symbolic-state)
+    (forbids .
+      (base36-authorizes-state
+       emoji-authorizes-state
+       dom-authorizes-state
+       color-authorizes-state
+       notation-authorizes-state))
+  )
+-imo
+
+# [Closure 0x06]: Base36 Projection Authority
+omi-0000-0000-0000-0000-0000-0036-c006/128 CLOSE base36-projection-authority
+
+omi-
+  (
+    (requires .
+      (Delta-Law
+       period-8
+       W36
+       valid-OMI-state))
+    (seals . Base36-as-visible-orbit-alphabet)
+    (forbids .
+      (Base36-creates-orbit
+       Base36-validates-frame
+       Base36-digit-five-equals-hidden-factor-five))
+  )
+-imo
+
+# [Closure 0x07]: Omicron Not Zero
+omi-0000-0000-0000-0000-0000-03bf-c007/128 CLOSE omicron-not-zero
+
+omi-
+  (
+    (requires .
+      (omicron-glyph-distinct-from-zero-digit
+       chiral-entry-cardinal-exit-distinction))
+    (seals . omicron-as-observer-origin-marker)
+    (forbids .
+      (omicron-treatable-as-arithmetic-zero
+       zero-digit-replaces-omicron-operator
+       glyph-collapse-between-0x0030-and-0x03BF))
+  )
+-imo
+
+# [Closure 0x08]: Factorial Tower Bounded
+omi-0000-0000-0000-0000-0000-0008-c008/128 CLOSE factorial-tower-bounded
+
+omi-
+  (
+    (requires .
+      ((8! . physical-frame-40320)
+       (9!-12! . interpretive-envelopes)))
+    (form . "n! = (n x ... x 8) x 7 x 3 x 240 for n >= 8")
+    (seals . "n! for n >= 8 is derived, not stored")
+    (forbids .
+      (storing-envelopes-as-physical-frame
+       confusing-interpretive-resolution-with-storage))
+  )
+-imo

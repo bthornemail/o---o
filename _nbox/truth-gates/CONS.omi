@@ -1,0 +1,105 @@
+# ============================================================================
+# OMICRON OBJECT MODEL (OMI) — CANONICAL CONS DIRECTORY
+# File Target: truth-gates/CONS.omi
+# Specification Level: Pair Structure Reduction
+# ============================================================================
+#
+# CONS reduces structural pairs. It defines notation and pairing;
+# it does not validate frames or authorize symbolic state.
+
+# [Cons 0x01]: OMI/IMO Palindromic Pair
+omi-0000-0000-0000-0000-0000-0000-0c05-0001/128 CONS omi-imo-palindromic-pair
+
+omi-
+  (
+    (car . omi)
+    (cdr . imo)
+    (bridge . ---)
+    (expanded . (Omicron . (Tetragrammaton . Metatron)))
+    (role . "visible mnemonic carrier for OMI palindromic identity")
+    (authority . projection-only)
+    (forbids .
+      (token-authorizes-invalid-frame
+       hyphen-count-replaces-frame-validation))
+  )
+-imo
+
+# [Cons 0x02]: Omicron Anchors Pair
+omi-0000-0000-0000-0000-0000-0000-0c05-0002/128 CONS omicron-anchors-pair
+
+omi-
+  (
+    (chiral . 0x03BF)
+    (cardinal . 0x039F)
+    (role . "frame delimiter pair: S1 = ο (entry), S6 = Ο (exit)")
+    (authority . structural-constant)
+    (forbids . (swapping-anchors-preserves-validity))
+  )
+-imo
+
+# [Cons 0x03]: Truth Row Triple
+omi-0000-0000-0000-0000-0000-0000-0c05-0003/128 CONS truth-row-triple
+
+omi-
+  (
+    (LL . scope)
+    (NN . antecedent)
+    (MM . consequent)
+    (role . "one truth row per valid frame: (LL, NN, MM)")
+    (form . "MM resolves from NN under LL-modulated Delta Law")
+  )
+-imo
+
+# [Cons 0x04]: Car/Cdr Notation
+omi-0000-0000-0000-0000-0000-0000-0c05-0004/128 CONS car-cdr-notation
+
+omi-
+  (
+    (car . head)
+    (cdr . tail)
+    (notation . read)
+    (cipher . transform)
+    (role . "dual reading of the pair: notation as cipher, cipher as notation")
+  )
+-imo
+
+# [Cons 0x05]: Slot5040 Triple Composition
+omi-0000-0000-0000-0000-0000-0000-0c05-0005/128 CONS slot5040-triple-composition
+
+omi-
+  (
+    (fano7 . 0..6)
+    (role3 . 0..2)
+    (local240 . 0..239)
+    (form . "slot5040 = fano7×720 + role3×240 + local240")
+    (role . "replay ring slot decomposition")
+  )
+-imo
+
+# [Cons 0x06]: Five-Fold / Four-Fold Bridge
+omi-0000-0000-0000-0000-0000-0000-0c05-0006/128 CONS five-fold-four-fold-bridge
+
+omi-
+  (
+    (hidden . five-fold-packet-root)
+    (visible . four-fold-selector-surface)
+    (bridge . 240)
+    (form . "240 = 2×5! = 15×16")
+    (role . "hidden root becomes visible through the bridge")
+  )
+-imo
+
+# [Cons 0x07]: Q Frame / Q XY Distinction
+omi-0000-0000-0000-0000-0000-0000-0c05-0007/128 CONS q-frame-q-xy-distinction
+
+omi-
+  (
+    (q-frame . "Q_frame(S) = E_var + E_const")
+    (q-xy . "Q_xy(x,y) = 60x² + 16xy + 4y²")
+    (role . "Q_frame validates the carrier; Q_xy projects the carried state")
+    (boundary .
+      (Q_frame-validates-first
+       Q_xy-projects-second
+       never-collapse))
+  )
+-imo

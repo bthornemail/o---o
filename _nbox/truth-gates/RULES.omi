@@ -1,0 +1,100 @@
+# ============================================================================
+# OMICRON OBJECT MODEL (OMI) — CANONICAL RULES DIRECTORY
+# File Target: truth-gates/RULES.omi
+# Specification Level: Canonical Substrate Invariants
+# ============================================================================
+#
+# This file encodes the normative invariant rules for the OMI canon.
+# Native grammar is relational descent:
+#
+#   omi-<frame>/<control>/<selector>/<relation>/<unit>-imo
+#
+# This file uses the CIDR adapter form for compiler compatibility:
+#
+#   <omi-address>/<claim> MUST <invariant-name>
+#
+# Every row defines a mandatory architectural behavior mapped to a
+# specific 16-bit segment offset.
+
+# [Rule 0x01]: Frame Validation
+#   The 128-bit frame MUST satisfy Q_frame(S) = 0.
+#   Q_frame(S) = E_var + E_const.
+#   Non-zero means the frame is structurally malformed.
+omi-0500-03bf-0000-2b05-2f05-0000-039f-05ff/48 MUST frame-validation-invariant
+
+# [Rule 0x02]: LL Coherence
+#   The LL selector MUST be coherent across segments 0, 3, 4, 7.
+#   L0 = S0>>8, L3 = S3&0xFF, L4 = S4&0xFF, L7 = S7>>8
+#   L0 = L3 = L4 = L7
+omi-0000-0000-0000-0000-0000-0000-0000-0002/128 MUST ll-coherence-invariant
+
+# [Rule 0x03]: Constant Alignment
+#   The delimiter constants MUST match exactly.
+#   S0 low byte = 0x00, S1 = 0x03BF, S3 high = 0x2B,
+#   S4 high = 0x2F, S6 = 0x039F, S7 low = 0xFF
+omi-0000-0000-0000-0000-0000-0000-0000-0003/128 MUST constant-alignment-invariant
+
+# [Rule 0x04]: Free Variable Non-Interference
+#   S2 (NNNN) and S5 (MMMM) MUST pass through unpenalized.
+#   They do not contribute to Q_frame(S).
+omi-0000-0000-0000-0000-0000-0000-0000-0004/128 MUST free-variable-non-interference
+
+# [Rule 0x05]: Delta Law Orbit
+#   The Delta_Law: Δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C
+#   C = 0x5A3C. Period = 8.
+omi-0000-0000-5a3c-0000-0000-0000-0000-0005/128 MUST delta-law-orbit
+
+# [Rule 0x06]: Fano Lottery Bound
+#   The Fano lottery MUST resolve within 0 ≤ k < 15 steps.
+#   Steps_max = 2 × period − 1 = 15.
+omi-0000-0000-0000-0000-0000-0000-0000-0006/128 MUST fano-lottery-bound
+
+# [Rule 0x07]: Receipt Packing
+#   Written receipts MUST pack as:
+#   provenance:16 | steps:8 | LL:8 | NN:16 | MM:16
+omi-0000-0000-0000-0000-0000-0000-0000-0007/128 MUST receipt-packing-format
+
+# [Rule 0x08]: Slot5040 Derivation
+#   The replay slot MUST be derived as:
+#   slot5040 = fano7 × 720 + role3 × 240 + local240
+omi-0000-0000-0000-0000-0000-0000-0000-0008/128 MUST slot5040-derivation
+
+# [Rule 0x09]: Local240 Boundedness
+#   local240 MUST be derivable as Q_xy(x,y) mod 240.
+#   Q_xy(x,y) = 60x² + 16xy + 4y²
+omi-0000-0000-0000-0000-0000-0000-0000-0009/128 MUST local240-boundedness
+
+# [Rule 0x0A]: Frame/Projection Boundary
+#   Q_frame(S) validates the envelope before Q_xy projects.
+#   The two quadratic forms MUST NOT be collapsed.
+omi-0000-0000-0000-0000-0000-0000-0000-000a/128 MUST frame-projection-boundary
+
+# [Rule 0x0B]: Projection Is Not Authority
+#   A projection may display accepted state.
+#   A projection may not accept state.
+omi-0000-0000-0000-0000-0000-0000-0000-000b/128 MUST projection-is-not-authority
+
+# [Rule 0x0C]: Base36 Is Naming, Not Creation
+#   Base36 names W=36 orbit positions.
+#   Base36 does not create the orbit, validate the frame,
+#   or authorize state.
+omi-0000-0000-0000-0000-0000-0000-0000-000c/128 MUST base36-names-not-creates
+
+# [Rule 0x0D]: Hidden Five Preservation
+#   The factor 5! = 120 is the hidden root.
+#   240 = 2 × 5!. The decimal stepping digits {0,1,3,6,9,8,6,3}
+#   contain no digit 5. Factor 5 MUST NOT appear as a visible
+#   stepping digit above the root.
+omi-0000-0000-0000-0000-0000-0000-0000-000d/128 MUST hidden-five-preservation
+
+# [Rule 0x0E]: Omicron Chirality Dataflow
+#   ο (U+03BF, 0x03BF) = chiral entry / inbound dataflow
+#   Ο (U+039F, 0x039F) = cardinal exit / outbound closure
+omi-0000-0000-0000-0000-0000-0000-0000-000e/128 MUST omicron-chirality-dataflow
+
+# [Rule 0x0F]: Sequencing Before Projection
+#   Sequencing (tick → chirality → Fano → role → local240 → slot5040)
+#   MUST occur after Q_frame validation and before Q_xy projection.
+#   The forbidden order: symbol → projection → validity.
+#   The lawful order: validity → sequencing → projection.
+omi-0000-0000-0000-0000-0000-0000-0000-000f/128 MUST sequence-before-projection

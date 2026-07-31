@@ -1,0 +1,133 @@
+# ============================================================================
+# OMICRON OBJECT MODEL (OMI) — CANONICAL FACT DEFINITIONS
+# File Target: truth-gates/FACTS.omi
+# Specification Level: Ground Truth Declarations
+# ============================================================================
+#
+# This file declares factual assignments for the OMI canon.
+# Each FACT row grounds an observed or derived truth.
+
+# --- Section 1: Genesis Frame ---
+
+# [Fact 0x01-0001]: Genesis frame validated
+#   The canonical genesis frame satisfies Q_frame(S) = 0.
+#   Frame: 0100-03bf-7c00-2b01-2f01-1434-039f-01ff
+#   Steps to Fano intersection: 1
+#   Receipt slot: 1504
+omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48 FACT genesis-frame-validated
+
+# [Fact 0x01-0002]: Genesis frame accepted
+#   Q_frame(S)=0, steps=1, slot=1504.
+omi-0100-03bf-7c00-2b01-2f01-1434-039f-01ff/48 FACT genesis-frame-accepted
+
+# --- Section 2: Canonical Constants ---
+
+# [Fact 0x02-0001]: Canonical inversion constant
+#   C = 0x5A3C.
+omi-0000-0000-5a3c-0000-0000-0000-0000-0000/48 FACT canonical-inversion-constant
+
+# [Fact 0x02-0002]: Delta Law period
+#   Period-8 for all 16-bit states.
+omi-0000-0000-0000-0000-0000-0000-0000-0000/48 FACT delta-law-period-eight
+
+# [Fact 0x02-0003]: Q_frame(S) = 0 for valid frames
+#   The canonical quadratic frame form vanishes exactly for valid envelopes.
+omi-0500-03bf-0000-2b05-2f05-0000-039f-05ff/48 FACT q-frame-vanishes
+
+# --- Section 3: Factorial Lattice ---
+
+# [Fact 0x03-0001]: 5040-slot replay ring
+#   5040 = 7!
+omi-0000-0000-0000-0000-0000-0000-0000-5040/48 FACT factorial-replay-ring-size
+
+# [Fact 0x03-0002]: 240-state bridge
+#   240 = 2 × 5! = 15 × 16 = 6!/3
+omi-0000-0000-0000-0000-0000-0000-0000-00f0/48 FACT bridge-240-state
+
+# [Fact 0x03-0003]: 720 sweep
+#   720 = 6!
+omi-0000-0000-0000-0000-0000-0000-0000-02d0/48 FACT sweep-720
+
+# --- Section 4: Five-Fold / Four-Fold ---
+
+# [Fact 0x04-0001]: Five-fold packet root verified
+#   The 5! = 120 packet root is verified.
+omi-0000-0000-0000-0000-0000-0000-0005-0001/128 FACT five-fold-packet-root-verified
+
+# [Fact 0x04-0002]: Packet bound to 240 bridge
+#   240 = 2 × 5! — factor 5 hidden in the bridge.
+omi-0000-0000-0000-0000-0000-0000-0005-0002/128 FACT packet-bound-to-240-bridge
+
+# [Fact 0x04-0003]: Four-fold selector surface active
+#   FS/GS/RS/US channels exposed.
+omi-0000-0000-0000-0000-0000-0000-0004-0001/128 FACT four-fold-selector-active
+
+# --- Section 5: Truth Row Extraction ---
+
+# [Fact 0x05-0001]: One truth row per valid frame
+#   A valid frame yields exactly one truth row: (LL, NN, MM).
+omi-0000-0000-0000-0000-0000-0000-0000-0001/128 FACT one-truth-row-per-frame
+
+# [Fact 0x05-0002]: MM resolves from NN under LL
+#   A truth row is accepted iff MM resolves from NN
+#   under the LL-modulated Delta Law.
+omi-0000-0000-0000-0000-0000-0000-0000-0002/128 FACT truth-row-resolution
+
+# --- Section 6: Projection ---
+
+# [Fact 0x06-0001]: Projection is not authority
+#   DOM, CSSOM, Base36, emoji — none authorizes state.
+omi-0000-0000-0000-0000-0000-0000-000b-0001/128 FACT projection-is-not-authority
+
+# [Fact 0x06-0002]: Receipt accepts state
+#   Only validation, resolution, and receipt accept state.
+omi-0000-0000-0000-0000-0000-0000-000b-0002/128 FACT receipt-accepts-state
+
+# --- Section 7: Nibble Geometry ---
+
+# [Fact 0x07-0001]: Nibble wheel diagonals
+#   D+ = {0,5,A,F}, D- = {3,6,9,C}
+#   Each sums to 0x1E = 30.
+omi-0000-0000-0000-0000-0000-000f-001e/48 FACT nibble-diagonals-sum-0x1E
+
+# [Fact 0x07-0002]: Diagonal closure to 60
+#   0x1E + 0x1E = 0x3C = 60.
+#   The sexagesimal gate is the sum of both diagonals.
+omi-0000-0000-0000-0000-0000-000f-003c/48 FACT diagonal-closure-to-sixty
+
+# [Fact 0x07-0003]: Even/odd branch separation
+#   D+ is the even branch. D- is the odd branch.
+#   They mirror each other across the 240-state nibble surface.
+omi-0000-0000-0000-0000-0000-000f-0000/48 FACT even-odd-branch-separation
+
+# --- Section 8: Envelope Derivation ---
+
+# [Fact 0x08-0001]: Route envelope derivation
+#   route9 = Delta_C(S2) mod 9
+omi-0000-0000-0000-0000-0000-0009-0009/48 FACT route-envelope-niner
+
+# [Fact 0x08-0002]: Declaration envelope derivation
+#   decl10 = Delta_C(S3) mod 10
+omi-0000-0000-0000-0000-0000-000a-000a/48 FACT declaration-envelope-ten
+
+# [Fact 0x08-0003]: Witness envelope derivation
+#   witness11 = Delta_C(S4) mod 11
+omi-0000-0000-0000-0000-0000-000b-000b/48 FACT witness-envelope-eleven
+
+# [Fact 0x08-0004]: Clock envelope derivation
+#   phase12 = Delta_C(S5) mod 12
+omi-0000-0000-0000-0000-0000-000c-000c/48 FACT clock-envelope-twelve
+
+# --- Section 9: Period 73 ---
+
+# [Fact 0x09-0001]: 1/73 period block
+#   1/73 = 0.01369863 repeating. Period = 8.
+#   Block B = [0,1,3,6,9,8,6,3]. Sum = 36.
+#   No digit 5 appears in the period block.
+omi-0000-0000-0000-0000-0000-0049-0000/48 FACT period-73-block
+
+# [Fact 0x09-0002]: Factor 5 hidden in decimal stepping
+#   5 divides the base (10). 5 does not divide 73.
+#   Factor 5 is absorbed into 240 = 2 x 5! and never
+#   appears as a visible stepping digit.
+omi-0000-0000-0000-0000-0000-0049-0005/48 FACT hidden-five-not-in-period

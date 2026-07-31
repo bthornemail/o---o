@@ -1,0 +1,150 @@
+# ============================================================================
+# OMICRON OBJECT MODEL (OMI) — CANONICAL COMBINATORS DIRECTORY
+# File Target: truth-gates/COMBINATORS.omi
+# Specification Level: Lawful Operation Composition
+# ============================================================================
+#
+# COMBINATORS compose lawful operations. They do not validate
+# frames, ground facts, or seal closure by themselves.
+
+# [Combinator 0x01]: Delta Motion
+omi-0000-0000-5a3c-0000-0000-0000-0000-b001/128 COMBINE delta-motion
+
+omi-
+  (
+    (input . ((x . uint16) (C . 0x5A3C)))
+    (form . "Δ_C(x) = rotl(x,1) ⊕ rotl(x,3) ⊕ rotr(x,2) ⊕ C")
+    (output . "x':uint16")
+    (property .
+      (rotations-preserve-bits
+       xor-preserves-reversibility
+       constant-breaks-zero-fixed-point
+       mask-preserves-boundedness))
+  )
+-imo
+
+# [Combinator 0x02]: Quadratic Projection
+omi-0000-0000-0000-0000-0000-0000-0078-b002/128 COMBINE quadratic-projection
+
+omi-
+  (
+    (input . ((x . 0..3) (y . 0..3)))
+    (form . "Q_xy(x,y) = 60x² + 16xy + 4y²")
+    (output .
+      ((q . Q_xy)
+       (local240 . "q mod 240")
+       (zRoot . "q / 6")))
+    (property .
+      ("Q_xy(3,3)=720"
+       "Q_xy(3,3)/6=120"
+       "local240 ∈ 0..239"))
+  )
+-imo
+
+# [Combinator 0x03]: Replay Slot
+omi-0000-0000-0000-0000-0000-0000-5040-b003/128 COMBINE replay-slot
+
+omi-
+  (
+    (input .
+      ((fano7 . 0..6)
+       (role3 . 0..2)
+       (local240 . 0..239)))
+    (form . "slot5040 = fano7×720 + role3×240 + local240")
+    (output . "slot5040 ∈ 0..5039")
+    (property . "5040 = 7×3×240 = 7!")
+  )
+-imo
+
+# [Combinator 0x04]: Base36 Projection
+omi-0000-0000-0000-0000-0000-0000-0036-b004/128 COMBINE base36-projection
+
+omi-
+  (
+    (input . position)
+    (form .
+      ((quotient36 . "floor(position / 36)")
+       (remainder36 . "position mod 36")
+       (symbol36 . "encodeBase36(remainder36)")))
+    (output .
+      (quotient36 remainder36 symbol36))
+    (boundary .
+      (Delta-Law-derives-W36
+       Base36-names-W36
+       Base36-does-not-create-orbit
+       Base36-visible-five-is-not-hidden-factor-five))
+  )
+-imo
+
+# [Combinator 0x05]: Five-Fold to 240 Bridge
+omi-0000-0000-0000-0000-0000-0000-0005-b005/128 COMBINE five-fold-to-240-bridge
+
+omi-
+  (
+    (input . (hidden-five-root orientation))
+    (form . "240 = 2 × 5! = 16² − 16")
+    (output . (bridge-240 active-byte-surface))
+    (property .
+      (factor-5-hidden-in-bridge
+       visible-as-15×16
+       fano-7-role-3-local-240))
+  )
+-imo
+
+# [Combinator 0x06]: Slot5040 Decomposition
+omi-0000-0000-0000-0000-0000-13b0-b006/128 COMBINE slot5040-decomposition
+
+omi-
+  (
+    (input . slot5040)
+    (form . "fano7 = slot5040 div 720; role3 = (slot5040 mod 720) div 240; local240 = slot5040 mod 240")
+    (output . (fano7 role3 local240))
+    (property . decomposition-is-bijective-within-0..5039)
+  )
+-imo
+
+# [Combinator 0x07]: Envelope Derivation
+omi-0000-0000-0000-0000-0000-0009-b007/128 COMBINE envelope-derivation
+
+omi-
+  (
+    (input .
+      ((frame-segments . (S2 S3 S4 S5))
+       (C . 0x5A3C)))
+    (form .
+      ((route9 . "Delta_C(S2) mod 9")
+       (decl10 . "Delta_C(S3) mod 10")
+       (witness11 . "Delta_C(S4) mod 11")
+       (phase12 . "Delta_C(S5) mod 12")))
+    (output .
+      (route9 decl10 witness11 phase12))
+    (property .
+      (envelopes-are-derived-not-stored
+       same-frame-always-yields-same-envelopes
+       envelopes-do-not-modify-frame))
+  )
+-imo
+
+# [Combinator 0x08]: Diagonal Separation
+omi-0000-0000-0000-0000-0000-000f-b008/128 COMBINE diagonal-separation
+
+omi-
+  (
+    (input . nibble-state-0xF)
+    (diagonals .
+      ((D+ . "{0,5,A,F}")
+       (D- . "{3,6,9,C}")))
+    (form .
+      ((D+-sum . "0+5+A+F = 0x1E")
+       (D--sum . "3+6+9+C = 0x1E")
+       (closure . "0x1E + 0x1E = 0x3C = 60")))
+    (output .
+      (even-branch-D+
+       odd-branch-D-
+       sexagesimal-gate-60))
+    (property .
+      (diagonal-sum-is-invariant-under-permutation
+       branches-mirror-each-other
+       each-branch-preserves-parity))
+  )
+-imo
