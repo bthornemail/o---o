@@ -1,0 +1,90 @@
+system OMI
+
+type NULL
+type NODE
+type EDGE
+type CONTROL
+type BYTE_NODE
+type CONS
+type BOM_TICK
+type RULE
+type MODAL
+type REGION
+type SID
+type OID
+type IMAGE
+type SNAPSHOT
+type PROJECTION
+type CHECKSUM
+type FRAME
+type CONTROL_STATE
+type HEADER_STATE
+type PLANE_STATE
+type CHIRALITY
+type RESOLUTION
+type BOM_UNIT
+type AEGEAN_HEADER
+type BRAILLE_BODY
+type GAUGE
+type TRANSFORM
+type PARITY
+type INTERPRETER_STATE
+
+relation ADJACENT(NODE, NODE)
+relation BINDS(CONS, NODE, NODE)
+relation COLLAPSES(EDGE, NULL)
+relation OSCILLATES(EDGE, BOM_TICK)
+relation CONSTRAINS(RULE, NODE)
+relation STABILIZES(REGION, BOM_TICK)
+relation PROMOTES(OID, SID)
+relation LOADS(IMAGE, NODE)
+relation SNAPSHOTS(SNAPSHOT, IMAGE)
+relation PROJECTS(PROJECTION, REGION)
+relation VERIFIES(CHECKSUM, SNAPSHOT)
+relation FRAMES(FRAME, REGION)
+relation HEARS(CONTROL_STATE, BYTE_NODE)
+relation SCALES(HEADER_STATE, RESOLUTION)
+relation SELECTS(PLANE_STATE, PROJECTION)
+relation FRAME_DECOMPOSE(FRAME, BOM_UNIT, AEGEAN_HEADER, BRAILLE_BODY)
+relation FRAME_COMPOSE(BOM_UNIT, AEGEAN_HEADER, BRAILLE_BODY, FRAME)
+relation TRANSFORMS(GAUGE, codepoint, codepoint)
+relation APPLIES(GAUGE, INTERPRETER_STATE, INTERPRETER_STATE)
+relation OMICRON_MODE(byte, mode)
+
+invariant GRAPH_INVARIANCE:
+  state := NODE | EDGE | CONTROL | BYTE_NODE
+
+invariant CONS_CLOSURE:
+  adjacency_pressure -> CONS | NULL | transient_oscillation
+
+invariant BOM_TEMPORALITY:
+  time := endian_inversion | byte_order_reinterpretation
+
+invariant RULE_VALIDITY:
+  valid_state := all(MUST) & none(MUST_NOT)
+
+invariant PROJECTION_NON_AUTHORITY:
+  projection_truth <= graph_truth
+
+invariant REPLAY_DETERMINISM:
+  same(image, tick, rules) -> same(cons_summary)
+
+invariant FRAME_CONTEXTUALITY:
+  meaning(byte) := frame(byte, control_state, header_state, plane_state, chirality)
+
+invariant IEEE_ISOMORPHISM:
+  frame_field(BOM) ~= IEEE_sign_bit
+  frame_field(AEGEAN) ~= IEEE_exponent_field
+  frame_field(BRAILLE) ~= IEEE_significand_field
+  ; Mapping is structural, not numeric equivalence
+  ; Domain reinterpretation, NOT format redefinition
+
+invariant GAUGE_OPERATIONAL:
+  ; ASCII codepoints transform state, not semantic meaning
+  ; Meaning is side-effect of state transformation
+  applies(gauge, state) -> state'
+
+invariant GNOMON_SELF_SIMILARITY:
+  ; Deeper recursion preserves structural equivalence
+  ; GAUGE^d preserves operator grammar at any depth
+  gauge^d(state) equivalent grammar
